@@ -1,2 +1,52 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+#map { 
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: -1;
+}
+
+.modal img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 100%;
+    pointer-events:none; /* This makes sure that we can still click outside of the modal to close it */
+}
+
+.vertical-align-center {
+    /* To center vertically */
+    display: table-cell;
+    vertical-align: middle;
+    pointer-events:none;
+}
+
+.modal-content {
+    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+    width:inherit;
+    height:inherit;
+    /* To center horizontally */
+    margin: 0 auto;
+    pointer-events: all;
+}
+
+@media (min-width: 768px) {
+    .navbar {
+        min-height: 80px;
+    }
+
+    .navbar-brand {
+        height: 80px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        line-height: 80px;
+    }
+}

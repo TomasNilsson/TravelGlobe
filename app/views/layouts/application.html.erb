@@ -2,20 +2,48 @@
 <html>
 <head>
   <title>TravelGlobe</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.14.3/mapbox-gl.css' %>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= javascript_include_tag 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.14.3/mapbox-gl.js' %>
+  <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
 </head>
 <body>
-<div id="user_nav">
-	<% if current_user %>
-	    Signed in as <strong><%= current_user.name %></strong>!
-	    <%= link_to "Sign out", signout_path, id: "sign_out" %>
-	    <%= image_tag current_user.image_url %>
-	<% else %>
-	    <%= link_to "Sign in with Facebook", "/auth/facebook", id: "sign_in" %>
-	<% end %>
-</div>
+<div id="map"></div>
+<%= render 'layouts/header' %>
+<% if not current_user %>
+	<!-- Modal -->
+	<div class="modal fade" data-keyboard="false" data-backdrop="static" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
+	  <div class="vertical-alignment-helper">
+	    <div class="modal-dialog vertical-align-center" role="document">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <h4 class="modal-title" id="loginModalLabel">Welcome to TravelGlobe!</h4>
+	        </div>
+	        <div class="modal-body">
+	            <%= link_to image_tag("facebook.png"), "/auth/facebook" %>
+	        </div>
+	        <div class="modal-footer">
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<script type="text/javascript">
+	  $(window).load(function(){
+	      $('#loginModal').modal('show');
+	  });
+	 </script>
+ <% end %>
+ <script>
+  mapboxgl.accessToken = "<%= ENV['MAPBOX_TOKEN'] %>";
+  var map = new mapboxgl.Map({
+      container: 'map', // container id
+      style: 'mapbox://styles/mapbox/streets-v8', //stylesheet location
+      center: [25, 25], // starting position
+      zoom: 2 // starting zoom
+  });
+</script>
 
 <%= yield %>
 
