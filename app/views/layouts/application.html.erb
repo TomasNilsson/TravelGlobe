@@ -2,9 +2,7 @@
 <html>
 <head>
   <title>TravelGlobe</title>
-  <%= stylesheet_link_tag 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.14.3/mapbox-gl.css' %>
   <%= stylesheet_link_tag 'application', media: 'all' %>
-  <%= javascript_include_tag 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.14.3/mapbox-gl.js' %>
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
 </head>
@@ -12,38 +10,122 @@
 <div id="map"></div>
 <%= render 'layouts/header' %>
 <% if not current_user %>
-	<!-- Modal -->
-	<div class="modal fade" data-keyboard="false" data-backdrop="static" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
-	  <div class="vertical-alignment-helper">
-	    <div class="modal-dialog vertical-align-center" role="document">
-	      <div class="modal-content">
-	        <div class="modal-header">
-	          <h4 class="modal-title" id="loginModalLabel">Welcome to TravelGlobe!</h4>
-	        </div>
-	        <div class="modal-body">
-	            <%= link_to image_tag("facebook.png"), "/auth/facebook" %>
-	        </div>
-	        <div class="modal-footer">
-	        </div>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-	<script type="text/javascript">
-	  $(window).load(function(){
-	      $('#loginModal').modal('show');
-	  });
-	 </script>
+  <!-- Modal -->
+  <div class="modal fade" data-keyboard="false" data-backdrop="static" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
+    <div class="vertical-alignment-helper">
+      <div class="modal-dialog vertical-align-center" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="loginModalLabel">Welcome to TravelGlobe!</h4>
+          </div>
+          <div class="modal-body">
+              <%= link_to image_tag("facebook.png"), "/auth/facebook" %>
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    $(window).load(function(){
+        $('#loginModal').modal('show');
+    });
+   </script>
  <% end %>
  <script>
-  mapboxgl.accessToken = "<%= ENV['MAPBOX_TOKEN'] %>";
-  var map = new mapboxgl.Map({
-      container: 'map', // container id
-      style: 'mapbox://styles/mapbox/streets-v8', //stylesheet location
-      center: [25, 25], // starting position
-      zoom: 2 // starting zoom
-  });
+  var map;
+  function initMap() {
+    var travelGlobeMapType = new google.maps.StyledMapType([
+      {
+        "featureType": "all",
+        "elementType": "all",
+        "stylers": [
+          {"hue": "#3b5998"},
+          {"saturation": -22}
+        ]
+      }, {
+        "featureType": "administrative",
+        "elementType": "labels.icon",
+        "stylers": [
+          {"visibility": "on"},
+          {"color": "#3b5998"}
+        ]
+      }, {
+        "featureType": "administrative.country",
+        "elementType": "geometry.stroke",
+        "stylers": [
+          {"visibility": "simplified"},
+          {"color": "#3b5998"}
+        ]
+      }, {
+        "featureType": "administrative.province",
+        "elementType": "all",
+        "stylers": [
+          {"visibility": "off"}
+        ]
+      }, {
+        "featureType": "landscape",
+        "elementType": "all",
+        "stylers": [
+          {"visibility": "on"},
+          {"color": "#f7f7f7"},
+          {"saturation": 10},
+          {"lightness": 76}
+        ]
+      }, {
+        "featureType": "landscape.natural",
+        "elementType": "all",
+        "stylers": [
+          {"color": "#f7f7f7"}
+        ]
+      }, {
+        "featureType": "road.highway",
+        "elementType": "all",
+        "stylers": [
+          {"color": "#8b9dc3"},
+          {"visibility": "simplified"}
+        ]
+      }, {
+        "featureType": "road.highway",
+        "elementType": "labels.icon",
+        "stylers": [
+          {"visibility": "off"}
+        ]
+      }, {
+        "featureType": "road.local",
+        "elementType": "geometry.fill",
+        "stylers": [
+          {"color": "#8b9dc3"}
+        ]
+      }, {
+        "featureType": "transit.line",
+        "elementType": "all",
+        "stylers": [
+          {"color": "#ffffff"},
+          {"weight": 0.43}
+        ]
+      }, {
+        "featureType": "water",
+        "elementType": "all",
+        "stylers": [
+          {"color": "#3b5998"}
+        ]
+      }
+    ], {name: 'TravelGlobe Map'});
+
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 25, lng: 25},
+      zoom: 3,
+      mapTypeControl: false,
+      streetViewControl: false
+    });
+
+    map.mapTypes.set("travelglobe", travelGlobeMapType);
+    map.setMapTypeId("travelglobe");
+  }
 </script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['MAPBOX_TOKEN'] %>&callback=initMap" async defer></script>
 
 <%= yield %>
 
