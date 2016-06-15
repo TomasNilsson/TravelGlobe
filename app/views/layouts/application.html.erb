@@ -7,8 +7,9 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<div id="map"></div>
 <%= render 'layouts/header' %>
+<input id="search" class="controls" type="text" placeholder="Search">
+<div id="map"></div>
 <% if not current_user %>
   <!-- Modal -->
   <div class="modal fade" data-keyboard="false" data-backdrop="static" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
@@ -35,6 +36,13 @@
  <% end %>
  <script>
   var map;
+
+  $(document).ready(function() {
+    $(window).resize(function() {
+      $("#map").css("height", $(window).height() - $('#navbar').height());
+    }).resize();
+  });
+
   function initMap() {
     var travelGlobeMapType = new google.maps.StyledMapType([
       {
@@ -59,14 +67,8 @@
           {"color": "#3b5998"}
         ]
       }, {
-        "featureType": "administrative.province",
-        "elementType": "all",
-        "stylers": [
-          {"visibility": "off"}
-        ]
-      }, {
         "featureType": "landscape",
-        "elementType": "all",
+        "elementType": "geometry",
         "stylers": [
           {"visibility": "on"},
           {"color": "#f7f7f7"},
@@ -75,7 +77,7 @@
         ]
       }, {
         "featureType": "landscape.natural",
-        "elementType": "all",
+        "elementType": "geometry",
         "stylers": [
           {"color": "#f7f7f7"}
         ]
@@ -107,9 +109,18 @@
         ]
       }, {
         "featureType": "water",
-        "elementType": "all",
+        "elementType": "geometry",
         "stylers": [
           {"color": "#3b5998"}
+        ]
+      }, {
+        "featureType": "water",
+        "elementType": "labels",
+        "stylers": [
+          {"color": "#3b5998"},
+          {"saturation": 10},
+          {"lightness": 30},
+          {"weight": 0.43}
         ]
       }
     ], {name: 'TravelGlobe Map'});
@@ -123,9 +134,95 @@
 
     map.mapTypes.set("travelglobe", travelGlobeMapType);
     map.setMapTypeId("travelglobe");
+
+    // Color visited countries
+    // TODO: this should be dynamic based on the logged-in user
+    var layerVisited = new google.maps.FusionTablesLayer({
+      query: {
+        select: 'Geometry',
+        from: '1N2E7_-NS9_cQ7NKL61BwtvcrNLEeYB4Mk1G8LZzd',
+        where: 'Code IN (\'GB\', \'IE\', \'DK\', \'NO\', \'FI\', \'IS\', \'DE\', \'FR\', \'PT\', \'ES\', \'AT\', \'HR\', \'GR\', \'BG\', \'CZ\', \'TR\', \'PL\', \'BY\', \'UA\', \'CY\', \'US-FL\', \'US-HI\', \'US-MN\', \'US-WI\', \'US-AZ\', \'US-NV\', \'US-DC\', \'US-NY\')' 
+      },
+      suppressInfoWindows: true
+    });
+    layerVisited.setMap(map);
+
+    // Color home countries
+    // TODO: this should be dynamic based on the logged-in user
+    var layerHome = new google.maps.FusionTablesLayer({
+      query: {
+        select: 'Geometry',
+        from: '1N2E7_-NS9_cQ7NKL61BwtvcrNLEeYB4Mk1G8LZzd',
+        where: 'Code IN (\'SE\', \'US-CA\')' 
+      },
+      styles: [{
+        polygonOptions: {
+          fillColor: '#00FF00',
+          fillOpacity: 0.3
+        }
+      }],
+      suppressInfoWindows: true
+    });
+    layerHome.setMap(map);
+
+
+    // Create the search box and link it to the UI element.
+    var input = document.getElementById('search');
+    var searchBox = new google.maps.places.SearchBox(input);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+    // Bias the SearchBox results towards current map's viewport.
+    map.addListener('bounds_changed', function() {
+      searchBox.setBounds(map.getBounds());
+    });
+
+    var markers = [];
+    // Listen for the event fired when the user selects a prediction and retrieve
+    // more details for that place.
+    searchBox.addListener('places_changed', function() {
+      var places = searchBox.getPlaces();
+
+      if (places.length == 0) {
+        return;
+      }
+
+      // Clear out the old markers.
+      markers.forEach(function(marker) {
+        marker.setMap(null);
+      });
+      markers = [];
+
+      // For each place, get the icon, name and location.
+      var bounds = new google.maps.LatLngBounds();
+      places.forEach(function(place) {
+        var icon = {
+          url: place.icon,
+          size: new google.maps.Size(71, 71),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(17, 34),
+          scaledSize: new google.maps.Size(25, 25)
+        };
+
+        // Create a marker for each place.
+        markers.push(new google.maps.Marker({
+          map: map,
+          icon: icon,
+          title: place.name,
+          position: place.geometry.location
+        }));
+
+        if (place.geometry.viewport) {
+          // Only geocodes have viewport.
+          bounds.union(place.geometry.viewport);
+        } else {
+          bounds.extend(place.geometry.location);
+        }
+      });
+      map.fitBounds(bounds);
+    });
   }
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['MAPBOX_TOKEN'] %>&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_API_KEY'] %>&callback=initMap&libraries=places&language=en" async defer></script>
 
 <%= yield %>
 
