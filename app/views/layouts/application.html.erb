@@ -137,35 +137,41 @@
     map.mapTypes.set("travelglobe", travelGlobeMapType);
     map.setMapTypeId("travelglobe");
 
+    <% if current_user %>
+    var current_user_id = <%= current_user.id %>;
     // Color visited countries
     // TODO: this should be dynamic based on the logged-in user
-    var layerVisited = new google.maps.FusionTablesLayer({
-      query: {
-        select: 'Geometry',
-        from: '1N2E7_-NS9_cQ7NKL61BwtvcrNLEeYB4Mk1G8LZzd',
-        where: 'Code IN (\'GB\', \'IE\', \'DK\', \'NO\', \'FI\', \'IS\', \'DE\', \'FR\', \'PT\', \'ES\', \'AT\', \'HR\', \'GR\', \'BG\', \'CZ\', \'TR\', \'PL\', \'BY\', \'UA\', \'CY\', \'US-FL\', \'US-HI\', \'US-MN\', \'US-WI\', \'US-AZ\', \'US-NV\', \'US-DC\', \'US-NY\')' 
-      },
-      suppressInfoWindows: true
+    var visitedCountries = $.getJSON("/users/"+current_user_id+"/visited_countries").success(function(data) {
+      var layerVisited = new google.maps.FusionTablesLayer({
+        query: {
+          select: 'Geometry',
+          from: '1N2E7_-NS9_cQ7NKL61BwtvcrNLEeYB4Mk1G8LZzd',
+          where: 'Code IN (\'' + data.countries.join('\',\'') + '\')' 
+        },
+        suppressInfoWindows: true
+      });
+      layerVisited.setMap(map);
     });
-    layerVisited.setMap(map);
 
     // Color home countries
-    // TODO: this should be dynamic based on the logged-in user
-    var layerHome = new google.maps.FusionTablesLayer({
-      query: {
-        select: 'Geometry',
-        from: '1N2E7_-NS9_cQ7NKL61BwtvcrNLEeYB4Mk1G8LZzd',
-        where: 'Code IN (\'SE\', \'US-CA\')' 
-      },
-      styles: [{
-        polygonOptions: {
-          fillColor: '#00FF00',
-          fillOpacity: 0.3
-        }
-      }],
-      suppressInfoWindows: true
+    var homeCountries = $.getJSON("/users/"+current_user_id+"/home_countries").success(function(data) {
+      var layerHome = new google.maps.FusionTablesLayer({
+        query: {
+          select: 'Geometry',
+          from: '1N2E7_-NS9_cQ7NKL61BwtvcrNLEeYB4Mk1G8LZzd',
+          where: 'Code IN (\'' + data.countries.join('\',\'') + '\')' 
+        },
+        styles: [{
+          polygonOptions: {
+            fillColor: '#00FF00',
+            fillOpacity: 0.3
+          }
+        }],
+        suppressInfoWindows: true
+      });
+      layerHome.setMap(map);
     });
-    layerHome.setMap(map);
+    <% end %>
 
     // Prevent panning outside map boundaries
     map.addListener('center_changed', function() {
