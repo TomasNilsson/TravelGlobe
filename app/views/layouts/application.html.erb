@@ -128,6 +128,8 @@
     map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 25, lng: 25},
       zoom: 3,
+      minZoom: 3,
+      maxZoom: 9,
       mapTypeControl: false,
       streetViewControl: false
     });
@@ -165,6 +167,29 @@
     });
     layerHome.setMap(map);
 
+    // Prevent panning outside map boundaries
+    map.addListener('center_changed', function() {
+      var latNorth = map.getBounds().getNorthEast().lat();
+      var latSouth = map.getBounds().getSouthWest().lat();
+      var newLat;
+
+      if (latNorth < 85 && latSouth > -85)  // OK (both top and bottom within boundaries)
+        return;
+      else {
+        if (latNorth > 85 && latSouth < -85)  // OK (both top and bottom outside boundaries)
+          return;
+        else {
+          if (latNorth > 85)
+            newLat =  map.getCenter().lat() - (latNorth - 85);  // Too far north, centering
+          if (latSouth < -85) 
+            newLat =  map.getCenter().lat() - (latSouth + 85);  // Too far south, centering
+        }
+      }
+      if (newLat) {
+          var newCenter = new google.maps.LatLng(newLat, map.getCenter().lng());
+          map.setCenter(newCenter);
+      }
+    });
 
     // Create the search box and link it to the UI element.
     var input = document.getElementById('search');
