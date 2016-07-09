@@ -13,6 +13,11 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><%= link_to icon("plane") + " Add New Trip", '#', 'data-toggle': "modal", 'data-target': "#newTripModal" %></li>
+        <li><%= link_to icon("stats") + " Statistics", '#', 'data-toggle': "modal", 'data-target': "#statisticsModal" %></li>
+        <li><%= link_to icon("globe") + " My Trips", '#', 'data-toggle': "modal", 'data-target': "#myTripsModal" %></li>
+      </ul>
       <ul class="nav navbar-nav navbar-right">
         <% if current_user %>
           <li class="dropdown">
@@ -28,3 +33,128 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+<% if current_user %>
+<!-- Modal -->
+<div class="modal fade" data-keyboard="false" data-backdrop="static" id="newTripModal" tabindex="-1" role="dialog" aria-labelledby="newTripModalLabel">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="newTripModalLabel">Add New Trip</h4>
+        </div>
+        <%= form_tag new_visited_country_path, remote: true, id: "new_visited_country" do %>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+      
+              <div class="form-group">
+                <%= label_tag :country, "Country/Countries" %>
+                <%= select_tag :country, options_from_collection_for_select(@countries, 'name', 'name'), class: "form-control js-example-basic-multiple", multiple: true, style: "width: 100%" %>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <%= submit_tag "Save", class: "btn btn-primary" %>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" data-keyboard="false" data-backdrop="static" id="statisticsModal" tabindex="-1" role="dialog" aria-labelledby="statisticsModalLabel">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="statisticsModalLabel">Statistics</h4>
+        </div>
+        <div class="modal-body">
+          <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="false">
+            <div class="carousel-controls">
+              <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+              </a>
+              <ol class="carousel-indicators">
+                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+              </ol>
+              <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+              </a>
+            </div>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+              <div class="item active">
+                <div class="carousel-box">
+                  <h3>Number of visited countries:</h3>
+                  <div><span class="label label-primary chart-total"><%= current_user.visited_countries.count %></span></div>
+                  <div class="chart-box">
+                    <canvas id="myChart" width="250" height="250"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="item">
+                <div class="carousel-box">
+                  <h3>Your Top 5 Travel Buddies:</h3>
+                  <ol class="colored-list">
+                    <li>Gustav Nilsson</li>
+                    <li>Ann-Kristin Nilsson</li>
+                    <li>Terese Nilsson</li>
+                    <li>Simon Anderjon</li>
+                    <li>Olof Jansson</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" data-keyboard="false" data-backdrop="static" id="myTripsModal" tabindex="-1" role="dialog" aria-labelledby="myTripsModalLabel">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myTripsModalLabel">My Trips</h4>
+        </div>
+        <div class="modal-body">
+          <table id="trips" class="table table-hover">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Categories</th>
+              </tr>
+            </thead>
+            <tbody>
+            <% @trips.each do |t| %>
+              <tr>
+                <td><%= t.date %></td>
+                <td><%= t.name %></td>
+                <td></td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

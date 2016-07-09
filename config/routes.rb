@@ -4,8 +4,10 @@ Rails.application.routes.draw do
   get 'auth/failure', to: redirect('/')
   delete 'logout', to: 'sessions#destroy'
 
-  get 'users/:id/home_countries' => 'users#home_countries'
-  get 'users/:id/visited_countries' => 'users#visited_countries'
+  # Id unnecessary?
+  get 'users/:id/home_countries' => 'users#get_home_countries'
+  get 'users/:id/visited_countries' => 'users#get_visited_countries'
+  post 'visited_countries' => 'users#post_visited_countries', as: :new_visited_country
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

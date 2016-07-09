@@ -14,3 +14,7 @@
 //= require bootstrap-sprockets
 //= require jquery_ujs
 //= require_tree .
+//= require chart.min.js
+//= require select2.min.js
+//= require jquery.dataTables.min.js
+//= require dataTables.bootstrap.min.js

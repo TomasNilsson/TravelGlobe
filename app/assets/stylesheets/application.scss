@@ -1,6 +1,9 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic);
+@import "select2.min.css";
+@import "select2-bootstrap.min.css";
+@import "dataTables.bootstrap.min.css";
 
 html, body {
     height: 100%;
@@ -9,6 +12,7 @@ html, body {
     overflow: hidden;
     background-color: #3b5998;
     font-family: 'Roboto', sans-serif;
+    counter-reset: item;
 }
   
 #map {
@@ -74,9 +78,85 @@ html, body {
     pointer-events: all;
 }
 
+.carousel-controls{
+    position: relative; 
+    width: 100%;
+    margin: 0 auto;
+    height: 30px;
+}
+
+.carousel-control.left, .carousel-control.right {
+    background-image: none;
+    color: #999;
+    width: 5%;
+    top: 0px;
+}
+
+.carousel-indicators {
+    top: 50%;
+}
+
+.carousel-indicators li {
+    background-color: #999;
+}
+
+.carousel-indicators .active {
+    background-color: #444;
+}
+
+div.carousel-box {
+    width:100%;
+    height:350px;
+    overflow:hidden;
+    display:block;
+}
+
+div.chart-box {
+    width: 250px;
+    height: 250px;
+    margin: 0 auto;
+}
+
+.chart-total {
+    position: absolute;
+    top: 119px;
+    left: 261px;
+    font-size: 20px;
+    z-index: -1;
+}
+
+ol.colored-list {
+   list-style: none;
+}
+
+ol.colored-list li {
+    counter-increment: item;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+ol.colored-list li:before {
+    margin-right: 10px;
+    content: counter(item);
+    background: #f3e820;
+    border-radius: 100%;
+    color: #000000;
+    width: 1.2em;
+    text-align: center;
+    display: inline-block;
+    font-weight: bold;
+}
+
 @media (min-width: 768px) {
     .navbar {
         min-height: 80px;
+    }
+
+    .navbar-nav > li > a {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        line-height: 50px;
+        outline: none;
     }
 
     .navbar-brand {

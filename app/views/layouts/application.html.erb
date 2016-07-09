@@ -2,6 +2,9 @@
 <html>
 <head>
   <title>TravelGlobe</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <%= stylesheet_link_tag 'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
@@ -32,15 +35,23 @@
     $(window).load(function(){
         $('#loginModal').modal('show');
     });
-   </script>
- <% end %>
- <script>
+  </script>
+<% end %>
+<script>
   var map;
 
   $(document).ready(function() {
+    
     $(window).resize(function() {
       $("#map").css("height", $(window).height() - $('#navbar').height());
     }).resize();
+
+    $('#newTripModal').on('hidden.bs.modal', function(){
+      $(this).find('form')[0].reset();
+      $('.js-example-basic-multiple').val('').trigger('change');
+    });
+
+    $('#trips').DataTable();
   });
 
   function initMap() {
@@ -140,7 +151,6 @@
     <% if current_user %>
     var current_user_id = <%= current_user.id %>;
     // Color visited countries
-    // TODO: this should be dynamic based on the logged-in user
     var visitedCountries = $.getJSON("/users/"+current_user_id+"/visited_countries").success(function(data) {
       var layerVisited = new google.maps.FusionTablesLayer({
         query: {
@@ -254,6 +264,55 @@
   }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_API_KEY'] %>&callback=initMap&libraries=places&language=en" async defer></script>
+<script>
+Chart.defaults.global.legend.position = 'bottom';
+var ctx = $("#myChart");
+var data = {
+    labels: [
+        "Africa",
+        "Europe",
+        "Asia",
+        "North America",
+        "South America",
+        "Antarctica",
+        "Australia"
+    ],
+    datasets: [
+        {
+            data: [300, 50, 100, 100, 100, 100, 100],
+            backgroundColor: [
+                "#5DA5DA",
+                "#FAA43A",
+                "#60BD68",
+                "#B276B2",
+                "#DECF3F",
+                "#F15854",
+                "#4D4D4D"
+            ],
+            hoverBackgroundColor: [
+                "#5DA5DA",
+                "#FAA43A",
+                "#60BD68",
+                "#B276B2",
+                "#DECF3F",
+                "#F15854",
+                "#4D4D4D"
+            ]
+        }]
+};
+var myDoughnutChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: data,
+    animation:{
+        animateScale:true
+    }
+});
+</script>
+<script type="text/javascript">
+$(".js-example-basic-multiple").select2({
+    theme: "bootstrap"
+});
+</script>
 
 <%= yield %>
 
