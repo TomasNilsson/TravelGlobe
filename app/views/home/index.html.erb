@@ -1,0 +1,231 @@
+<% if current_user %>
+<!-- Modal -->
+<div class="modal fade" data-keyboard="false" data-backdrop="static" id="newTripModal" tabindex="-1" role="dialog" aria-labelledby="newTripModalLabel">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="newTripModalLabel">Add New Trip</h4>
+        </div>
+        <%= form_for @trip, remote: true, id: "new_trip" do |f| %>
+        <div id="carousel-new-trip" class="carousel slide" data-ride="carousel" data-interval="false">
+          <div class="carousel-controls">
+            <a class="left carousel-control" href="#carousel-new-trip" role="button" data-slide="prev">
+              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            </a>
+            <ol class="carousel-indicators">
+              <li data-target="#carousel-new-trip" data-slide-to="0" class="active"></li>
+              <li data-target="#carousel-new-trip" data-slide-to="1"></li>
+            </ol>
+            <a class="right carousel-control" href="#carousel-new-trip" role="button" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            </a>
+          </div>
+          <div class="modal-body modal-carousel">
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+              <div class="item active">
+                <div class="carousel-box">
+                  <div class="row">
+                    <div class="form-group col-xs-12 col-md-8">
+                      <%= f.label :name, "Name" %> 
+                      <%= f.text_field :name, placeholder: "E.g. California Road Trip", class: "form-control" %>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-6">
+                      <%= f.label :start_date, "Start Date" %> 
+                      <div class="input-group">
+                        <%= f.text_field :start_date, class: "form-control", 'data-provide': "datepicker" %>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                      </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-6">
+                      <%= f.label :end_date, "End Date" %> 
+                      <div class="input-group">
+                        <%= f.text_field :end_date, class: "form-control", 'data-provide': "datepicker" %>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                      </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-8">
+                      <%= f.label :country_ids, "Countries/States" %>
+                      <%= f.select :country_ids, options_from_collection_for_select(Country.all.order(:name), 'id', 'name'), {}, {class: "form-control js-example-basic-multiple", multiple: true, style: "width: 100%"} %>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-8">
+                      <%= f.label :user_ids, "People" %>
+                      <%= f.select :user_ids, options_for_select(@friends.collect {|f| [ f['name'], f['id'] ] }), {}, {class: "form-control js-example-basic-multiple", multiple: true, style: "width: 100%"} %>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-8">
+                      <%= f.label :category_ids, "Categories" %>
+                      <%= f.select :category_ids, options_from_collection_for_select(Category.all, 'id', 'name'), {}, {class: "form-control js-example-basic-multiple", multiple: true, style: "width: 100%"} %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="item">
+                <div class="carousel-box">
+                  <h4>Select Photos</h4>
+                  <button type="button" class="btn btn-primary" id="fbPhotoSelect">Facebook</button>
+                  <button type="button" class="btn btn-default" id="uploadPhotos">Upload Photos</button>
+                  <table id="selectedPhotos" class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Preview</th>
+                        <th>Caption</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                  <%= link_to_add_association '', f, :photos, {partial: 'trips/photos_fields', "data-association-insertion-node": '#selectedPhotos > tbody', "data-association-insertion-method": 'append', id: "addPhoto", style: "display:none;" } %>
+                </div>
+              </div>
+            </div>
+          </div>   
+        </div>
+        <!-- Markup for Carson Shold's Photo Selector -->
+        <div id="CSPhotoSelector">
+          <div class="CSPhotoSelector_dialog">
+            <div class="CSPhotoSelector_form">
+              <div class="CSPhotoSelector_header">
+                  <a href="#" id="CSPhotoSelector_buttonClose">x</a>
+                  <p>Choose from Photos</p>
+              </div>
+              <div class="CSPhotoSelector_content CSAlbumSelector_wrapper">
+                <div class="CSPhotoSelector_searchContainer CSPhotoSelector_clearfix">
+                  <div class="CSPhotoSelector_selectedCountContainer">Select an album</div>
+                </div>
+                <div class="CSPhotoSelector_photosContainer CSAlbum_container"></div>
+              </div>
+
+              <div class="CSPhotoSelector_content CSPhotoSelector_wrapper">
+                <div class="CSPhotoSelector_searchContainer CSPhotoSelector_clearfix">
+                  <div class="CSPhotoSelector_selectedCountContainer"><span class="CSPhotoSelector_selectedPhotoCount">0</span> photos selected</div>
+                  <a href="#" id="CSPhotoSelector_selectAll">Select all</a>
+                  <a href="#" id="CSPhotoSelector_backToAlbums">Back to albums</a>
+                </div>
+                <div class="CSPhotoSelector_photosContainer CSPhoto_container"></div>
+              </div>
+
+              <div id="CSPhotoSelector_loader"></div>
+
+
+              <div class="CSPhotoSelector_footer CSPhotoSelector_clearfix">
+                <a href="#" id="CSPhotoSelector_pagePrev" class="CSPhotoSelector_disabled">Previous</a>
+                <a href="#" id="CSPhotoSelector_pageNext">Next</a>
+                <div class="CSPhotoSelector_pageNumberContainer">
+                  Page <span id="CSPhotoSelector_pageNumber">1</span> / <span id="CSPhotoSelector_pageNumberTotal">1</span>
+                </div>
+                <a href="#" id="CSPhotoSelector_buttonOK">OK</a>
+                <a href="#" id="CSPhotoSelector_buttonCancel">Cancel</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <a class="btn btn-primary" href="#carousel-new-trip" role="button" data-slide="next" id="new-trip-next">Next</a>
+          <%= submit_tag "Save", class: "btn btn-primary", id: "new-trip-save", style: "display: none;" %>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" data-keyboard="false" data-backdrop="static" id="statisticsModal" tabindex="-1" role="dialog" aria-labelledby="statisticsModalLabel">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="statisticsModalLabel">Statistics</h4>
+        </div>
+        <div id="carousel-statistics" class="carousel slide" data-ride="carousel" data-interval="false">
+          <div class="carousel-controls">
+            <a class="left carousel-control" href="#carousel-statistics" role="button" data-slide="prev">
+              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            </a>
+            <ol class="carousel-indicators">
+              <li data-target="#carousel-statistics" data-slide-to="0" class="active"></li>
+              <li data-target="#carousel-statistics" data-slide-to="1"></li>
+            </ol>
+            <a class="right carousel-control" href="#carousel-statistics" role="button" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            </a>
+          </div>
+          <div class="modal-body modal-carousel">
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+              <div class="item active">
+                <div class="carousel-box">
+                  <h4>Number of visited countries:</h4>
+                  <div class="chart-total-box">
+                    <span class="label label-primary chart-total"><%= current_user.visited_countries.count %></span>
+                  </div>
+                  <div class="chart-box">
+                    <canvas id="myChart" width="250" height="250"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="item">
+                <div class="carousel-box">
+                  <h4>Your Top 5 Travel Buddies:</h4>
+                  <ol class="colored-list">
+                    <li>Gustav Nilsson</li>
+                    <li>Ann-Kristin Nilsson</li>
+                    <li>Terese Nilsson</li>
+                    <li>Simon Anderjon</li>
+                    <li>Olof Jansson</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" data-keyboard="false" data-backdrop="static" id="myTripsModal" tabindex="-1" role="dialog" aria-labelledby="myTripsModalLabel">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog modal-lg vertical-align-center" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myTripsModalLabel">My Trips</h4>
+        </div>
+        <div class="modal-body">
+          <table id="trips" class="table table-hover">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Countries</th>
+                <th>Categories</th>
+              </tr>
+            </thead>
+            <tbody>
+            <% @trips.each do |t| %>
+              <tr>
+                <td><%= t.date %></td>
+                <td><%= t.name %></td>
+                <td><%= t.countries.map(&:name).join(", ") %></td>
+                <td><%= t.categories.map(&:name).join(", ") %></td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

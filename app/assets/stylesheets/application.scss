@@ -1,9 +1,11 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "bootstrap-datepicker3";
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic);
 @import "select2.min.css";
 @import "select2-bootstrap.min.css";
 @import "dataTables.bootstrap.min.css";
+@import "photoselector";
 
 html, body {
     height: 100%;
@@ -53,6 +55,11 @@ html, body {
     display: block;
     margin-left: auto;
     margin-right: auto
+}
+
+.modal .modal-carousel {
+    height: 525px;
+    overflow-y: auto;
 }
 
 .vertical-alignment-helper {
@@ -105,10 +112,9 @@ html, body {
 }
 
 div.carousel-box {
-    width:100%;
-    height:350px;
-    overflow:hidden;
-    display:block;
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
 div.chart-box {
@@ -117,10 +123,13 @@ div.chart-box {
     margin: 0 auto;
 }
 
+.chart-total-box {
+    text-align: center;
+}
+
 .chart-total {
-    position: absolute;
-    top: 119px;
-    left: 261px;
+    position: relative;
+    top: 88px;
     font-size: 20px;
     z-index: -1;
 }

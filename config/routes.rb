@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   get 'users/:id/visited_countries' => 'users#get_visited_countries'
   post 'visited_countries' => 'users#post_visited_countries', as: :new_visited_country
 
+  resources :trips, only: [:create]
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

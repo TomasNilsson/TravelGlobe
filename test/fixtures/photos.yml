@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  thumb_url: MyString
+  image_url: MyString
+  caption: MyString
+  trip_id: 
+
+two:
+  thumb_url: MyString
+  image_url: MyString
+  caption: MyString
+  trip_id: 

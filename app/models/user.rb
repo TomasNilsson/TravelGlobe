@@ -1,8 +1,10 @@
 class User < ActiveRecord::Base
-  has_and_belongs_to_many :home_countries, :class_name => 'Country', :join_table => 'home_countries_users'
-  has_and_belongs_to_many :visited_countries, :class_name => 'Country', :join_table => 'visited_countries_users'
+  has_and_belongs_to_many :home_countries, class_name: "Country", join_table: "home_countries_users"
+  has_and_belongs_to_many :visited_countries, class_name: "Country", join_table: "visited_countries_users"
+  has_and_belongs_to_many :trips
 
   def self.from_omniauth(auth)
+    # TODO: need to refresh OAuth token if it has expired. Check before Koala call.
     where(uid: auth.uid).first_or_initialize do |user|
       user.uid = auth.uid
       user.name = auth.info.name

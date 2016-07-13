@@ -22,9 +22,14 @@ gem 'bootstrap-datepicker-rails'
 
 # Use Facebook authentication
 gem 'omniauth-facebook'
+# Koala is a Facebook library for Ruby, supporting e.g. the Graph API 
+gem "koala", "~> 2.2"
 
 # Use Figaro to set environment variables
 gem 'figaro'
+
+# Use Cocoon for dynamic nested forms
+gem "cocoon"
 
 group :development do
   # Use sqlite3 as the database for Active Record

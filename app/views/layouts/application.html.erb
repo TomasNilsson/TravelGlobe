@@ -41,15 +41,11 @@
   var map;
 
   $(document).ready(function() {
+    // TODO: Move to js file
     
     $(window).resize(function() {
       $("#map").css("height", $(window).height() - $('#navbar').height());
     }).resize();
-
-    $('#newTripModal').on('hidden.bs.modal', function(){
-      $(this).find('form')[0].reset();
-      $('.js-example-basic-multiple').val('').trigger('change');
-    });
 
     $('#trips').DataTable();
   });
@@ -117,6 +113,12 @@
         "stylers": [
           {"color": "#ffffff"},
           {"weight": 0.43}
+        ]
+      }, {
+        "featureType": "transit",
+        "elementType": "labels",
+        "stylers": [
+          {"visibility": "off"}
         ]
       }, {
         "featureType": "water",
@@ -264,55 +266,6 @@
   }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_API_KEY'] %>&callback=initMap&libraries=places&language=en" async defer></script>
-<script>
-Chart.defaults.global.legend.position = 'bottom';
-var ctx = $("#myChart");
-var data = {
-    labels: [
-        "Africa",
-        "Europe",
-        "Asia",
-        "North America",
-        "South America",
-        "Antarctica",
-        "Australia"
-    ],
-    datasets: [
-        {
-            data: [300, 50, 100, 100, 100, 100, 100],
-            backgroundColor: [
-                "#5DA5DA",
-                "#FAA43A",
-                "#60BD68",
-                "#B276B2",
-                "#DECF3F",
-                "#F15854",
-                "#4D4D4D"
-            ],
-            hoverBackgroundColor: [
-                "#5DA5DA",
-                "#FAA43A",
-                "#60BD68",
-                "#B276B2",
-                "#DECF3F",
-                "#F15854",
-                "#4D4D4D"
-            ]
-        }]
-};
-var myDoughnutChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: data,
-    animation:{
-        animateScale:true
-    }
-});
-</script>
-<script type="text/javascript">
-$(".js-example-basic-multiple").select2({
-    theme: "bootstrap"
-});
-</script>
 
 <%= yield %>
 
