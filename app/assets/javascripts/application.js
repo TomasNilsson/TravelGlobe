@@ -14,6 +14,7 @@
 //= require bootstrap-sprockets
 //= require bootstrap-datepicker
 //= require jquery_ujs
+//= require jquery-ui/sortable
 //= require_tree .
 //= require chart.min.js
 //= require select2.min.js
@@ -46,7 +47,65 @@ $(document).ready(function(){
     $('.navbar a').click(function(){
         $('.modal.in').modal('hide');
     });
+
+    $(".sortable").sortable({
+        update: function(event, ui) {
+            updateOrder();
+        }
+    });
+    $(".sortable").disableSelection();
+
+    $('.sortable').on('click', '.place-up', function(event){
+        moveUp($(this).closest("li"));
+    });
+
+    $('.sortable').on('click', '.place-down', function(event){
+        moveDown($(this).closest("li"));
+    });
+
+    $('.sortable').on('cocoon:after-insert', function(e, insertedItem) {
+        updateOrder();
+    });
+
+    $('.sortable').on('cocoon:after-remove', function() {
+        updateOrder();
+    });
 });
+
+function moveUp(item) {
+    var prev = item.prev();
+    if (prev.length == 0)
+        return;
+    item.insertBefore(prev).hide().show('slow');
+    updateOrder();
+}
+
+function moveDown(item) {
+    var next = item.next();
+    if (next.length == 0)
+        return;
+    var index = next.find("input.place-order").val();
+    item.insertAfter(next).hide().show('slow');
+    updateOrder();
+}
+
+function updateOrder() {
+    var listElements = $(".sortable").children();
+    var len = listElements.length;
+    listElements.each(function (i, element) {
+        if (i != 0) {
+            $(element).find(".place-up").show();
+        } else {
+            $(element).find(".place-up").hide();
+        }
+        if (i != len - 1) {
+            $(element).find(".place-down").show();
+        } else {
+            $(element).find(".place-down").hide();
+        }
+        $(this).find("input.place-order").val(i);
+    });
+}
 
 $(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
     event.preventDefault();
@@ -194,6 +253,10 @@ $(document).ready(function(){
     $('#myTripsModal').on('hidden.bs.modal', function(){
         // Reset filter
         $('#trips').DataTable().search('').draw();
+    });
+
+    $('#tripInfoModal').on('hide.bs.modal', function(){
+        removeMarkers();
     });
 });
 

@@ -11,13 +11,14 @@ class TripsController < ApplicationController
   end
 
   def show
-    @trip = Trip.includes(:countries, :categories, :photos).find(params[:id])
+    @trip = Trip.includes(:countries, :categories, :photos, :places).find(params[:id])
+    @places = @trip.places.order(:order)
   end
 
   def destroy
   end
 
   def trip_params
-    params.require(:trip).permit(:name, :start_date, :end_date, {:country_ids => []}, {:user_ids => []}, {:category_ids => []}, photos_attributes: [:id, :thumb_url, :image_url, :caption, :_destroy])
+    params.require(:trip).permit(:name, :start_date, :end_date, {:country_ids => []}, {:user_ids => []}, {:category_ids => []}, photos_attributes: [:id, :thumb_url, :image_url, :caption, :_destroy], places_attributes: [:id, :name, :latitude, :longitude, :order, :_destroy])
   end
 end

@@ -39,6 +39,7 @@
 <% end %>
 <script>
   var map;
+  var markers = [];
 
   $(document).ready(function() {
     // TODO: Move to js file
@@ -228,16 +229,15 @@
     });
 
     // Create the search box and link it to the UI element.
-    var input = document.getElementById('search');
-    var searchBox = new google.maps.places.SearchBox(input);
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+    var searchInput = document.getElementById('search');
+    var searchBox = new google.maps.places.SearchBox(searchInput);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(searchInput);
 
     // Bias the SearchBox results towards current map's viewport.
     map.addListener('bounds_changed', function() {
       searchBox.setBounds(map.getBounds());
     });
 
-    var markers = [];
     // Listen for the event fired when the user selects a prediction and retrieve
     // more details for that place.
     searchBox.addListener('places_changed', function() {
@@ -247,40 +247,80 @@
         return;
       }
 
-      // Clear out the old markers.
-      markers.forEach(function(marker) {
-        marker.setMap(null);
-      });
-      markers = [];
+      var place = places[0];
 
-      // For each place, get the icon, name and location.
-      var bounds = new google.maps.LatLngBounds();
-      places.forEach(function(place) {
-        var icon = {
-          url: place.icon,
-          size: new google.maps.Size(71, 71),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(17, 34),
-          scaledSize: new google.maps.Size(25, 25)
-        };
+      removeMarkers();
 
-        // Create a marker for each place.
-        markers.push(new google.maps.Marker({
-          map: map,
-          icon: icon,
-          title: place.name,
-          position: place.geometry.location
-        }));
+      // Create a marker for each place.
+      markers.push(new google.maps.Marker({
+        map: map,
+        title: place.name,
+        position: place.geometry.location
+      }));
 
-        if (place.geometry.viewport) {
-          // Only geocodes have viewport.
-          bounds.union(place.geometry.viewport);
-        } else {
-          bounds.extend(place.geometry.location);
+      if (place.geometry.viewport) {
+        // Only geocodes have viewport.
+        map.fitBounds(place.geometry.viewport);
+      } else {
+        map.setCenter(place.geometry.location);
+        map.setZoom(9);
+      }
+    });
+
+    var places = document.getElementById('google-places');
+    var autocomplete = new google.maps.places.Autocomplete(places);
+    // Listen for the event fired when the user selects a prediction and retrieve
+    // more details for that place.
+    autocomplete.addListener('place_changed', function() {
+      var place = autocomplete.getPlace();
+      console.log(place);
+      $("#google-places").val('');
+      $("#addPlace").click();
+      listElement = $("#selectedPlaces li:last-child");
+      listElement.find("input.place-name").val(place.name);
+      listElement.find("input.place-latitude").val(place.geometry.location.lat());
+      listElement.find("input.place-longitude").val(place.geometry.location.lng());
+      listElement.find("input.place-order").val(listElement.index());
+      listElement.find('span.place-name').text(place.name);
+    });
+  }
+
+  function moveMap(countries) {
+    var geocoder = new google.maps.Geocoder();
+    var bounds = new google.maps.LatLngBounds();
+    countries.forEach(function(country) {
+      geocoder.geocode( { 'address': country}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          bounds.union(results[0].geometry.viewport);
+          map.fitBounds(bounds);
         }
       });
-      map.fitBounds(bounds);
     });
+  }
+
+  function addMarkers(places) {
+    var infowindow = new google.maps.InfoWindow();
+    places.forEach(function(place, i) {
+      var marker = new google.maps.Marker({
+        position: {lat: parseFloat(place[1]), lng: parseFloat(place[2])},
+        label: (i+1).toString(),
+        title: place[0],
+        map: map
+      });
+      marker.addListener('click', function() {
+        infowindow.setContent("<b>" + place[0] + "</b>");
+        infowindow.open(map, marker);
+      });
+      markers.push(marker);
+      console.log(markers);
+    });
+  }
+
+  function removeMarkers() {
+    markers.forEach(function(marker) {
+      marker.setMap(null);
+    });
+    markers = [];
   }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_API_KEY'] %>&callback=initMap&libraries=places&language=en" async defer></script>

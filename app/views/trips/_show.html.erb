@@ -1,7 +1,8 @@
 <h4><%= @trip.name %></h4>
 <p><strong>Date:</strong> <%= @trip.date %></p>
-<p><strong>Countries:</strong> <span id="countryNames"><%= @trip.countries.map(&:name).join(", ") %></span></p>
 <p><strong>Categories:</strong> <%= @trip.categories.map(&:name).join(", ") %></p>
+<p><strong>Countries:</strong> <span id="countryNames"><%= @trip.countries.map(&:name).join(", ") %></span></p>
+<p><strong>Places:</strong> <%= @places.map(&:name).join(", ") %> <span id="placesInfo"><%= raw @places.pluck(:name, :latitude, :longitude).to_json %></span></p>
 <% @trip.photos.each_slice(2) do |photo_group| %>
   <div class="row">
   <% photo_group.each do |p| %>

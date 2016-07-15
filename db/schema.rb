@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160711145657) do
+ActiveRecord::Schema.define(version: 20160715101531) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name"
@@ -60,6 +60,18 @@ ActiveRecord::Schema.define(version: 20160711145657) do
   end
 
   add_index "photos", ["trip_id"], name: "index_photos_on_trip_id"
+
+  create_table "places", force: :cascade do |t|
+    t.string   "name"
+    t.decimal  "latitude"
+    t.decimal  "longitude"
+    t.integer  "order"
+    t.integer  "trip_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "places", ["trip_id"], name: "index_places_on_trip_id"
 
   create_table "trips", force: :cascade do |t|
     t.string   "name"

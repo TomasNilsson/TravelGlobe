@@ -47,10 +47,6 @@
                       </div>
                     </div>
                     <div class="form-group col-xs-12 col-md-8">
-                      <%= f.label :country_ids, "Countries/States" %>
-                      <%= f.select :country_ids, options_from_collection_for_select(Country.all.order(:name), 'id', 'name'), {}, {class: "form-control js-example-basic-multiple", multiple: true, style: "width: 100%"} %>
-                    </div>
-                    <div class="form-group col-xs-12 col-md-8">
                       <%= f.label :user_ids, "People" %>
                       <%= f.select :user_ids, options_for_select(@friends.collect {|f| [ f['name'], f['id'] ] }), {}, {class: "form-control js-example-basic-multiple", multiple: true, style: "width: 100%"} %>
                     </div>
@@ -58,7 +54,18 @@
                       <%= f.label :category_ids, "Categories" %>
                       <%= f.select :category_ids, options_from_collection_for_select(Category.all, 'id', 'name'), {}, {class: "form-control js-example-basic-multiple", multiple: true, style: "width: 100%"} %>
                     </div>
+                    <div class="form-group col-xs-12 col-md-8">
+                      <%= f.label :country_ids, "Countries/States" %>
+                      <%= f.select :country_ids, options_from_collection_for_select(Country.all.order(:name), 'id', 'name'), {}, {class: "form-control js-example-basic-multiple", multiple: true, style: "width: 100%"} %>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-8">
+                      <label>Cities/Places</label>
+                      <input type="text" class="form-control" id="google-places">
+                    </div>
                   </div>
+                  <ul id="selectedPlaces" class="list-group sortable col-xs-12 col-md-8">
+                  </ul>
+                  <%= link_to_add_association '', f, :places, {partial: 'trips/places_fields', "data-association-insertion-node": '#selectedPlaces', "data-association-insertion-method": 'append', id: "addPlace", style: "display:none;" } %>
                 </div>
               </div>
               <div class="item">

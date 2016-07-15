@@ -1,0 +1,12 @@
+<li class="list-group-item nested-fields">
+  <span class="place-name"></span>
+  <%= f.hidden_field :name, class: "place-name" %>
+  <%= f.hidden_field :latitude, class: "place-latitude" %>
+  <%= f.hidden_field :longitude, class: "place-longitude" %>
+  <%= f.hidden_field :order, class: "place-order" %>
+  <span class="pull-right">
+    <%= link_to icon('chevron-up'), "#", class: "place-up", style: "display:none;" %>
+    <%= link_to icon('chevron-down'), "#", class: "place-down", style: "display:none;" %>
+    <%= link_to_remove_association icon('remove'), f %>
+  </span>
+</li>
