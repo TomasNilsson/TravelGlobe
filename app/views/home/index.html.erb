@@ -1,6 +1,6 @@
 <% if current_user %>
 <!-- Modal -->
-<div class="modal fade" data-keyboard="false" data-backdrop="static" id="newTripModal" tabindex="-1" role="dialog" aria-labelledby="newTripModalLabel">
+<div class="modal fade" data-backdrop="static" id="newTripModal" tabindex="-1" role="dialog" aria-labelledby="newTripModalLabel">
   <div class="vertical-alignment-helper">
     <div class="modal-dialog vertical-align-center" role="document">
       <div class="modal-content">
@@ -133,7 +133,7 @@
   </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" data-keyboard="false" data-backdrop="static" id="statisticsModal" tabindex="-1" role="dialog" aria-labelledby="statisticsModalLabel">
+<div class="modal fade" id="statisticsModal" tabindex="-1" role="dialog" aria-labelledby="statisticsModalLabel">
   <div class="vertical-alignment-helper">
     <div class="modal-dialog vertical-align-center" role="document">
       <div class="modal-content">
@@ -191,7 +191,7 @@
   </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" data-keyboard="false" data-backdrop="static" id="myTripsModal" tabindex="-1" role="dialog" aria-labelledby="myTripsModalLabel">
+<div class="modal fade" id="myTripsModal" tabindex="-1" role="dialog" aria-labelledby="myTripsModalLabel">
   <div class="vertical-alignment-helper">
     <div class="modal-dialog modal-lg vertical-align-center" role="document">
       <div class="modal-content">
@@ -213,7 +213,7 @@
             <% @trips.each do |t| %>
               <tr>
                 <td><%= t.date %></td>
-                <td><%= t.name %></td>
+                <td><%= link_to t.name, trip_path(t), remote: true %></td>
                 <td><%= t.countries.map(&:name).join(", ") %></td>
                 <td><%= t.categories.map(&:name).join(", ") %></td>
               </tr>
@@ -223,7 +223,24 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <a class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#newTripModal">Add New Trip</a>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Sidebar-->
+<div class="modal modal-left fade" data-backdrop="false" id="tripInfoModal" tabindex="-1" role="dialog" aria-labelledby="tripInfoModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="tripInfoModalLabel">Trip Info</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

@@ -6,6 +6,7 @@
 @import "select2-bootstrap.min.css";
 @import "dataTables.bootstrap.min.css";
 @import "photoselector";
+@import "ekko-lightbox.min.css";
 
 html, body {
     height: 100%;
@@ -74,6 +75,33 @@ html, body {
     display: table-cell;
     vertical-align: middle;
     pointer-events:none;
+}
+
+.modal-left .modal-dialog {
+    position: fixed;
+    margin: auto;
+    height: 100%;
+    -webkit-transform: translate3d(0%, 0, 0);
+        -ms-transform: translate3d(0%, 0, 0);
+         -o-transform: translate3d(0%, 0, 0);
+            transform: translate3d(0%, 0, 0);
+}
+
+.modal-left .modal-content {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.modal-left.fade:not(.in) .modal-dialog {
+    left: -320px;
+    -webkit-transform: translate3d(-25%, 0, 0);
+        -ms-transform: translate3d(-25%, 0, 0);
+         -o-transform: translate3d(-25%, 0, 0);
+            transform: translate3d(-25%, 0, 0);
+}
+
+.modal-left.fade.in .modal-dialog {
+    left: 0;
 }
 
 .modal-content {
@@ -157,21 +185,26 @@ ol.colored-list li:before {
 }
 
 @media (min-width: 768px) {
-    .navbar {
-        min-height: 80px;
-    }
-
     .navbar-nav > li > a {
-        padding-top: 15px;
-        padding-bottom: 15px;
+        padding-top: 4px;
+        padding-bottom: 4px;
         line-height: 50px;
         outline: none;
     }
 
     .navbar-brand {
-        height: 80px;
-        padding-top: 0px;
-        padding-bottom: 0px;
-        line-height: 80px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        line-height: 50px;
+    }
+
+    .modal-left {
+        top: 60px;
+        right: auto;
+        overflow: visible !important;
+    }
+
+    .modal-left .modal-dialog {
+        width: 360px;
     }
 }

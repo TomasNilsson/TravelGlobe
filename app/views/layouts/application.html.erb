@@ -45,9 +45,23 @@
     
     $(window).resize(function() {
       $("#map").css("height", $(window).height() - $('#navbar').height());
+      $(".modal-left .modal-content").css("height", $(window).height() - $('#navbar').height());
     }).resize();
 
-    $('#trips').DataTable();
+    $('#trips').DataTable({
+      "lengthChange": false,
+      "info": false,
+      "autoWidth": false,
+      "language": {
+        "zeroRecords": "No matching trips found"
+      },
+      "columns": [
+        { "width": "25%" },
+        { "width": "25%" },
+        { "width": "25%" },
+        { "width": "25%" }
+      ]
+    });
   });
 
   function initMap() {
@@ -163,6 +177,10 @@
         suppressInfoWindows: true
       });
       layerVisited.setMap(map);
+      google.maps.event.addListener(layerVisited, "click", function(event) {
+        $('#myTripsModal').modal('show');
+        $('#trips').DataTable().search(event.row.Name.value).draw();
+      });
     });
 
     // Color home countries

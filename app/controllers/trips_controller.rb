@@ -10,6 +10,10 @@ class TripsController < ApplicationController
     end
   end
 
+  def show
+    @trip = Trip.includes(:countries, :categories, :photos).find(params[:id])
+  end
+
   def destroy
   end
 

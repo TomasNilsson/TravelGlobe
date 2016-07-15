@@ -20,6 +20,7 @@
 //= require jquery.dataTables.min.js
 //= require dataTables.bootstrap.min.js
 //= require cocoon
+//= require ekko-lightbox.min.js
 
 $(document).ready(function(){
     $('[data-provide~=datepicker]').datepicker({
@@ -41,6 +42,15 @@ $(document).ready(function(){
         var maxDate = new Date(selected.date.valueOf());
         $('#trip_start_date').datepicker('setEndDate', maxDate);
     });
+
+    $('.navbar a').click(function(){
+        $('.modal.in').modal('hide');
+    });
+});
+
+$(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
+    event.preventDefault();
+    $(this).ekkoLightbox();
 });
 
 $(document).ready(function () {
@@ -180,6 +190,11 @@ $(document).ready(function(){
             $('#new-trip-next').show();
         }
     })
+
+    $('#myTripsModal').on('hidden.bs.modal', function(){
+        // Reset filter
+        $('#trips').DataTable().search('').draw();
+    });
 });
 
 $(document).ready(function(){
