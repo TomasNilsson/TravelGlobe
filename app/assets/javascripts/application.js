@@ -239,10 +239,17 @@ $(document).ready(function(){
         theme: "bootstrap"
     });
 
+    $(".select-box-tags").select2({
+        theme: "bootstrap",
+        //placeholder: "Choose from the list or create new",
+        tags: true
+    });
+
     $(".select-box-single").select2({
         theme: "bootstrap",
         placeholder: "Select a country",
-        allowClear: true
+        allowClear: true,
+        dropdownParent: $('#newPlaceLivedModal')
     });
 
     $('#new_trip').on('ajax:success', function(event, data, status, xhr) {

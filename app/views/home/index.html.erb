@@ -50,17 +50,17 @@
                       </div>
                     </div>
                     <div class="form-group col-xs-12 col-md-8">
-                      <%= f.label :user_ids, "People" %>
+                      <%= f.label :travel_partner_ids, "Travel Partners" %>
                       <div class="input-group">
                         <span class="input-group-addon"><%= icon("user") %></span>
-                        <%= f.select :user_ids, options_for_select(@friends.collect {|f| [ f['name'], f['id'] ] }), {}, {class: "form-control select-box", multiple: true, style: "width: 100%"} %>
+                        <%= f.select :travel_partner_ids, options_from_collection_for_select(current_user.travel_partners.order(:name), 'id', 'name'), {}, {class: "form-control select-box-tags", multiple: true, style: "width: 100%"} %>
                       </div>
                     </div>
                     <div class="form-group col-xs-12 col-md-8">
                       <%= f.label :category_ids, "Categories" %>
                       <div class="input-group">
                         <span class="input-group-addon"><%= icon("tags") %></span>
-                        <%= f.select :category_ids, options_from_collection_for_select(Category.all, 'id', 'name'), {}, {class: "form-control select-box", multiple: true, style: "width: 100%"} %>
+                        <%= f.select :category_ids, options_from_collection_for_select(Category.for_user(current_user), 'id', 'name'), {}, {class: "form-control select-box-tags", multiple: true, style: "width: 100%"} %>
                       </div>
                     </div>
                     <div class="form-group col-xs-12 col-md-8">
@@ -192,13 +192,11 @@
               </div>
               <div class="item">
                 <div class="carousel-box">
-                  <h4>Your Top 5 Travel Buddies:</h4>
+                  <h4>Your Top 5 Travel Partners:</h4>
                   <ol class="colored-list">
-                    <li>Gustav Nilsson</li>
-                    <li>Ann-Kristin Nilsson</li>
-                    <li>Terese Nilsson</li>
-                    <li>Simon Anderjon</li>
-                    <li>Olof Jansson</li>
+                    <% @travel_partners_toplist.each do |t| %>
+                      <li><strong><%= t.name %></strong>, <%= t.trip_count %> trips</li>
+                    <% end %>
                   </ol>
                 </div>
               </div>
@@ -289,7 +287,7 @@
   </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="newPlaceLivedModal" role="dialog" aria-labelledby="newPlaceLivedModalLabel">
+<div class="modal fade" id="newPlaceLivedModal" tabindex="-1" role="dialog" aria-labelledby="newPlaceLivedModalLabel">
   <div class="vertical-alignment-helper">
     <div class="modal-dialog vertical-align-center" role="document">
       <div class="modal-content">

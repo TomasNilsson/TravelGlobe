@@ -1,16 +1,21 @@
 class User < ActiveRecord::Base 
   has_and_belongs_to_many :countries
   has_and_belongs_to_many :trips
+  has_many :travel_partners
   has_many :places_lived, class_name: 'PlaceLived'
 
   def visited_countries_count
     # United States should only be included once if multiple US states have been visited.
     us_state_count = self.countries.where("name LIKE :prefix", prefix: "United States%").count
     if us_state_count > 1
-      return self.countries.count - us_state_count + 1
+      self.countries.count - us_state_count + 1
     else
-      return self.countries.count
+      self.countries.count
     end
+  end
+
+  def travel_partners_toplist
+    TravelPartner.select("travel_partners.name", "COUNT(trips.id) as trip_count").joins(:trips).where(user_id: self.id).group("travel_partners.id").order("trip_count DESC, travel_partners.name ASC")
   end
 
   def self.from_omniauth(auth)
