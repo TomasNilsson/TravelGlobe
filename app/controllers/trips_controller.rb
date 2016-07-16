@@ -4,6 +4,7 @@ class TripsController < ApplicationController
     @trip = Trip.new(trip_params)
     @trip.users << current_user
     if @trip.save
+      current_user.countries << @trip.countries - current_user.countries
       render json: {status: :ok}
     else
       render json: {status: :internal_server_error}

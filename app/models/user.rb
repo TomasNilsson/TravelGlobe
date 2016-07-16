@@ -1,7 +1,17 @@
-class User < ActiveRecord::Base
-  has_and_belongs_to_many :home_countries, class_name: "Country", join_table: "home_countries_users"
-  has_and_belongs_to_many :visited_countries, class_name: "Country", join_table: "visited_countries_users"
+class User < ActiveRecord::Base 
+  has_and_belongs_to_many :countries
   has_and_belongs_to_many :trips
+  has_many :places_lived, class_name: 'PlaceLived'
+
+  def visited_countries_count
+    # United States should only be included once if multiple US states have been visited.
+    us_state_count = self.countries.where("name LIKE :prefix", prefix: "United States%").count
+    if us_state_count > 1
+      return self.countries.count - us_state_count + 1
+    else
+      return self.countries.count
+    end
+  end
 
   def self.from_omniauth(auth)
     # TODO: need to refresh OAuth token if it has expired. Check before Koala call.

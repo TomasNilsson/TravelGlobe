@@ -16,6 +16,7 @@
       <ul class="nav navbar-nav">
         <li><%= link_to icon("plane") + " Add New Trip", '#', 'data-toggle': "modal", 'data-target': "#newTripModal" %></li>
         <li><%= link_to icon("globe") + " My Trips", '#', 'data-toggle': "modal", 'data-target': "#myTripsModal" %></li>
+        <li><%= link_to icon("home") + " Places Lived", '#', 'data-toggle': "modal", 'data-target': "#placesLivedModal" %></li>
         <li><%= link_to icon("stats") + " Statistics", '#', 'data-toggle': "modal", 'data-target': "#statisticsModal" %></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -25,7 +26,8 @@
               <%= image_tag(current_user.image_url) + " " + current_user.name %><span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li><%= link_to icon("log-out") + " Log out", logout_path, method: :delete %></li>
+              <li><%= link_to icon("share-alt") + " Share", "#" %></li>
+              <li><%= link_to icon("off") + " Log out", logout_path, method: :delete %></li>
             </ul>
           </li>
         <% end %>

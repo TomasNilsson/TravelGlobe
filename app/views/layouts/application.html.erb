@@ -63,6 +63,20 @@
         { "width": "25%" }
       ]
     });
+
+    $('#placesLived').DataTable({
+      "lengthChange": false,
+      "info": false,
+      "autoWidth": false,
+      "language": {
+        "zeroRecords": "No matching places found"
+      },
+      "columns": [
+        { "width": "33%" },
+        { "width": "33%" },
+        { "width": "33%" },
+      ]
+    });
   });
 
   function initMap() {
@@ -168,25 +182,8 @@
     <% if current_user %>
     var current_user_id = <%= current_user.id %>;
     // Color visited countries
-    var visitedCountries = $.getJSON("/users/"+current_user_id+"/visited_countries").success(function(data) {
+    var visitedCountries = $.getJSON("/visited_countries").success(function(data) {
       var layerVisited = new google.maps.FusionTablesLayer({
-        query: {
-          select: 'Geometry',
-          from: '1N2E7_-NS9_cQ7NKL61BwtvcrNLEeYB4Mk1G8LZzd',
-          where: 'Code IN (\'' + data.countries.join('\',\'') + '\')' 
-        },
-        suppressInfoWindows: true
-      });
-      layerVisited.setMap(map);
-      google.maps.event.addListener(layerVisited, "click", function(event) {
-        $('#myTripsModal').modal('show');
-        $('#trips').DataTable().search(event.row.Name.value).draw();
-      });
-    });
-
-    // Color home countries
-    var homeCountries = $.getJSON("/users/"+current_user_id+"/home_countries").success(function(data) {
-      var layerHome = new google.maps.FusionTablesLayer({
         query: {
           select: 'Geometry',
           from: '1N2E7_-NS9_cQ7NKL61BwtvcrNLEeYB4Mk1G8LZzd',
@@ -200,8 +197,16 @@
         }],
         suppressInfoWindows: true
       });
-      layerHome.setMap(map);
+      layerVisited.setMap(map);
+      google.maps.event.addListener(layerVisited, "click", function(event) {
+        $('.modal.in').modal('hide');
+        $('#myTripsModal').modal('show');
+        $('#trips').DataTable().search(event.row.Name.value).draw();
+      });
     });
+
+    // Add markers to places lived
+    addHouseMarkers(<%= raw @places_lived.pluck(:address, :latitude, :longitude).to_json %>);
     <% end %>
 
     // Prevent panning outside map boundaries
@@ -273,7 +278,6 @@
     // more details for that place.
     autocomplete.addListener('place_changed', function() {
       var place = autocomplete.getPlace();
-      console.log(place);
       $("#google-places").val('');
       $("#addPlace").click();
       listElement = $("#selectedPlaces li:last-child");
@@ -282,6 +286,36 @@
       listElement.find("input.place-longitude").val(place.geometry.location.lng());
       listElement.find("input.place-order").val(listElement.index());
       listElement.find('span.place-name').text(place.name);
+    });
+
+    var placeLived = document.getElementById('place_lived_address');
+    var placeLivedAutocomplete = new google.maps.places.Autocomplete(placeLived);
+    // Listen for the event fired when the user selects a prediction and retrieve
+    // more details for that place.
+    placeLivedAutocomplete.addListener('place_changed', function() {
+      var place = placeLivedAutocomplete.getPlace();
+      var address = [];
+      var addressComponents = {
+        street_number: 'short_name',
+        route: 'long_name',
+        locality: 'long_name'
+      };
+      for (var i = 0; i < place.address_components.length; i++) {
+        var addressType = place.address_components[i].types[0];
+        if (addressComponents[addressType]) {
+          var val = place.address_components[i][addressComponents[addressType]];
+          address[(addressType==="route" && !$.isNumeric(place.formatted_address.charAt(0)))?"unshift":"push"](val);
+        }
+      }
+      if (address.length > 2) {
+        addressString = address.slice(0, -1).join(' ') + ', ' + address.slice(-1);
+      } else {
+        addressString = address.join(', ');
+      }
+      form = $("#new_place_lived");
+      form.find("input#place_lived_address").val(addressString);
+      form.find("input#place_lived_latitude").val(place.geometry.location.lat());
+      form.find("input#place_lived_longitude").val(place.geometry.location.lng());
     });
   }
 
@@ -305,6 +339,10 @@
         position: {lat: parseFloat(place[1]), lng: parseFloat(place[2])},
         label: (i+1).toString(),
         title: place[0],
+        icon: {
+          url: "<%= URI.join(root_url, image_path('map-marker.png')) %>",
+          labelOrigin: new google.maps.Point(21, 12)
+        },
         map: map
       });
       marker.addListener('click', function() {
@@ -312,7 +350,6 @@
         infowindow.open(map, marker);
       });
       markers.push(marker);
-      console.log(markers);
     });
   }
 
@@ -321,6 +358,22 @@
       marker.setMap(null);
     });
     markers = [];
+  }
+
+  function addHouseMarkers(places) {
+    var infowindow = new google.maps.InfoWindow();
+    places.forEach(function(place, i) {
+      var marker = new google.maps.Marker({
+        position: {lat: parseFloat(place[1]), lng: parseFloat(place[2])},
+        title: place[0],
+        icon: "<%= URI.join(root_url, image_path('house-marker.png')) %>",
+        map: map
+      });
+      marker.addListener('click', function() {
+        infowindow.setContent("<b>" + place[0] + "</b>");
+        infowindow.open(map, marker);
+      });
+    });
   }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_API_KEY'] %>&callback=initMap&libraries=places&language=en" async defer></script>

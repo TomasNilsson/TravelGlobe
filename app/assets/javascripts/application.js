@@ -44,6 +44,20 @@ $(document).ready(function(){
         $('#trip_start_date').datepicker('setEndDate', maxDate);
     });
 
+    $('#place_lived_start_date').on('changeDate', function (selected) {
+        var minDate = new Date(selected.date.valueOf());
+        var endDate = $('#place_lived_end_date');
+        endDate.datepicker('setStartDate', minDate);
+        if (!endDate.val()) {
+            endDate.datepicker('update', minDate);
+        }
+    });
+
+    $('#place_lived_end_date').on('changeDate', function (selected) {
+        var maxDate = new Date(selected.date.valueOf());
+        $('#place_lived_start_date').datepicker('setEndDate', maxDate);
+    });
+
     $('.navbar a').click(function(){
         $('.modal.in').modal('hide');
     });
@@ -221,21 +235,33 @@ $(document).ready(function () {
 });
 
 $(document).ready(function(){
-    $(".js-example-basic-multiple").select2({
+    $(".select-box").select2({
         theme: "bootstrap"
+    });
+
+    $(".select-box-single").select2({
+        theme: "bootstrap",
+        placeholder: "Select a country",
+        allowClear: true
     });
 
     $('#new_trip').on('ajax:success', function(event, data, status, xhr) {
         $('#newTripModal').modal('hide').empty();
+        // TODO: handle errors and don't reload page (use AJAX instead to update different elements)
         location.reload();
-        // TODO: handle errors
+    });
+
+    $('#new_place_lived').on('ajax:success', function(event, data, status, xhr) {
+        $('#newPlaceLivedModal').modal('hide').empty();
+        // TODO: handle errors and don't reload page (use AJAX instead to update different elements)
+        location.reload();
     });
 
     $('#newTripModal').on('hidden.bs.modal', function(){
         // Reset everything
         $('[data-provide~=datepicker]').datepicker('update', '');
         $(this).find('form')[0].reset();
-        $('.js-example-basic-multiple').val('').trigger('change');
+        $('.select-box').val('').trigger('change');
         $("#selectedPhotos > tbody").html("");
         $('#carousel-new-trip').carousel(0);
     });

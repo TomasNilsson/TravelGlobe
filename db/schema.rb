@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160715101531) do
+ActiveRecord::Schema.define(version: 20160715200848) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name"
@@ -42,13 +42,14 @@ ActiveRecord::Schema.define(version: 20160715101531) do
   add_index "countries_trips", ["country_id"], name: "index_countries_trips_on_country_id"
   add_index "countries_trips", ["trip_id"], name: "index_countries_trips_on_trip_id"
 
-  create_table "home_countries_users", id: false, force: :cascade do |t|
+  create_table "countries_users", id: false, force: :cascade do |t|
     t.integer "country_id"
     t.integer "user_id"
   end
 
-  add_index "home_countries_users", ["country_id"], name: "index_home_countries_users_on_country_id"
-  add_index "home_countries_users", ["user_id"], name: "index_home_countries_users_on_user_id"
+  add_index "countries_users", ["country_id", "user_id"], name: "index_countries_users_on_country_id_and_user_id", unique: true
+  add_index "countries_users", ["country_id"], name: "index_countries_users_on_country_id"
+  add_index "countries_users", ["user_id"], name: "index_countries_users_on_user_id"
 
   create_table "photos", force: :cascade do |t|
     t.string   "thumb_url"
@@ -72,6 +73,21 @@ ActiveRecord::Schema.define(version: 20160715101531) do
   end
 
   add_index "places", ["trip_id"], name: "index_places_on_trip_id"
+
+  create_table "places_lived", force: :cascade do |t|
+    t.string   "address"
+    t.integer  "country_id"
+    t.decimal  "latitude"
+    t.decimal  "longitude"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "places_lived", ["country_id"], name: "index_places_lived_on_country_id"
+  add_index "places_lived", ["user_id"], name: "index_places_lived_on_user_id"
 
   create_table "trips", force: :cascade do |t|
     t.string   "name"
@@ -100,13 +116,5 @@ ActiveRecord::Schema.define(version: 20160715101531) do
   end
 
   add_index "users", ["uid"], name: "index_users_on_uid"
-
-  create_table "visited_countries_users", id: false, force: :cascade do |t|
-    t.integer "country_id"
-    t.integer "user_id"
-  end
-
-  add_index "visited_countries_users", ["country_id"], name: "index_visited_countries_users_on_country_id"
-  add_index "visited_countries_users", ["user_id"], name: "index_visited_countries_users_on_user_id"
 
 end
