@@ -16,7 +16,7 @@ html, body {
     overflow: hidden;
     background-color: #3b5998;
     font-family: 'Roboto', sans-serif;
-    counter-reset: item;
+    counter-reset: toplist;
 }
   
 #map {
@@ -26,6 +26,15 @@ html, body {
 .navbar {
     margin: 0;
     padding: 0;
+}
+
+.navbar-inverse .navbar-nav > li > a:focus {
+  color: #9d9d9d;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+  color: #fff;
+  background-color: transparent;
 }
 
 .controls {
@@ -71,8 +80,8 @@ ul.sortable li {
     margin-right: auto
 }
 
-.modal .modal-carousel {
-    height: 525px;
+.modal .modal-tabs {
+    height: 425px;
     overflow-y: auto;
 }
 
@@ -126,68 +135,24 @@ ul.sortable li {
     pointer-events: all;
 }
 
-.carousel-controls{
-    position: relative; 
-    width: 100%;
-    margin: 0 auto;
-    height: 30px;
-}
-
-.carousel-control.left, .carousel-control.right {
-    background-image: none;
-    color: #999;
-    width: 5%;
-    top: 0px;
-}
-
-.carousel-indicators {
-    top: 50%;
-}
-
-.carousel-indicators li {
-    background-color: #999;
-}
-
-.carousel-indicators .active {
-    background-color: #444;
-}
-
-div.carousel-box {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-div.chart-box {
-    width: 250px;
-    height: 250px;
-    margin: 0 auto;
-}
-
-.chart-total-box {
-    text-align: center;
-}
-
-.chart-total {
-    position: relative;
-    top: 88px;
-    font-size: 20px;
-    z-index: -1;
+.label-statistics {
+    font-size: 14px;
 }
 
 ol.colored-list {
    list-style: none;
+   padding-left: 10px;
 }
 
 ol.colored-list li {
-    counter-increment: item;
+    counter-increment: toplist;
     margin-bottom: 5px;
     font-size: 16px;
 }
 
 ol.colored-list li:before {
     margin-right: 10px;
-    content: counter(item);
+    content: counter(toplist);
     background: #f3e820;
     border-radius: 100%;
     color: #000000;
@@ -195,6 +160,23 @@ ol.colored-list li:before {
     text-align: center;
     display: inline-block;
     font-weight: bold;
+}
+
+.input-group-addon {
+    cursor: pointer;
+}
+
+.select2-container--bootstrap .select2-selection {
+    border-bottom-left-radius: 0px !important;
+    border-top-left-radius: 0px !important;
+}
+
+.select2-search__field:not([placeholder='']) {
+    width: 20em !important;
+}
+
+.ekko-lightbox a.glyphicon, a.glyphicon:hover, a.glyphicon:focus {
+    color: #ffffff;
 }
 
 @media (min-width: 768px) {
@@ -214,6 +196,7 @@ ol.colored-list li:before {
     .modal-left {
         top: 60px;
         right: auto;
+        z-index: 1040;
         overflow: visible !important;
     }
 

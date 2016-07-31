@@ -15,7 +15,15 @@ class User < ActiveRecord::Base
   end
 
   def travel_partners_toplist
-    TravelPartner.select("travel_partners.name", "COUNT(trips.id) as trip_count").joins(:trips).where(user_id: self.id).group("travel_partners.id").order("trip_count DESC, travel_partners.name ASC")
+    TravelPartner.select("travel_partners.name", "COUNT(trips.id) as trip_count").joins(:trips).where(user_id: self.id).group("travel_partners.id").order("trip_count DESC, travel_partners.name ASC").limit(10)
+  end
+
+  def days_travelling
+    days = 0
+    self.trips.each do |t|
+      days += (t.end_date - t.start_date).to_i + 1
+    end
+    return days
   end
 
   def self.from_omniauth(auth)

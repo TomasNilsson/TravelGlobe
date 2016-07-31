@@ -53,14 +53,16 @@
       "lengthChange": false,
       "info": false,
       "autoWidth": false,
+      "order": [[0, "desc"]],
       "language": {
         "zeroRecords": "No matching trips found"
       },
       "columns": [
-        { "width": "25%" },
-        { "width": "25%" },
-        { "width": "25%" },
-        { "width": "25%" }
+        {"width": "25%"},
+        {"width": "25%"},
+        {"width": "25%"},
+        {"width": "25%"},
+        {"visible": false}
       ]
     });
 
@@ -68,6 +70,7 @@
       "lengthChange": false,
       "info": false,
       "autoWidth": false,
+      "order": [[0, "desc"]],
       "language": {
         "zeroRecords": "No matching places found"
       },
@@ -260,7 +263,12 @@
       markers.push(new google.maps.Marker({
         map: map,
         title: place.name,
-        position: place.geometry.location
+        position: place.geometry.location,
+        label: "\u25CF",
+        icon: {
+          url: "<%= URI.join(root_url, image_path('map-marker.png')) %>",
+          labelOrigin: new google.maps.Point(21, 10)
+        }
       }));
 
       if (place.geometry.viewport) {
@@ -366,7 +374,10 @@
       var marker = new google.maps.Marker({
         position: {lat: parseFloat(place[1]), lng: parseFloat(place[2])},
         title: place[0],
-        icon: "<%= URI.join(root_url, image_path('house-marker.png')) %>",
+        icon: {
+          url: "<%= URI.join(root_url, image_path('house-marker.png')) %>",
+          anchor: new google.maps.Point(16,20)
+        },
         map: map
       });
       marker.addListener('click', function() {

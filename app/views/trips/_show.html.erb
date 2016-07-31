@@ -5,7 +5,9 @@
   <% end %>
 </p>
 <p><strong>Date:</strong> <%= @trip.date %></p>
-<p><strong>Travel Partners:</strong> <%= @trip.travel_partners.map(&:name).join(", ") %></p>
+<% if @trip.travel_partners.present? %>
+  <p><strong>Travel Partners:</strong> <%= @trip.travel_partners.map(&:name).join(", ") %></p>
+<% end %>
 <p><strong>Countries:</strong> <span id="countryNames"><%= @trip.countries.map(&:name).join(", ") %></span></p>
 <p><strong>Places:</strong> <%= @places.map(&:name).join(", ") %> <span id="placesInfo"><%= raw @places.pluck(:name, :latitude, :longitude).to_json %></span></p>
 <% @trip.photos.each_slice(2) do |photo_group| %>

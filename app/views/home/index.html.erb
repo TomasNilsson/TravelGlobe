@@ -9,101 +9,93 @@
           <h4 class="modal-title" id="newTripModalLabel">Add New Trip</h4>
         </div>
         <%= form_for @trip, remote: true, id: "new_trip" do |f| %>
-        <div id="carousel-new-trip" class="carousel slide" data-ride="carousel" data-interval="false">
-          <div class="carousel-controls">
-            <a class="left carousel-control" href="#carousel-new-trip" role="button" data-slide="prev">
-              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-            </a>
-            <ol class="carousel-indicators">
-              <li data-target="#carousel-new-trip" data-slide-to="0" class="active"></li>
-              <li data-target="#carousel-new-trip" data-slide-to="1"></li>
-            </ol>
-            <a class="right carousel-control" href="#carousel-new-trip" role="button" data-slide="next">
-              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-            </a>
-          </div>
-          <div class="modal-body modal-carousel">
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner" role="listbox">
-              <div class="item active">
-                <div class="carousel-box">
-                  <div class="row">
-                    <div class="form-group col-xs-12 col-md-8">
-                      <%= f.label :name, "Name" %> 
-                      <div class="input-group">
-                        <span class="input-group-addon"><%= icon("info-sign") %></span>
-                        <%= f.text_field :name, placeholder: "E.g. California Road Trip", class: "form-control" %>
-                      </div>
-                    </div>
-                    <div class="form-group col-xs-12 col-md-6">
-                      <%= f.label :start_date, "Start Date" %> 
-                      <div class="input-group">
-                        <span class="input-group-addon"><%= icon("calendar") %></span>
-                        <%= f.text_field :start_date, class: "form-control", 'data-provide': "datepicker" %>
-                      </div>
-                    </div>
-                    <div class="form-group col-xs-12 col-md-6">
-                      <%= f.label :end_date, "End Date" %> 
-                      <div class="input-group">
-                        <span class="input-group-addon"><%= icon("calendar") %></span>
-                        <%= f.text_field :end_date, class: "form-control", 'data-provide': "datepicker" %>
-                      </div>
-                    </div>
-                    <div class="form-group col-xs-12 col-md-8">
-                      <%= f.label :travel_partner_ids, "Travel Partners" %>
-                      <div class="input-group">
-                        <span class="input-group-addon"><%= icon("user") %></span>
-                        <%= f.select :travel_partner_ids, options_from_collection_for_select(current_user.travel_partners.order(:name), 'id', 'name'), {}, {class: "form-control select-box-tags", multiple: true, style: "width: 100%"} %>
-                      </div>
-                    </div>
-                    <div class="form-group col-xs-12 col-md-8">
-                      <%= f.label :category_ids, "Categories" %>
-                      <div class="input-group">
-                        <span class="input-group-addon"><%= icon("tags") %></span>
-                        <%= f.select :category_ids, options_from_collection_for_select(Category.for_user(current_user), 'id', 'name'), {}, {class: "form-control select-box-tags", multiple: true, style: "width: 100%"} %>
-                      </div>
-                    </div>
-                    <div class="form-group col-xs-12 col-md-8">
-                      <%= f.label :country_ids, "Countries/States" %>
-                      <div class="input-group">
-                        <span class="input-group-addon"><%= icon("globe") %></span>
-                        <%= f.select :country_ids, options_from_collection_for_select(Country.all.order(:name), 'id', 'name'), {}, {class: "form-control select-box", multiple: true, style: "width: 100%"} %>
-                      </div>
-                    </div>
-                    <div class="form-group col-xs-12 col-md-8">
-                      <label>Cities/Places</label>
-                      <div class="input-group">
-                        <span class="input-group-addon"><%= icon("map-marker") %></span>
-                        <input type="text" class="form-control" id="google-places">
-                      </div>
-                    </div>
+        <div class="modal-body modal-tabs">
+          <ul class="nav nav-tabs" id="newTripTabs" role="tablist">
+            <li role="presentation" class="active"><a href="#newTripInfo" aria-controls="newTripInfo" role="tab" data-toggle="tab">Info</a></li>
+            <li role="presentation"><a href="#newTripPlaces" aria-controls="newTripPlaces" role="tab" data-toggle="tab">Places</a></li>
+            <li role="presentation"><a href="#newTripPhotos" aria-controls="newTripPhotos" role="tab" data-toggle="tab">Photos</a></li>
+          </ul>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade in active" id="newTripInfo">
+              <h4>Trip Info</h4>
+              <div class="row">
+                <div class="form-group col-xs-12 col-md-8">
+                  <%= f.label :name, "Name" %> 
+                  <div class="input-group">
+                    <span class="input-group-addon"><%= icon("info-sign") %></span>
+                    <%= f.text_field :name, placeholder: "E.g. California Road Trip", class: "form-control" %>
                   </div>
-                  <ul id="selectedPlaces" class="list-group sortable col-xs-12 col-md-8">
-                  </ul>
-                  <%= link_to_add_association '', f, :places, {partial: 'trips/places_fields', "data-association-insertion-node": '#selectedPlaces', "data-association-insertion-method": 'append', id: "addPlace", style: "display:none;" } %>
                 </div>
-              </div>
-              <div class="item">
-                <div class="carousel-box">
-                  <h4>Select Photos</h4>
-                  <button type="button" class="btn btn-primary" id="fbPhotoSelect">Facebook</button>
-                  <button type="button" class="btn btn-default" id="uploadPhotos">Upload Photos</button>
-                  <table id="selectedPhotos" class="table table-hover">
-                    <thead>
-                      <tr>
-                        <th>Preview</th>
-                        <th>Caption</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
-                  <%= link_to_add_association '', f, :photos, {partial: 'trips/photos_fields', "data-association-insertion-node": '#selectedPhotos > tbody', "data-association-insertion-method": 'append', id: "addPhoto", style: "display:none;" } %>
+                <div class="form-group col-xs-12 col-md-6">
+                  <%= f.label :start_date, "Start Date" %> 
+                  <div class="input-group">
+                    <span class="input-group-addon"><%= icon("calendar") %></span>
+                    <%= f.text_field :start_date, placeholder: "YYYY-MM-DD", class: "form-control", 'data-provide': "datepicker" %>
+                  </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-6">
+                  <%= f.label :end_date, "End Date" %> 
+                  <div class="input-group">
+                    <span class="input-group-addon"><%= icon("calendar") %></span>
+                    <%= f.text_field :end_date, placeholder: "YYYY-MM-DD", class: "form-control", 'data-provide': "datepicker" %>
+                  </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-8">
+                  <%= f.label :travel_partner_ids, "Travel Partners" %>
+                  <div class="input-group">
+                    <span class="input-group-addon"><%= icon("user") %></span>
+                    <%= f.select :travel_partner_ids, options_from_collection_for_select(current_user.travel_partners.order(:name), 'id', 'name'), {}, {class: "form-control select-box-tags", multiple: true, style: "width: 100%"} %>
+                  </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-8">
+                  <%= f.label :category_ids, "Categories" %>
+                  <div class="input-group">
+                    <span class="input-group-addon"><%= icon("tags") %></span>
+                    <%= f.select :category_ids, options_from_collection_for_select(Category.for_user(current_user), 'id', 'name'), {}, {class: "form-control select-box-tags", multiple: true, style: "width: 100%"} %>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>   
+            <div role="tabpanel" class="tab-pane fade" id="newTripPlaces">
+              <h4>Select Places</h4>
+              <div class="row">
+                <div class="form-group col-xs-12 col-md-8">
+                  <%= f.label :country_ids, "Countries/States" %>
+                  <div class="input-group">
+                    <span class="input-group-addon"><%= icon("globe") %></span>
+                    <%= f.select :country_ids, options_from_collection_for_select(Country.all.order(:name), 'id', 'name'), {}, {class: "form-control select-box-multiple", multiple: true, style: "width: 100%"} %>
+                  </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-8">
+                  <label>Cities/Places</label>
+                  <div class="input-group">
+                    <span class="input-group-addon"><%= icon("map-marker") %></span>
+                    <input type="text" class="form-control" id="google-places">
+                  </div>
+                </div>
+              </div>
+              <ul id="selectedPlaces" class="list-group sortable col-xs-12 col-md-8">
+              </ul>
+              <%= link_to_add_association '', f, :places, {partial: 'trips/places_fields', "data-association-insertion-node": '#selectedPlaces', "data-association-insertion-method": 'append', id: "addPlace", style: "display:none;" } %>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="newTripPhotos">
+              <h4>Select Photos</h4>
+              <button type="button" class="btn btn-primary" id="fbPhotoSelect">Facebook</button>
+              <button type="button" class="btn btn-default" id="uploadPhotos">Upload Photos</button>
+              <table id="selectedPhotos" class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Preview</th>
+                    <th>Caption</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+              <%= link_to_add_association '', f, :photos, {partial: 'trips/photos_fields', "data-association-insertion-node": '#selectedPhotos > tbody', "data-association-insertion-method": 'append', id: "addPhoto", style: "display:none;" } %>
+            </div>
+          </div>  
         </div>
         <!-- Markup for Carson Shold's Photo Selector -->
         <div id="CSPhotoSelector">
@@ -146,8 +138,8 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <a class="btn btn-primary" href="#carousel-new-trip" role="button" data-slide="next" id="new-trip-next">Next</a>
-          <%= submit_tag "Save", class: "btn btn-primary", id: "new-trip-save", style: "display: none;" %>
+          <button type="button" class="btn btn-primary" id="newTripNext">Next</button>
+          <%= submit_tag "Save", class: "btn btn-primary", id: "newTripSave", style: "display: none;" %>
         </div>
         <% end %>
       </div>
@@ -163,44 +155,18 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="statisticsModalLabel">Statistics</h4>
         </div>
-        <div id="carousel-statistics" class="carousel slide" data-ride="carousel" data-interval="false">
-          <div class="carousel-controls">
-            <a class="left carousel-control" href="#carousel-statistics" role="button" data-slide="prev">
-              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-            </a>
-            <ol class="carousel-indicators">
-              <li data-target="#carousel-statistics" data-slide-to="0" class="active"></li>
-              <li data-target="#carousel-statistics" data-slide-to="1"></li>
-            </ol>
-            <a class="right carousel-control" href="#carousel-statistics" role="button" data-slide="next">
-              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-            </a>
+        <div class="modal-body">
+          <div class="well well-sm">
+            <h4>Number of Visited Countries: <span class="label label-primary label-statistics"><%= current_user.visited_countries_count %></span></h4>
+            <h4>Number of Days Travelling: <span class="label label-primary label-statistics"><%= current_user.days_travelling %></span></h4>
           </div>
-          <div class="modal-body modal-carousel">
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner" role="listbox">
-              <div class="item active">
-                <div class="carousel-box">
-                  <h4>Number of visited countries:</h4>
-                  <div class="chart-total-box">
-                    <span class="label label-primary chart-total"><%= current_user.visited_countries_count %></span>
-                  </div>
-                  <div class="chart-box">
-                    <canvas id="myChart" width="250" height="250"></canvas>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="carousel-box">
-                  <h4>Your Top 5 Travel Partners:</h4>
-                  <ol class="colored-list">
-                    <% @travel_partners_toplist.each do |t| %>
-                      <li><strong><%= t.name %></strong>, <%= t.trip_count %> trips</li>
-                    <% end %>
-                  </ol>
-                </div>
-              </div>
-            </div>
+          <div class="well well-sm">
+            <h4>Top 10 Travel Partners:</h4>
+            <ol class="colored-list">
+              <% @travel_partners_toplist.each do |t| %>
+                <li><strong><%= t.name %></strong>, <%= pluralize(t.trip_count, 'trip')  %></li>
+              <% end %>
+            </ol>
           </div>
         </div>
         <div class="modal-footer">
@@ -227,6 +193,7 @@
                 <th>Name</th>
                 <th>Countries</th>
                 <th>Categories</th>
+                <th>Travel Partners</th>
               </tr>
             </thead>
             <tbody>
@@ -236,6 +203,7 @@
                 <td><%= link_to t.name, trip_path(t), remote: true %></td>
                 <td><%= t.countries.map(&:name).join(", ") %></td>
                 <td><%= t.categories.map(&:name).join(", ") %></td>
+                <td><%= t.travel_partners.map(&:name).join(", ") %></td>
               </tr>
             <% end %>
             </tbody>
@@ -287,13 +255,13 @@
   </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="newPlaceLivedModal" tabindex="-1" role="dialog" aria-labelledby="newPlaceLivedModalLabel">
+<div class="modal fade" data-backdrop="static" id="newPlaceLivedModal" tabindex="-1" role="dialog" aria-labelledby="newPlaceLivedModalLabel">
   <div class="vertical-alignment-helper">
     <div class="modal-dialog vertical-align-center" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="newPlacesLivedModalLabel">New Place Lived</h4>
+          <h4 class="modal-title" id="newPlacesLivedModalLabel">New Place I've Lived</h4>
         </div>
         <%= form_for @place_lived, remote: true, id: "new_place_lived" do |f| %>
         <div class="modal-body">
@@ -318,14 +286,14 @@
               <%= f.label :start_date, "Start Date" %> 
               <div class="input-group">
                 <span class="input-group-addon"><%= icon("calendar") %></span>
-                <%= f.text_field :start_date, class: "form-control", 'data-provide': "datepicker" %>
+                <%= f.text_field :start_date, placeholder: "YYYY-MM-DD", class: "form-control", 'data-provide': "datepicker" %>
               </div>
             </div>
             <div class="form-group col-xs-12 col-md-6">
               <%= f.label :end_date, "End Date" %> 
               <div class="input-group">
                 <span class="input-group-addon"><%= icon("calendar") %></span>
-                <%= f.text_field :end_date, class: "form-control", 'data-provide': "datepicker" %>
+                <%= f.text_field :end_date, placeholder: "YYYY-MM-DD", class: "form-control", 'data-provide': "datepicker" %>
               </div>
             </div>
           </div>

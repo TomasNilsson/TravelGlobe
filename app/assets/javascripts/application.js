@@ -16,7 +16,6 @@
 //= require jquery_ujs
 //= require jquery-ui/sortable
 //= require_tree .
-//= require chart.min.js
 //= require select2.min.js
 //= require jquery.dataTables.min.js
 //= require dataTables.bootstrap.min.js
@@ -30,35 +29,62 @@ $(document).ready(function(){
         weekStart: 1
     });
 
+    var tripDuration = 0;
+
     $('#trip_start_date').on('changeDate', function (selected) {
-        var minDate = new Date(selected.date.valueOf());
+        var newDate = new Date(selected.date.valueOf());
         var endDate = $('#trip_end_date');
-        endDate.datepicker('setStartDate', minDate);
+        endDate.datepicker('setStartDate', newDate);
         if (!endDate.val()) {
-            endDate.datepicker('update', minDate);
+            endDate.datepicker('update', newDate);
+            tripDuration = 0;
+        } else {
+            newDate.setDate(newDate.getDate() + tripDuration);
+            endDate.datepicker('update', newDate);
         }
     });
 
     $('#trip_end_date').on('changeDate', function (selected) {
-        var maxDate = new Date(selected.date.valueOf());
-        $('#trip_start_date').datepicker('setEndDate', maxDate);
+        var endDate = new Date(selected.date.valueOf());
+        var startDate = $('#trip_start_date').val();
+        if (startDate) {
+            tripDuration = endDate.getDate() - new Date(startDate).getDate();
+        } else {
+            tripDuration = 0;
+        }
     });
 
+    var placeLivedDuration = 0;
+
     $('#place_lived_start_date').on('changeDate', function (selected) {
-        var minDate = new Date(selected.date.valueOf());
+        var newDate = new Date(selected.date.valueOf());
         var endDate = $('#place_lived_end_date');
-        endDate.datepicker('setStartDate', minDate);
+        endDate.datepicker('setStartDate', newDate);
         if (!endDate.val()) {
-            endDate.datepicker('update', minDate);
+            endDate.datepicker('update', newDate);
+            placeLivedDuration = 0;
+        } else {
+            newDate.setDate(newDate.getDate() + placeLivedDuration);
+            endDate.datepicker('update', newDate);
         }
     });
 
     $('#place_lived_end_date').on('changeDate', function (selected) {
-        var maxDate = new Date(selected.date.valueOf());
-        $('#place_lived_start_date').datepicker('setEndDate', maxDate);
+        var endDate = new Date(selected.date.valueOf());
+        var startDate = $('#place_lived_start_date').val();
+        if (startDate) {
+            placeLivedDuration = endDate.getDate() - new Date(startDate).getDate();
+        } else {
+            placeLivedDuration = 0;
+        }
     });
 
-    $('.navbar a').click(function(){
+    $('.input-group-addon').click(function() {
+        $(this).siblings().focus();
+        $(this).siblings('select').select2('open');
+    });
+
+    $('.navbar a').click(function() {
         $('.modal.in').modal('hide');
     });
 
@@ -98,8 +124,7 @@ function moveDown(item) {
     var next = item.next();
     if (next.length == 0)
         return;
-    var index = next.find("input.place-order").val();
-    item.insertAfter(next).hide().show('slow');
+    next.insertBefore(item).hide().show('slow');
     updateOrder();
 }
 
@@ -235,13 +260,14 @@ $(document).ready(function () {
 });
 
 $(document).ready(function(){
-    $(".select-box").select2({
-        theme: "bootstrap"
+    $(".select-box-multiple").select2({
+        theme: "bootstrap",
+        placeholder: "Select one or many countries"
     });
 
     $(".select-box-tags").select2({
         theme: "bootstrap",
-        //placeholder: "Choose from the list or create new",
+        placeholder: "Choose from the list or create new",
         tags: true
     });
 
@@ -268,18 +294,32 @@ $(document).ready(function(){
         // Reset everything
         $('[data-provide~=datepicker]').datepicker('update', '');
         $(this).find('form')[0].reset();
-        $('.select-box').val('').trigger('change');
+        $('.select-box-tags').val('').trigger('change');
+        $('.select-box-multiple').val('').trigger('change');
+        $("#selectedPlaces").html("");
         $("#selectedPhotos > tbody").html("");
-        $('#carousel-new-trip').carousel(0);
+        $('#newTripTabs a:first').tab('show');
     });
 
-    $('#carousel-new-trip').on('slide.bs.carousel', function (event) {
-        if ($(event.relatedTarget).index() == 1) {
-            $('#new-trip-next').hide();
-            $('#new-trip-save').show();
+    $('#newPlaceLivedModal').on('hidden.bs.modal', function(){
+        // Reset everything
+        $('[data-provide~=datepicker]').datepicker('update', '');
+        $(this).find('form')[0].reset();
+        $('.select-box-single').val('').trigger('change');
+    });
+
+    $('#newTripNext').click(function (e) {
+      e.preventDefault()
+      $("#newTripTabs li.active").next().children('a').tab('show');
+    })
+
+    $('#newTripTabs a[data-toggle="tab"]').on('show.bs.tab', function (event) {
+        if ($(event.target).closest('li').index() == $("#newTripTabs li").length - 1) {
+            $('#newTripNext').hide();
+            $('#newTripSave').show();
         } else {
-            $('#new-trip-save').hide();
-            $('#new-trip-next').show();
+            $('#newTripSave').hide();
+            $('#newTripNext').show();
         }
     })
 
@@ -288,53 +328,12 @@ $(document).ready(function(){
         $('#trips').DataTable().search('').draw();
     });
 
+    $('#placesLivedModal').on('hidden.bs.modal', function(){
+        // Reset filter
+        $('#placesLived').DataTable().search('').draw();
+    });
+
     $('#tripInfoModal').on('hide.bs.modal', function(){
         removeMarkers();
-    });
-});
-
-$(document).ready(function(){
-    Chart.defaults.global.legend.position = 'bottom';
-    var ctx = $("#myChart");
-    var data = {
-        labels: [
-            "Africa",
-            "Europe",
-            "Asia",
-            "North America",
-            "South America",
-            "Antarctica",
-            "Australia"
-        ],
-        datasets: [
-            {
-                data: [300, 50, 100, 100, 100, 100, 100],
-                backgroundColor: [
-                    "#5DA5DA",
-                    "#FAA43A",
-                    "#60BD68",
-                    "#B276B2",
-                    "#DECF3F",
-                    "#F15854",
-                    "#4D4D4D"
-                ],
-                hoverBackgroundColor: [
-                    "#5DA5DA",
-                    "#FAA43A",
-                    "#60BD68",
-                    "#B276B2",
-                    "#DECF3F",
-                    "#F15854",
-                    "#4D4D4D"
-                ]
-            }]
-    };
-
-    var myDoughnutChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: data,
-        animation:{
-            animateScale:true
-        }
     });
 });
