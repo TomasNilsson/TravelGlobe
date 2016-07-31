@@ -1,3 +1,6 @@
+/* Customize variables before Bootstrap is included */
+$brand-primary: darken(#3b5998, 6.5%);
+
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "bootstrap-datepicker3";

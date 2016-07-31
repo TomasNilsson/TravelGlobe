@@ -8,5 +8,5 @@ Rails.application.routes.draw do
 
   resources :trips, only: [:create, :show]
 
-  resources :places_lived, only: [:create]
+  resources :places_lived, only: [:create, :show]
 end

@@ -239,7 +239,7 @@
             <% @places_lived.each do |p| %>
               <tr>
                 <td><%= p.date %></td>
-                <td><%= p.address %></td>
+                <td><%= link_to p.address, place_lived_path(p), remote: true %></td>
                 <td><%= p.country.name %></td>
               </tr>
             <% end %>

@@ -328,17 +328,23 @@
     });
   }
 
-  function moveMap(countries) {
+  function moveMap(locations) {
     var geocoder = new google.maps.Geocoder();
     var bounds = new google.maps.LatLngBounds();
-    countries.forEach(function(country) {
-      geocoder.geocode( { 'address': country}, function(results, status) {
+    locations.forEach(function(location) {
+      geocoder.geocode( { 'address': location}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
           bounds.union(results[0].geometry.viewport);
           map.fitBounds(bounds);
         }
       });
     });
+  }
+
+  function moveMapLatLng(latitude, longitude) {
+    var location = new google.maps.LatLng(latitude, longitude);
+    map.setCenter(location);
+    map.setZoom(9);
   }
 
   function addMarkers(places) {

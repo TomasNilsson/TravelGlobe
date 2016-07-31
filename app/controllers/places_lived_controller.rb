@@ -10,6 +10,10 @@ class PlacesLivedController < ApplicationController
     end
   end
 
+  def show
+    @place_lived = PlaceLived.find(params[:id])
+  end
+
   def destroy
   end
 
