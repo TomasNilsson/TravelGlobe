@@ -16,11 +16,7 @@
 //= require jquery_ujs
 //= require jquery-ui/sortable
 //= require_tree .
-//= require select2.min.js
-//= require jquery.dataTables.min.js
-//= require dataTables.bootstrap.min.js
 //= require cocoon
-//= require ekko-lightbox.min.js
 //= require cloudinary
 
 $(document).ready(function(){

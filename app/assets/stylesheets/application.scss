@@ -6,11 +6,7 @@ $brand-primary: darken(#3b5998, 6.5%);
 @import "bootstrap-datepicker3";
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic);
 @import "jquery-ui/sortable";
-@import "select2.min.css";
-@import "select2-bootstrap.min.css";
-@import "dataTables.bootstrap.min.css";
 @import "photoselector";
-@import "ekko-lightbox.min.css";
 
 html, body {
     height: 100%;
