@@ -9,4 +9,6 @@ Rails.application.routes.draw do
   resources :trips, only: [:create, :show]
 
   resources :places_lived, only: [:create, :show]
+
+  get 'policies/privacy', to: 'home#privacy'
 end

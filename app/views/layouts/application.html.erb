@@ -22,30 +22,6 @@
 <%= render 'layouts/header' %>
 <input id="search" class="controls" type="text" placeholder="Search">
 <div id="map"></div>
-<% if not current_user %>
-  <!-- Modal -->
-  <div class="modal fade" data-keyboard="false" data-backdrop="static" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
-    <div class="vertical-alignment-helper">
-      <div class="modal-dialog vertical-align-center" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="loginModalLabel">Welcome to TravelGlobe!</h4>
-          </div>
-          <div class="modal-body">
-              <%= link_to image_tag("facebook.png"), "/auth/facebook" %>
-          </div>
-          <div class="modal-footer">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <script type="text/javascript">
-    $(window).load(function(){
-        $('#loginModal').modal('show');
-    });
-  </script>
-<% end %>
 <script>
   var map;
   var markers = [];
@@ -191,35 +167,6 @@
     map.mapTypes.set("travelglobe", travelGlobeMapType);
     map.setMapTypeId("travelglobe");
 
-    <% if current_user %>
-    var current_user_id = <%= current_user.id %>;
-    // Color visited countries
-    var visitedCountries = $.getJSON("/visited_countries").success(function(data) {
-      var layerVisited = new google.maps.FusionTablesLayer({
-        query: {
-          select: 'Geometry',
-          from: '1N2E7_-NS9_cQ7NKL61BwtvcrNLEeYB4Mk1G8LZzd',
-          where: 'Code IN (\'' + data.countries.join('\',\'') + '\')' 
-        },
-        styles: [{
-          polygonOptions: {
-            fillColor: '#00FF00',
-            fillOpacity: 0.3
-          }
-        }],
-        suppressInfoWindows: true
-      });
-      layerVisited.setMap(map);
-      google.maps.event.addListener(layerVisited, "click", function(event) {
-        $('.modal.in').modal('hide');
-        $('#myTripsModal').modal('show');
-        $('#trips').DataTable().search(event.row.Name.value).draw();
-      });
-    });
-
-    // Add markers to places lived
-    addHouseMarkers(<%= raw @places_lived.pluck(:address, :latitude, :longitude).to_json %>);
-
     // Prevent panning outside map boundaries
     map.addListener('center_changed', function() {
       var latNorth = map.getBounds().getNorthEast().lat();
@@ -287,6 +234,35 @@
         map.setZoom(9);
       }
     });
+
+    <% if current_user && controller.action_name == "index" %>
+    var current_user_id = <%= current_user.id %>;
+    // Color visited countries
+    var visitedCountries = $.getJSON("/visited_countries").success(function(data) {
+      var layerVisited = new google.maps.FusionTablesLayer({
+        query: {
+          select: 'Geometry',
+          from: '1N2E7_-NS9_cQ7NKL61BwtvcrNLEeYB4Mk1G8LZzd',
+          where: 'Code IN (\'' + data.countries.join('\',\'') + '\')' 
+        },
+        styles: [{
+          polygonOptions: {
+            fillColor: '#00FF00',
+            fillOpacity: 0.3
+          }
+        }],
+        suppressInfoWindows: true
+      });
+      layerVisited.setMap(map);
+      google.maps.event.addListener(layerVisited, "click", function(event) {
+        $('.modal.in').modal('hide');
+        $('#myTripsModal').modal('show');
+        $('#trips').DataTable().search(event.row.Name.value).draw();
+      });
+    });
+
+    // Add markers to places lived
+    addHouseMarkers(<%= raw @places_lived.pluck(:address, :latitude, :longitude).to_json %>);
 
     var places = document.getElementById('google-places');
     var autocomplete = new google.maps.places.Autocomplete(places);
