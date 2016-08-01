@@ -32,6 +32,9 @@ gem 'figaro'
 # Use Cocoon for dynamic nested forms
 gem "cocoon"
 
+# Use Cloudinary to upload images to the cloud
+gem 'cloudinary'
+
 group :development do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'

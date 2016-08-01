@@ -21,6 +21,7 @@
 //= require dataTables.bootstrap.min.js
 //= require cocoon
 //= require ekko-lightbox.min.js
+//= require cloudinary
 
 $(document).ready(function(){
     $('[data-provide~=datepicker]').datepicker({
@@ -244,11 +245,6 @@ $(document).ready(function () {
      * Click events
      * ----------------------------------------------------------------- */
 
-    $(".photoSelect").click(function (e) {
-        e.preventDefault();
-        $('#photoSelectorModal').modal('show');
-    });
-
     $("#fbPhotoSelect").click(function (e) {
         e.preventDefault();
         fbphotoSelect();
@@ -257,6 +253,61 @@ $(document).ready(function () {
     logActivity = function (message) {
         $("#results").append('<div>' + message + '</div>');
     };
+});
+
+$(document).ready(function() {
+    // Cloudinary jQuery integration library uses jQuery File Upload widget
+    // (see http://blueimp.github.io/jQuery-File-Upload/).
+    // Any file input field with cloudinary-fileupload class is automatically
+    // wrapped using the File Upload widget and configured for Cloudinary uploads.
+    // You can further customize the configuration using .fileupload method
+    // as we do below.
+    $(".cloudinary-fileupload")
+        .cloudinary_fileupload({
+            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+            dropZone: "#dropzone",
+        })
+        .on("fileuploadprogressall", function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress .progress-bar').css(
+                'width',
+                progress + '%'
+            );
+        })
+        .on("fileuploaddone", function (e, data) {
+            // TODO: handle errors
+            $('#photoUploaderModal').modal('hide');
+        })
+        .on("cloudinarydone", function (e, data) {
+            $("#addPhoto").click();
+            var tablerow = $("#selectedPhotos tr:last");
+            var thumb = tablerow.find('td.thumb-field')
+            thumb.find("input.thumb-url").val($.cloudinary.url(data.result.public_id, {
+                format: data.result.format, width: 130, height: 130, crop: "fit", secure: true
+            }));
+            thumb.find("input.image-url").val($.cloudinary.url(data.result.public_id, {
+                format: data.result.format, secure: true
+            }));
+            $.cloudinary.image(data.result.public_id, {
+              width: 130, height: 130, crop: "fit", secure: true
+            }).appendTo(thumb);
+        });
+    var counter = 0;
+    $('#dropzone')
+        .on("dragenter", function (e) {
+            counter++;
+            $(this).addClass('hover');
+        })
+        .on("dragleave", function (e) {
+            counter--;
+            if (counter === 0) { 
+                $(this).removeClass('hover');
+            }
+        })
+        .on("drop", function (e) {
+            counter = 0;
+            $(this).removeClass('hover');
+        });
 });
 
 $(document).ready(function(){
@@ -279,13 +330,13 @@ $(document).ready(function(){
     });
 
     $('#new_trip').on('ajax:success', function(event, data, status, xhr) {
-        $('#newTripModal').modal('hide').empty();
+        $('#newTripModal').modal('hide');
         // TODO: handle errors and don't reload page (use AJAX instead to update different elements)
         location.reload();
     });
 
     $('#new_place_lived').on('ajax:success', function(event, data, status, xhr) {
-        $('#newPlaceLivedModal').modal('hide').empty();
+        $('#newPlaceLivedModal').modal('hide');
         // TODO: handle errors and don't reload page (use AJAX instead to update different elements)
         location.reload();
     });
@@ -306,6 +357,12 @@ $(document).ready(function(){
         $('[data-provide~=datepicker]').datepicker('update', '');
         $(this).find('form')[0].reset();
         $('.select-box-single').val('').trigger('change');
+    });
+
+    $('#photoUploaderModal').on('hidden.bs.modal', function(){
+        // Reset everything
+        $(this).find('form')[0].reset();
+        $('#progress .progress-bar').css('width', '0%');
     });
 
     $('#newTripNext').click(function (e) {

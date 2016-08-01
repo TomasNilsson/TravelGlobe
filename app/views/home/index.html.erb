@@ -81,7 +81,7 @@
             <div role="tabpanel" class="tab-pane fade" id="newTripPhotos">
               <h4>Select Photos</h4>
               <button type="button" class="btn btn-primary" id="fbPhotoSelect">Facebook</button>
-              <button type="button" class="btn btn-default" id="uploadPhotos">Upload Photos</button>
+              <a class="btn btn-default" data-toggle="modal" data-target="#photoUploaderModal">Upload Photos</a>
               <table id="selectedPhotos" class="table table-hover">
                 <thead>
                   <tr>
@@ -142,6 +142,45 @@
           <%= submit_tag "Save", class: "btn btn-primary", id: "newTripSave", style: "display: none;" %>
         </div>
         <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="photoUploaderModal" tabindex="-1" role="dialog" aria-labelledby="photoUploaderModalLabel">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="photoUploaderModalLabel">Photo Uploader</h4>
+        </div>
+        <div class="modal-body">
+          <%= form_tag('#', method: :post) do  %>
+          <div id="dropzone" class="dropzone">
+            <div class="drop-inner">
+              <span class="drop-text">Drop files here<span class="small">or</span></span>
+              <div class="button-holder">
+                <span class="btn btn-primary fileinput-button">
+                  <i class="glyphicon glyphicon-plus"></i>
+                  <span>Select files...</span>
+                  <%= cl_image_upload_tag("photo[]", 
+                                          :crop => :limit, :width => 720, :height => 720,
+                                          :eager => [{ :crop => :fit, :width => 130, :height => 130 }],
+                                          :html => { :multiple => true, :class => "image-upload" }) %>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div id="progress" class="progress">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            </div>
+          </div>
+          <% end %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>

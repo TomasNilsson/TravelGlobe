@@ -182,6 +182,66 @@ ol.colored-list li:before {
     color: #ffffff;
 }
 
+.dropzone {
+    width: 80%;
+    height: 85px;
+    border: 4px dashed #ccc;
+    margin: 5px auto;
+}
+
+.dropzone.hover {
+    border-color: $brand-primary;
+}
+
+.dropzone .drop-inner {
+    width: 340px;
+    margin: 21px auto 0 auto;
+    height: 34px;
+}
+
+.dropzone .drop-inner span.drop-text {
+    float: left;
+    display: inline-block;
+    font-weight: normal;
+    font-size: 18px;
+    color: #999;
+    line-height: 34px;
+}
+
+.dropzone .drop-inner span.small {
+    float: none;
+    font-weight: normal;
+    font-size: 14px;
+    padding: 0 38px;
+}
+
+.dropzone .button-holder {
+    position: relative;
+    display: inline-block;
+    height: 34px;
+}
+
+.fileinput-button {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+.fileinput-button input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    opacity: 0;
+    -ms-filter: 'alpha(opacity=0)';
+    font-size: 200px !important;
+    direction: ltr;
+    cursor: pointer;
+}
+
+.progress {
+    margin-top: 20px;
+}
+
 @media (min-width: 768px) {
     .navbar-nav > li > a {
         padding-top: 4px;
