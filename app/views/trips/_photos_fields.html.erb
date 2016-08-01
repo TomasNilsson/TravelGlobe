@@ -1,5 +1,16 @@
-<tr class="nested-fields">
-  <td class="thumb-field"><%= f.hidden_field :thumb_url, class: "thumb-url" %><%= f.hidden_field :image_url, class: "image-url" %></td>
-  <td class="caption-field"><%= f.text_field :caption, class: "form-control" %></td>
-  <td class="remove-field"><%= link_to_remove_association icon('remove'), f %></td>
+<tr class="nested-fields sortable">
+  <td class="thumb-field">
+  	<div class="thumbnail"></div>
+  	<%= f.hidden_field :thumb_url, class: "thumb-url" %>
+  	<%= f.hidden_field :image_url, class: "image-url" %>
+  	<%= f.hidden_field :order, class: "order" %>
+  </td>
+  <td class="caption-field">
+  	<%= f.text_field :caption, class: "form-control" %>
+  </td>
+  <td>
+  	<%= link_to icon('chevron-up'), "#", class: "up", style: "display:none;" %>
+    <%= link_to icon('chevron-down'), "#", class: "down", style: "display:none;" %>
+  	<%= link_to_remove_association icon('remove'), f %>
+  </td>
 </tr>

@@ -18,7 +18,7 @@
   <%= cloudinary_js_config %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body data-rails-env="<%= Rails.env %>">
 <%= render 'layouts/header' %>
 <input id="search" class="controls" type="text" placeholder="Search">
 <div id="map"></div>
@@ -219,7 +219,6 @@
 
     // Add markers to places lived
     addHouseMarkers(<%= raw @places_lived.pluck(:address, :latitude, :longitude).to_json %>);
-    <% end %>
 
     // Prevent panning outside map boundaries
     map.addListener('center_changed', function() {
@@ -334,6 +333,7 @@
       form.find("input#place_lived_latitude").val(place.geometry.location.lat());
       form.find("input#place_lived_longitude").val(place.geometry.location.lng());
     });
+    <% end %>
   }
 
   function moveMap(locations) {

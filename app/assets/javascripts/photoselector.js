@@ -299,15 +299,19 @@ var CSPhotoSelector = (function(module, $) {
 			});
 
 			$selectAll.bind('click', function(e) {
-				// FIXME: some bugs exist for large albums when all pages have not been loaded before this function is called.
 				e.preventDefault();
 				$photosContainer.children().removeClass(settings.albumSelectedClass);
 				$photos.removeClass(settings.albumSelectedClass);
+				// Only select all photos on this oage instead of the entire album.
+				$photosContainer.children().click();
+				/* // FIXME: some bugs exist for large albums when all pages have not been loaded before this function is called.
 				if ($(this).text() == "Deselect all") {
 					selectedPhotoIds = [];
 					$selectedCount.html("0");
 					$(this).text("Select all");
 				} else {
+					/*
+					// Select all photos of the entire album
 					updatePhotosContainer(1);
 					updatePaginationButtons(1);
 					$(this).addClass("CSPhoto_selectAll");
@@ -316,14 +320,13 @@ var CSPhotoSelector = (function(module, $) {
 						$pageNext.click();
 					}
 					$(this).removeClass("CSPhoto_selectAll");
-					$(this).text("Deselect all");
-				}
+				}*/
 			});
 
 			$backToAlbums.bind('click', function(e) {
 				e.preventDefault();
 				updatePaginationButtons(currentAlbumPage, instanceSettings.albumsPerPage, albums.length);
-				$selectAll.text("Select all");
+				//$selectAll.text("Select all");
 				hidePhotoSelector();
 			});
 
@@ -345,11 +348,12 @@ var CSPhotoSelector = (function(module, $) {
 				e.preventDefault();
 				if ($(this).hasClass(settings.disabledClass)) { return; }
 				if ($photosWrapper.hasClass('CSPhoto_container_active')) {
-					if ($selectAll.hasClass("CSPhoto_selectAll")) {
+					/*if ($selectAll.hasClass("CSPhoto_selectAll")) {
 						updatePhotosContainer(pageNumber, true);
 					} else {
 						updatePhotosContainer(pageNumber);
-					}
+					}*/
+					updatePhotosContainer(pageNumber);
 				} else {
 					currentAlbumPage = pageNumber;
 					updateAlbumContainer(pageNumber);
@@ -472,6 +476,7 @@ var CSPhotoSelector = (function(module, $) {
 					log('CSPhotoSelector - newInstance - selectPhoto - selected IDs: ', selectedPhotoIds);
 					if (typeof instanceSettings.callbackPhotoSelected === "function") { instanceSettings.callbackPhotoSelected(photoId); }
 				} else {
+					$photo.addClass(settings.albumSelectedClass);
 					log('CSPhotoSelector - newInstance - selectPhoto - ID already stored');
 				}
 			} else {

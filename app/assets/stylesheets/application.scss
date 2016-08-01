@@ -65,7 +65,7 @@ html, body {
     z-index: 100000;
 }
 
-ul.sortable li {
+.sortable {
     cursor: move;
 }
 
@@ -236,6 +236,10 @@ ol.colored-list li:before {
 
 .progress {
     margin-top: 20px;
+}
+
+div.thumbnail {
+    width: 142px;
 }
 
 @media (min-width: 768px) {
