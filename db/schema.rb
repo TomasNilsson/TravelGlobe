@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160801161104) do
+ActiveRecord::Schema.define(version: 20160801211943) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name"
@@ -68,12 +68,12 @@ ActiveRecord::Schema.define(version: 20160801161104) do
 
   create_table "places", force: :cascade do |t|
     t.string   "name"
-    t.decimal  "latitude"
-    t.decimal  "longitude"
+    t.decimal  "latitude",   precision: 11, scale: 8
+    t.decimal  "longitude",  precision: 11, scale: 8
     t.integer  "order"
     t.integer  "trip_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
   end
 
   add_index "places", ["trip_id"], name: "index_places_on_trip_id"
@@ -81,13 +81,13 @@ ActiveRecord::Schema.define(version: 20160801161104) do
   create_table "places_lived", force: :cascade do |t|
     t.string   "address"
     t.integer  "country_id"
-    t.decimal  "latitude"
-    t.decimal  "longitude"
+    t.decimal  "latitude",   precision: 11, scale: 8
+    t.decimal  "longitude",  precision: 11, scale: 8
     t.date     "start_date"
     t.date     "end_date"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
   end
 
   add_index "places_lived", ["country_id"], name: "index_places_lived_on_country_id"
