@@ -4,11 +4,13 @@ Rails.application.routes.draw do
   get 'auth/failure', to: redirect('/')
   delete 'logout', to: 'sessions#destroy'
 
-  get 'visited_countries' => 'users#visited_countries'
+  get 'users/:id/visited_countries', to: 'users#visited_countries'
 
   resources :trips, only: [:create, :show]
 
   resources :places_lived, only: [:create, :show]
+
+  get 'share/:token', to: 'home#share'
 
   get 'policies/privacy', to: 'home#privacy'
 end

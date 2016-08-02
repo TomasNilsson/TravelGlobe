@@ -15,6 +15,7 @@
   <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/4.0.1/ekko-lightbox.min.css" rel="stylesheet" />
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/4.0.1/ekko-lightbox.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
   <%= cloudinary_js_config %>
   <%= csrf_meta_tags %>
 </head>
@@ -235,10 +236,10 @@
       }
     });
 
-    <% if current_user && controller.action_name == "index" %>
-    var current_user_id = <%= current_user.id %>;
+    <% if @user %>
+    var user_id = <%= @user.id %>;
     // Color visited countries
-    var visitedCountries = $.getJSON("/visited_countries").success(function(data) {
+    var visitedCountries = $.getJSON("/users/"+user_id+"/visited_countries").success(function(data) {
       var layerVisited = new google.maps.FusionTablesLayer({
         query: {
           select: 'Geometry',

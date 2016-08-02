@@ -14,7 +14,9 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><%= link_to icon("plane") + " Add New Trip", '#', 'data-toggle': "modal", 'data-target': "#newTripModal" %></li>
+        <% if current_user %>
+          <li><%= link_to icon("plane") + " Add New Trip", '#', 'data-toggle': "modal", 'data-target': "#newTripModal" %></li>
+        <% end %>
         <li><%= link_to icon("globe") + " My Trips", '#', 'data-toggle': "modal", 'data-target': "#myTripsModal" %></li>
         <li><%= link_to icon("home") + " Places Lived", '#', 'data-toggle': "modal", 'data-target': "#placesLivedModal" %></li>
         <li><%= link_to icon("stats") + " Statistics", '#', 'data-toggle': "modal", 'data-target': "#statisticsModal" %></li>
@@ -26,10 +28,12 @@
               <%= image_tag(current_user.image_url) + " " + current_user.name %><span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li><%= link_to icon("share-alt") + " Share", "#" %></li>
+              <li><%= link_to icon("share-alt") + " Share", "#", 'data-toggle': "modal", 'data-target': "#shareModal" %></li>
               <li><%= link_to icon("off") + " Log out", logout_path, method: :delete %></li>
             </ul>
           </li>
+        <% elsif @user %>
+          <li><%= link_to image_tag(@user.image_url) + " " + @user.name, '#' %></li>
         <% end %>
       </ul>
     </div><!-- /.navbar-collapse -->

@@ -35,6 +35,9 @@ gem "cocoon"
 # Use Cloudinary to upload images to the cloud
 gem 'cloudinary'
 
+# Use HasSecureToken to generate unique random tokens 
+gem 'has_secure_token'
+
 group :development do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
