@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   end
 
   def travel_partners_toplist
-    TravelPartner.select("travel_partners.name", "COUNT(trips.id) as trip_count").joins(:trips).where(user_id: self.id).group("travel_partners.id").order("trip_count DESC, travel_partners.name ASC").limit(10)
+    TravelPartner.select("travel_partners.name", "COUNT(trips.id) as trip_count").joins(:trips).where(user_id: self.id).group("travel_partners.id").order("trip_count DESC, travel_partners.id ASC").limit(10)
   end
 
   def days_travelling

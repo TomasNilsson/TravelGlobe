@@ -1,6 +1,8 @@
 $('#myTripsModal').modal('hide');
 $('#tripInfoModal .modal-body').html("<%= j render 'show' %>");
 $('#tripInfoModal').modal('show');
-moveMap($('#countryNames').text().split(', '));
+// Include first place to make sure that both the country and the place is shown (needed for islands far away from the rest of the country)
+// TODO: use all places and zoom out instead of using countries to move map?
+moveMap($('#countryNames').text().split(', '), [<%= @places.first.latitude %>, <%= @places.first.longitude %>]);
 removeMarkers();
 addMarkers(JSON.parse($('#placesInfo').text()));

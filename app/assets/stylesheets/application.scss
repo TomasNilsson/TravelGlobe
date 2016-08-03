@@ -125,6 +125,10 @@ html, body {
     left: 0;
 }
 
+.modal-left .label {
+    font-size: 84%;
+}
+
 .modal-content {
     /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
     width:inherit;

@@ -265,6 +265,8 @@
     // Add markers to places lived
     addHouseMarkers(<%= raw @places_lived.pluck(:address, :latitude, :longitude).to_json %>);
 
+    <% end %>
+    <% if current_user %>
     var places = document.getElementById('google-places');
     var autocomplete = new google.maps.places.Autocomplete(places);
     // Listen for the event fired when the user selects a prediction and retrieve
@@ -313,13 +315,15 @@
     <% end %>
   }
 
-  function moveMap(locations) {
+  function moveMap(countries, place) {
     var geocoder = new google.maps.Geocoder();
     var bounds = new google.maps.LatLngBounds();
-    locations.forEach(function(location) {
-      geocoder.geocode( { 'address': location}, function(results, status) {
+    bounds.extend(new google.maps.LatLng(place[0], place[1]));
+    countries.forEach(function(country) {
+      geocoder.geocode( { 'address': country}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
           bounds.union(results[0].geometry.viewport);
+          // FIXME: don't call fitBounds multiple times
           map.fitBounds(bounds);
         }
       });

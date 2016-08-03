@@ -198,7 +198,7 @@
         <div class="modal-body">
           <div class="row">
             <div class="form-group col-xs-12 col-md-8">
-              <%= f.label :country_id, "Country" %>
+              <%= f.label :country_id, "Country/State" %>
               <div class="input-group">
                 <span class="input-group-addon"><%= icon("globe") %></span>
                 <%= f.select :country_id, options_from_collection_for_select(Country.all.order(:name), 'id', 'name'), {include_blank: true}, {class: "form-control select-box-single", style: "width: 100%"} %>
@@ -283,7 +283,7 @@
               <tr>
                 <th>Date</th>
                 <th>Name</th>
-                <th>Countries</th>
+                <th>Countries/States</th>
                 <th>Categories</th>
                 <th>Travel Partners</th>
               </tr>
@@ -326,7 +326,7 @@
               <tr>
                 <th>Date</th>
                 <th>Address</th>
-                <th>Country</th>
+                <th>Country/State</th>
               </tr>
             </thead>
             <tbody>
