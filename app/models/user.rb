@@ -29,13 +29,13 @@ class User < ActiveRecord::Base
 
   def self.from_omniauth(auth)
     # TODO: need to refresh OAuth token if it has expired. Check before Koala call.
-    where(uid: auth.uid).first_or_initialize do |user|
-      user.uid = auth.uid
-      user.name = auth.info.name
-      user.image_url = auth.info.image
-      user.oauth_token = auth.credentials.token
-      user.oauth_expires_at = Time.at(auth.credentials.expires_at)
-      user.save!
-    end
+    user = User.where(uid: auth.uid).first_or_initialize
+    user.uid = auth.uid
+    user.name = auth.info.name
+    user.image_url = auth.info.image
+    user.oauth_token = auth.credentials.token
+    user.oauth_expires_at = Time.at(auth.credentials.expires_at)
+    user.save!
+    return user
   end
 end
