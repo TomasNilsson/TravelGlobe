@@ -21,9 +21,9 @@ class TripsController < ApplicationController
     @trip.users << current_user
     if @trip.save
       current_user.countries << @trip.countries - current_user.countries
-      render json: {status: :ok}
+      render json: @trip, status: :created
     else
-      render json: {status: :internal_server_error}
+      render json: @trip.errors, status: :unprocessable_entity
     end
   end
 

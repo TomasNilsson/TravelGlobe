@@ -4,9 +4,9 @@ class PlacesLivedController < ApplicationController
     @place_lived = current_user.places_lived.new(place_lived_params)
     if @place_lived.save
       current_user.countries << @place_lived.country unless current_user.countries.include?(@place_lived.country)
-      render json: {status: :ok}
+      render json: @place_lived, status: :created
     else
-      render json: {status: :internal_server_error}
+      render json: @place_lived.errors, status: :unprocessable_entity
     end
   end
 

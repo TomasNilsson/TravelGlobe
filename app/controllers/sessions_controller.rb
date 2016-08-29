@@ -13,4 +13,8 @@ class SessionsController < ApplicationController
     redirect_to root_url
   end
 
+  def failure
+    redirect_to root_url, alert: "Facebook login failed"
+  end
+
 end

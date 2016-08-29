@@ -8,6 +8,10 @@ class Trip < ActiveRecord::Base
   accepts_nested_attributes_for :photos, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :places, reject_if: :all_blank, allow_destroy: true
 
+  validates :name, :countries, :places, presence: true
+  validates_date :start_date
+  validates_date :end_date, on_or_after: :start_date
+
   def date
   	"#{self.start_date.strftime("%Y-%m-%d")} \u2013 #{self.end_date.strftime("%Y-%m-%d")}"
   end

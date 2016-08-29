@@ -29,7 +29,7 @@
             </a>
             <ul class="dropdown-menu">
               <li><%= link_to icon("share-alt") + " Share", "#", 'data-toggle': "modal", 'data-target': "#shareModal" %></li>
-              <li><%= link_to icon("off") + " Log out", logout_path, method: :delete %></li>
+              <li><%= link_to icon("off") + " Log out", logout_path, method: :delete, id: "logout" %></li>
             </ul>
           </li>
         <% elsif @user %>

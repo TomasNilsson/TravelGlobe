@@ -324,6 +324,9 @@ $(document).ready(function() {
 });
 
 $(document).ready(function(){
+    // Reset all forms on page load (Firefox remembers form data on reload)
+    $('form').each(function() { this.reset() });
+
     $(".select-box-multiple").select2({
         theme: "bootstrap",
         placeholder: "Select one or many countries"
@@ -344,20 +347,40 @@ $(document).ready(function(){
 
     $('#new_trip').on('ajax:success', function(event, data, status, xhr) {
         $('#newTripModal').modal('hide');
-        // TODO: handle errors and don't reload page (use AJAX instead to update different elements)
+        // TODO: don't reload page (use AJAX instead to update different elements)
         location.reload();
+    });
+
+    $('#new_trip').on('ajax:error', function(event, xhr, status, error) {
+        $('#new_trip').render_form_errors("trip", $.parseJSON(xhr.responseText));
+        $('#newTripTabs a:first').tab('show');
+    });
+
+    $('#place_lived_no_end_date').change(function(){
+        if ($('#place_lived_no_end_date').is(':checked')) {
+            $('#place_lived_end_date').datepicker('update', '');
+            $('#place_lived_end_date').prop('readonly', true);
+        } else {
+            $('#place_lived_end_date').prop('readonly', false);
+        }
     });
 
     $('#new_place_lived').on('ajax:success', function(event, data, status, xhr) {
         $('#newPlaceLivedModal').modal('hide');
-        // TODO: handle errors and don't reload page (use AJAX instead to update different elements)
+        // TODO: don't reload page (use AJAX instead to update different elements)
         location.reload();
+    });
+
+    $('#new_place_lived').on('ajax:error', function(event, xhr, status, error) {
+        $('#new_place_lived').render_form_errors("place_lived", $.parseJSON(xhr.responseText));
     });
 
     $('#newTripModal').on('hidden.bs.modal', function(){
         // Reset everything
         $('[data-provide~=datepicker]').datepicker('update', '');
-        $(this).find('form')[0].reset();
+        form = $(this).find('form')[0];
+        form.reset();
+        $(form).clear_previous_errors();
         $('.select-box-tags').val('').trigger('change');
         $('.select-box-multiple').val('').trigger('change');
         $("#selectedPlaces").html("");
@@ -368,7 +391,9 @@ $(document).ready(function(){
     $('#newPlaceLivedModal').on('hidden.bs.modal', function(){
         // Reset everything
         $('[data-provide~=datepicker]').datepicker('update', '');
-        $(this).find('form')[0].reset();
+        form = $(this).find('form')[0];
+        form.reset();
+        $(form).clear_previous_errors();
         $('.select-box-single').val('').trigger('change');
     });
 
@@ -422,6 +447,18 @@ $(document).ready(function(){
         setTooltip(e.trigger, 'Failed!');
         hideTooltip(e.trigger);
     });
+
+    /*$('#logout').click(function (e) {
+        // Check that the user is logged in to Facebook
+        // Problem: see http://stackoverflow.com/questions/34725123/getloginstatus-returns-status-unknown-when-trying-to-logout-from-facebook-using
+        FB.getLoginStatus(function(response) {
+            if (response.status === 'connected') {
+                // Will not log the user out of Facebook if the user 
+                // logged into Facebook before logging into TravelGlobe.
+                FB.logout();
+            }
+        });
+    })*/
 });
 
 function setTooltip(btn, message) {
@@ -435,3 +472,33 @@ function hideTooltip(btn) {
         $(btn).tooltip('hide');
     }, 1000);
 }
+
+(function($) {
+
+  $.fn.render_form_errors = function(model_name, errors) {
+    form = this
+    this.clear_previous_errors();
+
+    // Show error messages in input form-group help-block
+    $.each(errors, function(field, messages) {
+        input = form.find('input, select, textarea').filter(function() {
+            name = $(this).attr('name');
+            if (name && $(this).attr('type') != 'hidden') {
+                // Use field.slice(0,-3) to make 'countries' match 'country_ids'. TODO: Solve in a better way.
+                return name.match(new RegExp(model_name + '\\[' + field.slice(0,-3)));
+            }
+        });
+        inputDiv = input.closest('.form-group');
+        inputDiv.addClass('has-error');
+        inputDiv.append('<span class="help-block">' + $.map(messages, function(m) {return m.charAt(0).toUpperCase() + m.slice(1)}).join('<br />') + '</span>');
+    });
+  };
+
+  $.fn.clear_previous_errors = function() {
+    $('.form-group.has-error', this).each(function(){
+        $(this).find('.help-block').remove();
+        $(this).removeClass('has-error');
+    });
+  }
+
+}(jQuery));
