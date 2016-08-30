@@ -15,7 +15,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <% if current_user %>
-          <li><%= link_to icon("plane") + " Add New Trip", '#', 'data-toggle': "modal", 'data-target': "#newTripModal" %></li>
+          <li><%= link_to icon("plane") + " Add New Trip", new_trip_path, remote: true %></li>
         <% end %>
         <li><%= link_to icon("globe") + " My Trips", '#', 'data-toggle': "modal", 'data-target': "#myTripsModal" %></li>
         <li><%= link_to icon("home") + " Places Lived", '#', 'data-toggle': "modal", 'data-target': "#placesLivedModal" %></li>

@@ -1,147 +1,9 @@
 <% if current_user %>
 <!-- Modal -->
-<div class="modal fade" data-backdrop="static" id="newTripModal" tabindex="-1" role="dialog" aria-labelledby="newTripModalLabel">
+<div class="modal fade" data-backdrop="static" id="tripFormModal" tabindex="-1" role="dialog" aria-labelledby="tripFormModalLabel">
   <div class="vertical-alignment-helper">
     <div class="modal-dialog vertical-align-center" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="newTripModalLabel">Add New Trip</h4>
-        </div>
-        <%= form_for @trip, remote: true, id: "new_trip" do |f| %>
-        <div class="modal-body modal-tabs">
-          <ul class="nav nav-tabs" id="newTripTabs" role="tablist">
-            <li role="presentation" class="active"><a href="#newTripInfo" aria-controls="newTripInfo" role="tab" data-toggle="tab">Info</a></li>
-            <li role="presentation"><a href="#newTripPlaces" aria-controls="newTripPlaces" role="tab" data-toggle="tab">Places</a></li>
-            <li role="presentation"><a href="#newTripPhotos" aria-controls="newTripPhotos" role="tab" data-toggle="tab">Photos</a></li>
-          </ul>
-          <div class="tab-content">
-            <div role="tabpanel" class="tab-pane fade in active" id="newTripInfo">
-              <h4>Trip Info</h4>
-              <div class="row">
-                <div class="form-group col-xs-12 col-md-8">
-                  <%= f.label :name, "Name" %> 
-                  <div class="input-group">
-                    <span class="input-group-addon"><%= icon("info-sign") %></span>
-                    <%= f.text_field :name, placeholder: "E.g. California Road Trip", class: "form-control" %>
-                  </div>
-                </div>
-                <div class="form-group col-xs-12 col-md-6">
-                  <%= f.label :start_date, "Start Date" %> 
-                  <div class="input-group">
-                    <span class="input-group-addon"><%= icon("calendar") %></span>
-                    <%= f.text_field :start_date, placeholder: "YYYY-MM-DD", class: "form-control", 'data-provide': "datepicker" %>
-                  </div>
-                </div>
-                <div class="form-group col-xs-12 col-md-6">
-                  <%= f.label :end_date, "End Date" %> 
-                  <div class="input-group">
-                    <span class="input-group-addon"><%= icon("calendar") %></span>
-                    <%= f.text_field :end_date, placeholder: "YYYY-MM-DD", class: "form-control", 'data-provide': "datepicker" %>
-                  </div>
-                </div>
-                <div class="form-group col-xs-12 col-md-8">
-                  <%= f.label :travel_partner_ids, "Travel Partners" %>
-                  <div class="input-group">
-                    <span class="input-group-addon"><%= icon("user") %></span>
-                    <%= f.select :travel_partner_ids, options_from_collection_for_select(current_user.travel_partners.order(:name), 'id', 'name'), {}, {class: "form-control select-box-tags", multiple: true, style: "width: 100%"} %>
-                  </div>
-                </div>
-                <div class="form-group col-xs-12 col-md-8">
-                  <%= f.label :category_ids, "Categories" %>
-                  <div class="input-group">
-                    <span class="input-group-addon"><%= icon("tags") %></span>
-                    <%= f.select :category_ids, options_from_collection_for_select(Category.for_user(current_user), 'id', 'name'), {}, {class: "form-control select-box-tags", multiple: true, style: "width: 100%"} %>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="newTripPlaces">
-              <h4>Select Places</h4>
-              <div class="row">
-                <div class="form-group col-xs-12 col-md-8">
-                  <%= f.label :country_ids, "Countries/States" %>
-                  <div class="input-group">
-                    <span class="input-group-addon"><%= icon("globe") %></span>
-                    <%= f.select :country_ids, options_from_collection_for_select(Country.all.order(:name), 'id', 'name'), {}, {class: "form-control select-box-multiple", multiple: true, style: "width: 100%"} %>
-                  </div>
-                </div>
-                <div class="form-group col-xs-12 col-md-8">
-                  <label>Cities/Places</label>
-                  <div class="input-group">
-                    <span class="input-group-addon"><%= icon("map-marker") %></span>
-                    <input type="text" class="form-control" id="google-places" name="trip[places]">
-                  </div>
-                </div>
-              </div>
-              <ul id="selectedPlaces" class="list-group col-xs-12 col-md-8">
-              </ul>
-              <%= link_to_add_association '', f, :places, {partial: 'trips/places_fields', "data-association-insertion-node": '#selectedPlaces', "data-association-insertion-method": 'append', id: "addPlace", style: "display:none;" } %>
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="newTripPhotos">
-              <h4>Select Photos</h4>
-              <button type="button" class="btn btn-primary" id="fbPhotoSelect">Facebook</button>
-              <a class="btn btn-default" data-toggle="modal" data-target="#photoUploaderModal">Upload Photos</a>
-              <table id="selectedPhotos" class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>Preview</th>
-                    <th>Caption</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
-              <%= link_to_add_association '', f, :photos, {partial: 'trips/photos_fields', "data-association-insertion-node": '#selectedPhotos > tbody', "data-association-insertion-method": 'append', id: "addPhoto", style: "display:none;" } %>
-            </div>
-          </div>  
-        </div>
-        <!-- Markup for Carson Shold's Photo Selector -->
-        <div id="CSPhotoSelector">
-          <div class="CSPhotoSelector_dialog">
-            <div class="CSPhotoSelector_form">
-              <div class="CSPhotoSelector_header">
-                  <a href="#" id="CSPhotoSelector_buttonClose">x</a>
-                  <p>Choose from Photos</p>
-              </div>
-              <div class="CSPhotoSelector_content CSAlbumSelector_wrapper">
-                <div class="CSPhotoSelector_searchContainer CSPhotoSelector_clearfix">
-                  <div class="CSPhotoSelector_selectedCountContainer">Select an album</div>
-                </div>
-                <div class="CSPhotoSelector_photosContainer CSAlbum_container"></div>
-              </div>
-
-              <div class="CSPhotoSelector_content CSPhotoSelector_wrapper">
-                <div class="CSPhotoSelector_searchContainer CSPhotoSelector_clearfix">
-                  <div class="CSPhotoSelector_selectedCountContainer"><span class="CSPhotoSelector_selectedPhotoCount">0</span> photos selected</div>
-                  <a href="#" id="CSPhotoSelector_selectAll">Select all</a>
-                  <a href="#" id="CSPhotoSelector_backToAlbums">Back to albums</a>
-                </div>
-                <div class="CSPhotoSelector_photosContainer CSPhoto_container"></div>
-              </div>
-
-              <div id="CSPhotoSelector_loader"></div>
-
-
-              <div class="CSPhotoSelector_footer CSPhotoSelector_clearfix">
-                <a href="#" id="CSPhotoSelector_pagePrev" class="CSPhotoSelector_disabled">Previous</a>
-                <a href="#" id="CSPhotoSelector_pageNext">Next</a>
-                <div class="CSPhotoSelector_pageNumberContainer">
-                  Page <span id="CSPhotoSelector_pageNumber">1</span> / <span id="CSPhotoSelector_pageNumberTotal">1</span>
-                </div>
-                <a href="#" id="CSPhotoSelector_buttonOK">OK</a>
-                <a href="#" id="CSPhotoSelector_buttonCancel">Cancel</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="newTripNext">Next</button>
-          <%= submit_tag "Save", class: "btn btn-primary", id: "newTripSave", style: "display: none;" %>
-        </div>
-        <% end %>
       </div>
     </div>
   </div>
@@ -156,27 +18,6 @@
           <h4 class="modal-title" id="photoUploaderModalLabel">Photo Uploader</h4>
         </div>
         <div class="modal-body">
-          <%= form_tag('#', method: :post) do  %>
-          <div id="dropzone" class="dropzone">
-            <div class="drop-inner">
-              <span class="drop-text">Drop files here<span class="small">or</span></span>
-              <div class="button-holder">
-                <span class="btn btn-primary fileinput-button">
-                  <i class="glyphicon glyphicon-plus"></i>
-                  <span>Select files...</span>
-                  <%= cl_image_upload_tag("photo[]", 
-                                          :crop => :limit, :width => 720, :height => 720,
-                                          :eager => [{ :crop => :fit, :width => 130, :height => 130 }],
-                                          :html => { :multiple => true, :class => "image-upload" }) %>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div id="progress" class="progress">
-            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-            </div>
-          </div>
-          <% end %>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -186,61 +27,10 @@
   </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" data-backdrop="static" id="newPlaceLivedModal" tabindex="-1" role="dialog" aria-labelledby="newPlaceLivedModalLabel">
+<div class="modal fade" data-backdrop="static" id="placeLivedFormModal" tabindex="-1" role="dialog" aria-labelledby="placeLivedFormModalLabel">
   <div class="vertical-alignment-helper">
     <div class="modal-dialog vertical-align-center" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="newPlaceLivedModalLabel">New Place I've Lived</h4>
-        </div>
-        <%= form_for @place_lived, remote: true, id: "new_place_lived" do |f| %>
-        <div class="modal-body">
-          <div class="row">
-            <div class="form-group col-xs-12 col-md-8">
-              <%= f.label :country_id, "Country/State" %>
-              <div class="input-group">
-                <span class="input-group-addon"><%= icon("globe") %></span>
-                <%= f.select :country_id, options_from_collection_for_select(Country.all.order(:name), 'id', 'name'), {include_blank: true}, {class: "form-control select-box-single", style: "width: 100%"} %>
-              </div>
-            </div>
-            <div class="form-group col-xs-12 col-md-8">
-              <%= f.label :address, "Address" %>
-              <div class="input-group">
-                <span class="input-group-addon"><%= icon("map-marker") %></span>
-                <%= f.text_field :address, class: "form-control" %>
-                <%= f.hidden_field :latitude %>
-                <%= f.hidden_field :longitude %>
-              </div>
-            </div>
-            <div class="form-group col-xs-12 col-md-6">
-              <%= f.label :start_date, "Start Date" %> 
-              <div class="input-group">
-                <span class="input-group-addon"><%= icon("calendar") %></span>
-                <%= f.text_field :start_date, placeholder: "YYYY-MM-DD", class: "form-control", 'data-provide': "datepicker" %>
-              </div>
-            </div>
-            <div class=" col-xs-12 col-md-6">
-              <div class="form-group">
-                <%= f.label :end_date, "End Date" %> 
-                <div class="input-group">
-                  <span class="input-group-addon"><%= icon("calendar") %></span>
-                  <%= f.text_field :end_date, placeholder: "YYYY-MM-DD", class: "form-control", 'data-provide': "datepicker" %>
-                </div>
-              </div>
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" id="place_lived_no_end_date"> No end date
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <%= submit_tag "Save", class: "btn btn-primary" %>
-        </div>
-        <% end %>
       </div>
     </div>
   </div>
@@ -293,6 +83,10 @@
                 <th>Countries/States</th>
                 <th>Categories</th>
                 <th>Travel Partners</th>
+                <% if current_user %>
+                  <th></th>
+                  <th></th>
+                <% end %>
               </tr>
             </thead>
             <tbody>
@@ -303,6 +97,10 @@
                 <td><%= t.countries.map(&:name).join(", ") %></td>
                 <td><%= t.categories.map(&:name).join(", ") %></td>
                 <td><%= t.travel_partners.map(&:name).join(", ") %></td>
+                <% if current_user %>
+                  <td><%= link_to icon("pencil"), edit_trip_path(t), remote: true %></td>
+                  <td><%= link_to icon('remove'), trip_path(t), class: "delete-trip", method: :delete, remote: true, data: { confirm: "Do you really want to delete the trip?"} %></td>
+                <% end %>
               </tr>
             <% end %>
             </tbody>
@@ -311,7 +109,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <% if current_user %>
-            <a class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#newTripModal">Add New Trip</a>
+            <%= link_to "Add New Trip", new_trip_path, class: "btn btn-primary", remote: true %></td>
           <% end %>
         </div>
       </div>
@@ -334,6 +132,10 @@
                 <th>Date</th>
                 <th>Address</th>
                 <th>Country/State</th>
+                <% if current_user %>
+                  <th></th>
+                  <th></th>
+                <% end %>
               </tr>
             </thead>
             <tbody>
@@ -342,6 +144,10 @@
                 <td><%= p.date %></td>
                 <td><%= link_to p.address, place_lived_path(p), remote: true %></td>
                 <td><%= p.country.name %></td>
+                <% if current_user %>
+                  <td><%= link_to icon("pencil"), edit_place_lived_path(p), remote: true %></td>
+                  <td><%= link_to icon('remove'), place_lived_path(p), class: "delete-place", method: :delete, remote: true, data: { confirm: "Do you really want to delete the place?"} %></td>
+                <% end %>
               </tr>
             <% end %>
             </tbody>
@@ -350,7 +156,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <% if current_user %>
-            <a class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#newPlaceLivedModal">Add New Place</a>
+            <%= link_to "Add New Place", new_place_lived_path, class: "btn btn-primary", remote: true %></td>
           <% end %>
         </div>
       </div>
@@ -392,15 +198,6 @@
 <div class="modal modal-left fade" data-backdrop="false" id="tripInfoModal" tabindex="-1" role="dialog" aria-labelledby="tripInfoModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="tripInfoModalLabel">Trip Info</h4>
-      </div>
-      <div class="modal-body">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
     </div>
   </div>
 </div>

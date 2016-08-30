@@ -1,0 +1,51 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="placeLivedFormModalLabel"><%= action %> Place I've Lived</h4>
+</div>
+<%= form_for @place_lived, remote: true, html: { id: "placeLivedForm" } do |f| %>
+<div class="modal-body">
+  <div class="row">
+    <div class="form-group col-xs-12 col-md-8">
+      <%= f.label :country_id, "Country/State" %>
+      <div class="input-group">
+        <span class="input-group-addon"><%= icon("globe") %></span>
+        <%= f.select :country_id, options_from_collection_for_select(Country.all.order(:name), 'id', 'name', @place_lived.country_id), {include_blank: true}, {class: "form-control select-box-single", style: "width: 100%"} %>
+      </div>
+    </div>
+    <div class="form-group col-xs-12 col-md-8">
+      <%= f.label :address, "Address" %>
+      <div class="input-group">
+        <span class="input-group-addon"><%= icon("map-marker") %></span>
+        <%= f.text_field :address, class: "form-control" %>
+        <%= f.hidden_field :latitude %>
+        <%= f.hidden_field :longitude %>
+      </div>
+    </div>
+    <div class="form-group col-xs-12 col-md-6">
+      <%= f.label :start_date, "Start Date" %> 
+      <div class="input-group">
+        <span class="input-group-addon"><%= icon("calendar") %></span>
+        <%= f.text_field :start_date, placeholder: "YYYY-MM-DD", class: "form-control", 'data-provide': "datepicker" %>
+      </div>
+    </div>
+    <div class=" col-xs-12 col-md-6">
+      <div class="form-group">
+        <%= f.label :end_date, "End Date" %> 
+        <div class="input-group">
+          <span class="input-group-addon"><%= icon("calendar") %></span>
+          <%= f.text_field :end_date, placeholder: "YYYY-MM-DD", class: "form-control", 'data-provide': "datepicker", readonly: @no_end_date ? true : false %>
+        </div>
+      </div>
+      <div class="checkbox">
+        <label>
+          <%= check_box_tag 'place_lived_no_end_date', "1", @no_end_date ? true : false  %> No end date
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+  <%= submit_tag "Save", class: "btn btn-primary" %>
+</div>
+<% end %>

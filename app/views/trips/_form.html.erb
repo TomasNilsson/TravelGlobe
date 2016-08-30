@@ -1,0 +1,140 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="tripFormModalLabel"><%= action %> Trip</h4>
+</div>
+<%= form_for @trip, remote: true, html: { id: "tripForm" } do |f| %>
+<div class="modal-body modal-tabs">
+  <ul class="nav nav-tabs" id="tripFormTabs" role="tablist">
+    <li role="presentation" class="active"><a href="#tripFormInfo" aria-controls="tripFormInfo" role="tab" data-toggle="tab">Info</a></li>
+    <li role="presentation"><a href="#tripFormPlaces" aria-controls="tripFormPlaces" role="tab" data-toggle="tab">Places</a></li>
+    <li role="presentation"><a href="#tripFormPhotos" aria-controls="tripFormPhotos" role="tab" data-toggle="tab">Photos</a></li>
+  </ul>
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane fade in active" id="tripFormInfo">
+      <h4>Trip Info</h4>
+      <div class="row">
+        <div class="form-group col-xs-12 col-md-8">
+          <%= f.label :name, "Name" %> 
+          <div class="input-group">
+            <span class="input-group-addon"><%= icon("info-sign") %></span>
+            <%= f.text_field :name, placeholder: "E.g. California Road Trip", class: "form-control" %>
+          </div>
+        </div>
+        <div class="form-group col-xs-12 col-md-6">
+          <%= f.label :start_date, "Start Date" %> 
+          <div class="input-group">
+            <span class="input-group-addon"><%= icon("calendar") %></span>
+            <%= f.text_field :start_date, placeholder: "YYYY-MM-DD", class: "form-control", 'data-provide': "datepicker" %>
+          </div>
+        </div>
+        <div class="form-group col-xs-12 col-md-6">
+          <%= f.label :end_date, "End Date" %> 
+          <div class="input-group">
+            <span class="input-group-addon"><%= icon("calendar") %></span>
+            <%= f.text_field :end_date, placeholder: "YYYY-MM-DD", class: "form-control", 'data-provide': "datepicker" %>
+          </div>
+        </div>
+        <div class="form-group col-xs-12 col-md-8">
+          <%= f.label :travel_partner_ids, "Travel Partners" %>
+          <div class="input-group">
+            <span class="input-group-addon"><%= icon("user") %></span>
+            <%= f.select :travel_partner_ids, options_from_collection_for_select(current_user.travel_partners.order(:name), 'id', 'name', @trip.travel_partners.map(&:id)), {}, {class: "form-control select-box-tags", multiple: true, style: "width: 100%"} %>
+          </div>
+        </div>
+        <div class="form-group col-xs-12 col-md-8">
+          <%= f.label :category_ids, "Categories" %>
+          <div class="input-group">
+            <span class="input-group-addon"><%= icon("tags") %></span>
+            <%= f.select :category_ids, options_from_collection_for_select(Category.for_user(current_user), 'id', 'name', @trip.categories.map(&:id)), {}, {class: "form-control select-box-tags", multiple: true, style: "width: 100%"} %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="tripFormPlaces">
+      <h4>Select Places</h4>
+      <div class="row">
+        <div class="form-group col-xs-12 col-md-8">
+          <%= f.label :country_ids, "Countries/States" %>
+          <div class="input-group">
+            <span class="input-group-addon"><%= icon("globe") %></span>
+            <%= f.select :country_ids, options_from_collection_for_select(Country.all.order(:name), 'id', 'name', @trip.countries.map(&:id)), {}, {class: "form-control select-box-multiple", multiple: true, style: "width: 100%"} %>
+          </div>
+        </div>
+        <div class="form-group col-xs-12 col-md-8">
+          <label>Cities/Places</label>
+          <div class="input-group">
+            <span class="input-group-addon"><%= icon("map-marker") %></span>
+            <input type="text" class="form-control" id="google-places" name="trip[places]">
+          </div>
+        </div>
+      </div>
+      <ul id="selectedPlaces" class="list-group col-xs-12 col-md-8">
+        <%= f.fields_for :places do |place| %>
+          <%= render partial: 'places_fields', locals: { f: place, length: @trip.places.length } %>
+        <% end %>
+      </ul>
+      <%= link_to_add_association '', f, :places, {partial: 'trips/places_fields', "data-association-insertion-node": '#selectedPlaces', "data-association-insertion-method": 'append', id: "addPlace", style: "display:none;" } %>
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="tripFormPhotos">
+      <h4>Select Photos</h4>
+      <button type="button" class="btn btn-primary" id="fbPhotoSelect">Facebook</button>
+      <a class="btn btn-default" data-toggle="modal" data-target="#photoUploaderModal">Upload Photos</a>
+      <table id="selectedPhotos" class="table table-hover">
+        <thead>
+          <tr>
+            <th>Preview</th>
+            <th>Caption</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= f.fields_for :photos do |photo| %>
+            <%= render partial: 'photos_fields', locals: { f: photo, length: @trip.photos.length } %>
+          <% end %>
+        </tbody>
+      </table>
+      <%= link_to_add_association '', f, :photos, {partial: 'trips/photos_fields', "data-association-insertion-node": '#selectedPhotos > tbody', "data-association-insertion-method": 'append', id: "addPhoto", style: "display:none;" } %>
+    </div>
+  </div>  
+</div>
+<!-- Markup for Carson Shold's Photo Selector -->
+<div id="CSPhotoSelector">
+  <div class="CSPhotoSelector_dialog">
+    <div class="CSPhotoSelector_form">
+      <div class="CSPhotoSelector_header">
+          <a href="#" id="CSPhotoSelector_buttonClose">x</a>
+          <p>Choose from Photos</p>
+      </div>
+      <div class="CSPhotoSelector_content CSAlbumSelector_wrapper">
+        <div class="CSPhotoSelector_searchContainer CSPhotoSelector_clearfix">
+          <div class="CSPhotoSelector_selectedCountContainer">Select an album</div>
+        </div>
+        <div class="CSPhotoSelector_photosContainer CSAlbum_container"></div>
+      </div>
+      <div class="CSPhotoSelector_content CSPhotoSelector_wrapper">
+        <div class="CSPhotoSelector_searchContainer CSPhotoSelector_clearfix">
+          <div class="CSPhotoSelector_selectedCountContainer"><span class="CSPhotoSelector_selectedPhotoCount">0</span> photos selected</div>
+          <a href="#" id="CSPhotoSelector_selectAll">Select all</a>
+          <a href="#" id="CSPhotoSelector_backToAlbums">Back to albums</a>
+        </div>
+        <div class="CSPhotoSelector_photosContainer CSPhoto_container"></div>
+      </div>
+      <div id="CSPhotoSelector_loader"></div>
+      <div class="CSPhotoSelector_footer CSPhotoSelector_clearfix">
+        <a href="#" id="CSPhotoSelector_pagePrev" class="CSPhotoSelector_disabled">Previous</a>
+        <a href="#" id="CSPhotoSelector_pageNext">Next</a>
+        <div class="CSPhotoSelector_pageNumberContainer">
+          Page <span id="CSPhotoSelector_pageNumber">1</span> / <span id="CSPhotoSelector_pageNumberTotal">1</span>
+        </div>
+        <a href="#" id="CSPhotoSelector_buttonOK">OK</a>
+        <a href="#" id="CSPhotoSelector_buttonCancel">Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+  <button type="button" class="btn btn-primary" id="tripFormNext">Next</button>
+  <%= submit_tag "Save", class: "btn btn-primary", id: "tripFormSave", style: "display: none;" %>
+</div>
+<% end %>

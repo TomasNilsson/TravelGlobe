@@ -1,6 +1,11 @@
+<% length ||= 0 %>
 <tr class="nested-fields sortable">
   <td class="thumb-field">
-  	<div class="thumbnail"></div>
+  	<div class="thumbnail">
+      <% if f.object.thumb_url %>
+        <img src="<%= f.object.thumb_url %>">
+      <% end %>
+    </div>
   	<%= f.hidden_field :thumb_url, class: "thumb-url" %>
   	<%= f.hidden_field :image_url, class: "image-url" %>
   	<%= f.hidden_field :order, class: "order" %>
@@ -9,8 +14,8 @@
   	<%= f.text_field :caption, class: "form-control" %>
   </td>
   <td>
-  	<%= link_to icon('chevron-up'), "#", class: "up", style: "display:none;" %>
-    <%= link_to icon('chevron-down'), "#", class: "down", style: "display:none;" %>
+  	<%= link_to icon('chevron-up'), "#", class: "up", style: ("display:none;" if f.object.order == 0) %>
+    <%= link_to icon('chevron-down'), "#", class: "down", style: ("display:none;" if f.object.order == length - 1) %>
   	<%= link_to_remove_association icon('remove'), f %>
   </td>
 </tr>

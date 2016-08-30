@@ -1,0 +1,7 @@
+$('.modal.in').modal('hide');
+$('#tripFormModal .modal-content').empty();
+$('#tripFormModal .modal-content').html("<%= j render 'form', action: 'New' %>");
+$('#photoUploaderModal .modal-body').empty();
+$('#photoUploaderModal .modal-body').html("<%= j render 'photo_uploader' %>");
+<%= render 'form_js' %>
+$('#tripFormModal').modal('show');

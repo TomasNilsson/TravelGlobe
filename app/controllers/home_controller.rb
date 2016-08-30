@@ -8,8 +8,6 @@ class HomeController < ApplicationController
       # Can't use taggable_friends since the returned user id changes.
       #@facebook = Koala::Facebook::API.new(current_user.oauth_token)
       #@friends = @facebook.get_connections("me", "taggable_friends?limit=2000")
-      @trip = Trip.new
-      @place_lived = PlaceLived.new
       @travel_partners_toplist = current_user.travel_partners_toplist
     end
   end

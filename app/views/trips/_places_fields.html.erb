@@ -1,12 +1,13 @@
+<% length ||= 0 %>
 <li class="list-group-item nested-fields sortable">
-  <span class="place-name"></span>
+  <span class="place-name"><%= f.object.name unless f.object.name.blank? %></span>
   <%= f.hidden_field :name, class: "place-name" %>
   <%= f.hidden_field :latitude, class: "place-latitude" %>
   <%= f.hidden_field :longitude, class: "place-longitude" %>
   <%= f.hidden_field :order, class: "order" %>
   <span class="pull-right">
-    <%= link_to icon('chevron-up'), "#", class: "up", style: "display:none;" %>
-    <%= link_to icon('chevron-down'), "#", class: "down", style: "display:none;" %>
+    <%= link_to icon('chevron-up'), "#", class: "up", style: ("display:none;" if f.object.order == 0) %>
+    <%= link_to icon('chevron-down'), "#", class: "down", style: ("display:none;" if f.object.order == length - 1) %>
     <%= link_to_remove_association icon('remove'), f %>
   </span>
 </li>

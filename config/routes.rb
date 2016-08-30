@@ -6,9 +6,9 @@ Rails.application.routes.draw do
 
   get 'users/:id/visited_countries', to: 'users#visited_countries'
 
-  resources :trips, only: [:create, :show]
+  resources :trips, except: [:index]
 
-  resources :places_lived, only: [:create, :show]
+  resources :places_lived, except: [:index]
 
   get 'share/:token', to: 'home#share'
 

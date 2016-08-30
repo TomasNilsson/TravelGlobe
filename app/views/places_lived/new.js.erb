@@ -1,0 +1,5 @@
+$('#placesLivedModal').modal('hide');
+$('#placeLivedFormModal .modal-content').empty();
+$('#placeLivedFormModal .modal-content').html("<%= j render 'form', action: 'New' %>");
+<%= render 'form_js' %>
+$('#placeLivedFormModal').modal('show');

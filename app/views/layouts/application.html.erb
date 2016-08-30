@@ -43,6 +43,17 @@
       "language": {
         "zeroRecords": "No matching trips found"
       },
+      <% if current_user %>
+      "columns": [
+        {"width": "22.5%"},
+        {"width": "22.5%"},
+        {"width": "22.5%"},
+        {"width": "22.5%"},
+        {"visible": false},
+        { "width": "5%", "orderable": false },
+        { "width": "5%", "orderable": false }
+      ]
+      <% else %>
       "columns": [
         {"width": "25%"},
         {"width": "25%"},
@@ -50,6 +61,7 @@
         {"width": "25%"},
         {"visible": false}
       ]
+      <% end %>
     });
 
     $('#placesLived').DataTable({
@@ -60,11 +72,21 @@
       "language": {
         "zeroRecords": "No matching places found"
       },
+      <% if current_user %>
       "columns": [
-        { "width": "33%" },
-        { "width": "33%" },
-        { "width": "33%" },
+        { "width": "30%" },
+        { "width": "30%" },
+        { "width": "30%" },
+        { "width": "5%", "orderable": false },
+        { "width": "5%", "orderable": false }
       ]
+      <% else %>
+      "columns": [
+        { "width": "33.3%" },
+        { "width": "33.3%" },
+        { "width": "33.3%" }
+      ]
+      <% end %>
     });
   });
 
@@ -265,53 +287,6 @@
     // Add markers to places lived
     addHouseMarkers(<%= raw @places_lived.pluck(:address, :latitude, :longitude).to_json %>);
 
-    <% end %>
-    <% if current_user %>
-    var places = document.getElementById('google-places');
-    var autocomplete = new google.maps.places.Autocomplete(places);
-    // Listen for the event fired when the user selects a prediction and retrieve
-    // more details for that place.
-    autocomplete.addListener('place_changed', function() {
-      var place = autocomplete.getPlace();
-      $("#google-places").val('');
-      $("#addPlace").click();
-      listElement = $("#selectedPlaces li:last-child");
-      listElement.find("input.place-name").val(place.name);
-      listElement.find("input.place-latitude").val(place.geometry.location.lat());
-      listElement.find("input.place-longitude").val(place.geometry.location.lng());
-      listElement.find("input.place-order").val(listElement.index());
-      listElement.find('span.place-name').text(place.name);
-    });
-
-    var placeLived = document.getElementById('place_lived_address');
-    var placeLivedAutocomplete = new google.maps.places.Autocomplete(placeLived);
-    // Listen for the event fired when the user selects a prediction and retrieve
-    // more details for that place.
-    placeLivedAutocomplete.addListener('place_changed', function() {
-      var place = placeLivedAutocomplete.getPlace();
-      var address = [];
-      var addressComponents = {
-        street_number: 'short_name',
-        route: 'long_name',
-        locality: 'long_name'
-      };
-      for (var i = 0; i < place.address_components.length; i++) {
-        var addressType = place.address_components[i].types[0];
-        if (addressComponents[addressType]) {
-          var val = place.address_components[i][addressComponents[addressType]];
-          address[(addressType==="route" && !$.isNumeric(place.formatted_address.charAt(0)))?"unshift":"push"](val);
-        }
-      }
-      if (address.length > 2) {
-        addressString = address.slice(0, -1).join(' ') + ', ' + address.slice(-1);
-      } else {
-        addressString = address.join(', ');
-      }
-      form = $("#new_place_lived");
-      form.find("input#place_lived_address").val(addressString);
-      form.find("input#place_lived_latitude").val(place.geometry.location.lat());
-      form.find("input#place_lived_longitude").val(place.geometry.location.lng());
-    });
     <% end %>
   }
 

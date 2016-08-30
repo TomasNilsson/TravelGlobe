@@ -1,0 +1,60 @@
+var placeLived = document.getElementById('place_lived_address');
+var placeLivedAutocomplete = new google.maps.places.Autocomplete(placeLived);
+// Listen for the event fired when the user selects a prediction and retrieve
+// more details for that place.
+placeLivedAutocomplete.addListener('place_changed', function() {
+    var place = placeLivedAutocomplete.getPlace();
+    var address = [];
+    var addressComponents = {
+      street_number: 'short_name',
+      route: 'long_name',
+      locality: 'long_name'
+    };
+    for (var i = 0; i < place.address_components.length; i++) {
+      var addressType = place.address_components[i].types[0];
+      if (addressComponents[addressType]) {
+        var val = place.address_components[i][addressComponents[addressType]];
+        address[(addressType==="route" && !$.isNumeric(place.formatted_address.charAt(0)))?"unshift":"push"](val);
+      }
+    }
+    if (address.length > 2) {
+      addressString = address.slice(0, -1).join(' ') + ', ' + address.slice(-1);
+    } else {
+      addressString = address.join(', ');
+    }
+    form = $("#placeLivedForm");
+    form.find("input#place_lived_address").val(addressString);
+    form.find("input#place_lived_latitude").val(place.geometry.location.lat());
+    form.find("input#place_lived_longitude").val(place.geometry.location.lng());
+});
+
+$('#place_lived_no_end_date').change(function(){
+    if ($('#place_lived_no_end_date').is(':checked')) {
+        $('#place_lived_end_date').datepicker('update', '');
+        $('#place_lived_end_date').prop('readonly', true);
+    } else {
+        $('#place_lived_end_date').prop('readonly', false);
+    }
+});
+
+$(".select-box-single").select2({
+    theme: "bootstrap",
+    placeholder: "Select a country",
+    allowClear: true,
+    dropdownParent: $('#placeLivedFormModal')
+});
+
+$('.input-group-addon').click(function() {
+    $(this).siblings().focus();
+    $(this).siblings('select').select2('open');
+});
+
+$('#placeLivedForm').on('ajax:success', function(event, data, status, xhr) {
+    $('#placeLivedFormModal').modal('hide');
+    // TODO: don't reload page (use AJAX instead to update different elements)
+    location.reload();
+});
+
+$('#placeLivedForm').on('ajax:error', function(event, xhr, status, error) {
+    $('#placeLivedForm').render_form_errors("place_lived", $.parseJSON(xhr.responseText));
+});

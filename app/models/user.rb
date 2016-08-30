@@ -27,6 +27,14 @@ class User < ActiveRecord::Base
     return days
   end
 
+  def trips_and_places_count(country_id)
+    # Get number of trips and 'places lived' for the user for a certain country
+    count = 0
+    count += self.places_lived.where(country_id: country_id).count
+    count += self.trips.includes(:countries).where(countries: { id: country_id }).count
+    return count
+  end
+
   def self.from_omniauth(auth)
     # TODO: need to refresh OAuth token if it has expired. Check before Koala call.
     user = User.where(uid: auth.uid).first_or_initialize

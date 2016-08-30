@@ -82,6 +82,8 @@ GEM
       execjs
     coffee-script-source (1.10.0)
     concurrent-ruby (1.0.2)
+    data-confirm-modal (1.2.0)
+      railties (>= 3.0)
     debug_inspector (0.0.2)
     domain_name (0.5.20160615)
       unf (>= 0.0.5, < 1.0.0)
@@ -239,6 +241,7 @@ DEPENDENCIES
   cloudinary
   cocoon
   coffee-rails (~> 4.1.0)
+  data-confirm-modal
   figaro
   has_secure_token
   jbuilder (~> 2.0)

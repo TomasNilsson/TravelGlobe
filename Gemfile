@@ -41,6 +41,9 @@ gem 'has_secure_token'
 # Use ValidatesTimeliness to validate dates, times and datetimes
 gem 'validates_timeliness', '~> 4.0'
 
+# Use Data-Confirm Modal to use confirmation modals
+gem 'data-confirm-modal'
+
 group :development do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
