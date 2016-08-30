@@ -24,6 +24,7 @@ class TripsController < ApplicationController
     }
     @trip = Trip.new(trip_params)
     @trip.users << current_user
+    authorize! :create, @trip
     if @trip.save
       current_user.countries << @trip.countries - current_user.countries
       render json: @trip, status: :created
@@ -36,9 +37,11 @@ class TripsController < ApplicationController
   end
 
   def edit
+    authorize! :edit, @trip
   end
 
   def update
+    authorize! :update, @trip
     params[:trip][:category_ids].map! { |element|
       # Create new category if element is a name instead of an id
       if element.present? && (element.to_i.to_s != element)
@@ -70,6 +73,7 @@ class TripsController < ApplicationController
   end
 
   def destroy
+    authorize! :destroy, @trip
     countries = @trip.countries.to_a
     if @trip.destroy
       countries.each do |c|

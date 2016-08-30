@@ -26,6 +26,9 @@ gem 'omniauth-facebook'
 # Koala is a Facebook library for Ruby, supporting e.g. the Graph API 
 gem "koala", "~> 2.2"
 
+# Use CanCanCan for authorization control
+gem 'cancancan', '~> 1.10'
+
 # Use Figaro to set environment variables
 gem 'figaro'
 

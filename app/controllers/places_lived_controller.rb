@@ -1,4 +1,5 @@
 class PlacesLivedController < ApplicationController
+
   before_action :set_place_lived, only: [:show, :edit, :update, :destroy]
 
   def new
@@ -7,6 +8,7 @@ class PlacesLivedController < ApplicationController
   
   def create
     @place_lived = current_user.places_lived.new(place_lived_params)
+    authorize! :create, @place_lived
     if @place_lived.save
       current_user.countries << @place_lived.country unless current_user.countries.include?(@place_lived.country)
       render json: @place_lived, status: :created
@@ -19,10 +21,12 @@ class PlacesLivedController < ApplicationController
   end
 
   def edit
+    authorize! :edit, @place_lived
     @no_end_date = @place_lived.end_date.blank?
   end
 
   def update
+    authorize! :update, @place_lived
     country = @place_lived.country
     if @place_lived.update(place_lived_params)
       if current_user.trips_and_places_count(country.id) == 0
@@ -36,6 +40,7 @@ class PlacesLivedController < ApplicationController
   end
 
   def destroy
+    authorize! :destroy, @place_lived
     country = @place_lived.country
     if @place_lived.destroy
       if current_user.trips_and_places_count(country.id) == 0
