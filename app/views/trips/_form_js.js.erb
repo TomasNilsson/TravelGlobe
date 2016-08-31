@@ -130,20 +130,10 @@ fbphotoSelect = function(id) {
         selector.showPhotoSelector(null, album.id, album.count);
     };
 
-    callbackPhotoSelected = function(photoId) {
-        var photo;
-        photo = CSPhotoSelector.getPhotoById(photoId);
-    };
-
-    callbackPhotoUnselected = function(photoId) {
-        var photo;
-        album = CSPhotoSelector.getPhotoById(photoId);
-    };
-
-    callbackSubmit = function(photoIds) {
+    callbackSubmit = function(photos) {
         var photo, i, len, caption, tablerow, thumb;
-        for (i = 0, len = photoIds.length; i < len; i += 1) {
-            photo = CSPhotoSelector.getPhotoById(photoIds[i]);
+        for (i = 0, len = photos.length; i < len; i += 1) {
+            photo = photos[i];
             if (typeof photo.name === "undefined") {
                 caption = "";
             } else {
@@ -172,8 +162,6 @@ fbphotoSelect = function(id) {
     // Create Photo Selector instances
     selector = CSPhotoSelector.newInstance({
         callbackAlbumSelected   : callbackAlbumSelected,
-        callbackPhotoSelected   : callbackPhotoSelected,
-        callbackPhotoUnselected : callbackPhotoUnselected,
         callbackSubmit          : callbackSubmit,
         albumsPerPage           : 6,
         photosPerPage           : 12,

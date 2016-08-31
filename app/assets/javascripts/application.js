@@ -79,18 +79,18 @@ $(document).ready(function(){
 });
 
 function moveUp(item, sortableList) {
-    var prev = item.prev();
+    var prev = item.prevAll('.sortable:first');
     if (prev.length == 0)
         return;
-    item.insertBefore(prev).hide().show('slow');
+    item.insertBefore(prev);
     updateOrder(sortableList);
 }
 
 function moveDown(item, sortableList) {
-    var next = item.next();
+    var next = item.nextAll('.sortable:first');
     if (next.length == 0)
         return;
-    next.insertBefore(item).hide().show('slow');
+    next.insertBefore(item);
     updateOrder(sortableList);
 }
 

@@ -313,10 +313,15 @@
 
   function addMarkers(places) {
     var infowindow = new google.maps.InfoWindow();
+    if (places.length < 10) {
+      var labels = '123456789';
+    } else {
+      var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    }
     places.forEach(function(place, i) {
       var marker = new google.maps.Marker({
         position: {lat: parseFloat(place[1]), lng: parseFloat(place[2])},
-        label: (i+1).toString(),
+        label: labels[i % labels.length],
         title: place[0],
         icon: {
           url: "<%= URI.join(root_url, image_path('map-marker.png')) %>",

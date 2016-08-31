@@ -10,7 +10,7 @@ var CSPhotoSelector = (function(module, $) {
 
 	// Private variables
 	settings, albums, prev, photos, albumLength, numPages, albumId, currentAlbumPage,
-	$albums, $photos, $container, $albumsContainer, $photosContainer, $selectedCount, $pageNumber, $pageNumberTotal, $pagePrev, $pageNext, $buttonClose, $buttonOK, $buttonCancel,
+	$albums, $photos, $container, $albumsContainer, $photosContainer, $selectedCount, $pageNumber, $pageNumberSeparator, $pageNumberTotal, $pagePrev, $pageNext, $buttonClose, $buttonOK, $buttonCancel,
 
 	// Private functions
 	$getAlbumById, $getPhotoById, buildAlbumSelector, buildPhotoSelector, log, htmlEntities;
@@ -39,6 +39,7 @@ var CSPhotoSelector = (function(module, $) {
 			selectedPhotoCountSelector		: '.CSPhotoSelector_selectedPhotoCount',
 			selectAllSelector				: '#CSPhotoSelector_selectAll',
 			pageNumberSelector				: '#CSPhotoSelector_pageNumber',
+			pageNumberSeparatorSelector		: '#CSPhotoSelector_pageNumberSeparator',
 			pageNumberTotalSelector			: '#CSPhotoSelector_pageNumberTotal',
 			pagePrevSelector				: '#CSPhotoSelector_pagePrev',
 			pageNextSelector				: '#CSPhotoSelector_pageNext',
@@ -61,6 +62,7 @@ var CSPhotoSelector = (function(module, $) {
 		$selectedCount		= $container.find(settings.selectedPhotoCountSelector);
 		$selectAll			= $container.find(settings.selectAllSelector);
 		$pageNumber			= $container.find(settings.pageNumberSelector);
+		$pageNumberSeparator= $container.find(settings.pageNumberSeparatorSelector);
 		$pageNumberTotal	= $container.find(settings.pageNumberTotalSelector);
 		$pagePrev			= $container.find(settings.pagePrevSelector);
 		$pageNext			= $container.find(settings.pageNextSelector);
@@ -82,7 +84,10 @@ var CSPhotoSelector = (function(module, $) {
 		}
 		input = Array.prototype.slice.call(input);
 
-		albums = [];
+		if (typeof albums === 'undefined') {
+			albums = [];
+		}
+
 		for (var i=0; i<input.length; i++){
 			albums[albums.length] = input[i];
 		}
@@ -143,7 +148,7 @@ var CSPhotoSelector = (function(module, $) {
 		var showAlbumSelector, showPhotoSelector, hidePhotoSelector, hideAlbumSelector, getselectedAlbumIds, getselectedPhotoIds, setDisabledPhotoIds, reset,
 
 		// Private variables
-		instanceSettings, selectedAlbumIds = [], selectedPhotoIds = [], disabledPhotoIds = [],
+		instanceSettings, selectedAlbumIds = [], selectedPhotoIds = [], selectedPhotos = [], disabledPhotoIds = [],
 
 		// Private functions
 		bindEvents, unbindEvents, updateAlbumContainer, updatePhotosContainer, updatePaginationButtons, selectAlbum, selectPhotos;
@@ -295,7 +300,7 @@ var CSPhotoSelector = (function(module, $) {
 			$buttonOK.bind('click', function(e) {
 				e.preventDefault();
 				hideAlbumSelector();
-				if (typeof instanceSettings.callbackSubmit === "function") { instanceSettings.callbackSubmit(selectedPhotoIds); }
+				if (typeof instanceSettings.callbackSubmit === "function") { instanceSettings.callbackSubmit(selectedPhotos); }
 			});
 
 			$selectAll.bind('click', function(e) {
@@ -429,9 +434,18 @@ var CSPhotoSelector = (function(module, $) {
 
 		updatePaginationButtons = function(pageNumber, numPerPage, totalCount) {
 			if (numPerPage && totalCount) {
-				numPages = Math.ceil((totalCount) / numPerPage);
+				if (totalCount === '-') {
+					numPages = '';
+				} else {
+					numPages = Math.ceil((totalCount) / numPerPage);
+				}
 			}
 			$pageNumber.html(pageNumber);
+			if (numPages === '') {
+				$pageNumberSeparator.html('');
+			} else {
+				$pageNumberSeparator.html(' / ');
+			}
 			$pageNumberTotal.html(numPages);
 			if (pageNumber === 1 || numPages === 1) {
 				$pagePrev.addClass(settings.disabledClass);
@@ -471,10 +485,10 @@ var CSPhotoSelector = (function(module, $) {
 				// Add photo to selectedPhotoIds
 				if ($.inArray(photoId, selectedPhotoIds) === -1) {
 					selectedPhotoIds.push(photoId);
+					selectedPhotos.push(CSPhotoSelector.getPhotoById(photoId));
 					$photo.addClass(settings.albumSelectedClass);
 					$selectedCount.html(selectedPhotoIds.length);
 					log('CSPhotoSelector - newInstance - selectPhoto - selected IDs: ', selectedPhotoIds);
-					if (typeof instanceSettings.callbackPhotoSelected === "function") { instanceSettings.callbackPhotoSelected(photoId); }
 				} else {
 					$photo.addClass(settings.albumSelectedClass);
 					log('CSPhotoSelector - newInstance - selectPhoto - ID already stored');
@@ -484,9 +498,9 @@ var CSPhotoSelector = (function(module, $) {
 				for (i = 0, len = selectedPhotoIds.length; i < len; i += 1) {
 					if (selectedPhotoIds[i] === photoId) {
 						selectedPhotoIds.splice(i, 1);
+						selectedPhotos.splice(i, 1);
 						$photo.removeClass(settings.albumSelectedClass);
 						$selectedCount.html(selectedPhotoIds.length);
-						if (typeof instanceSettings.callbackPhotoUnselected === "function") { instanceSettings.callbackPhotoUnselected(photoId); }
 						return false;
 					}
 				}
@@ -549,8 +563,13 @@ var CSPhotoSelector = (function(module, $) {
 		FB.getLoginStatus(function(response) {
 			if (response.status === 'connected') {
 				var accessToken = response.authResponse.accessToken;
-				// TODO: Load '/me/photos' (Facebook photos you are tagged in)
-				// Load Facebook photos
+				// Add 'Photos of Me' to albums array
+				setAlbums([{
+				    name: "Photos Of Me",
+				    id: 'me', 
+				    count: '-'
+				}]);
+				// Load your Facebook albums
 				FB.api('/'+ id +'/albums?fields=name,id,count', function(response) {
 					if (response.data.length) {
 						setAlbums(response.data);
@@ -559,7 +578,6 @@ var CSPhotoSelector = (function(module, $) {
 						// Call the callback
 						if (typeof callback === 'function') { callback(); }
 					} else {
-						alert ('Sorry, your friend won\'t let us look through their photos');
 						log('CSPhotoSelector - buildAlbumSelector - No albums returned');
 						return false;
 					}
@@ -582,9 +600,14 @@ var CSPhotoSelector = (function(module, $) {
 
 		// Return the markup for a single album
 		buildAlbumMarkup = function(album, accessToken) {
+			if (album.id == 'me') {
+				var pictureType = 'large';
+			} else {
+				var pictureType = 'album';
+			}
 			return '<a href="#" class="CSPhotoSelector_album" data-id="' + album.id + '">' +
 					'<div class="CSPhotoSelector_albumWrap"><div>' +
-					'<img src="https://graph.facebook.com/'+ album.id +'/picture?type=album&access_token='+ accessToken +'" alt="' + htmlEntities(album.name) + '" class="CSPhotoSelector_photoAvatar" />' +
+					'<img src="https://graph.facebook.com/'+ album.id +'/picture?type='+ pictureType + '&access_token='+ accessToken +'" alt="' + htmlEntities(album.name) + '" class="CSPhotoSelector_photoAvatar" />' +
 					'</div></div>' +
 					'<div class="CSPhotoSelector_photoName">' + htmlEntities(album.name) + '</div>' +
 					'</a>';
@@ -604,7 +627,7 @@ var CSPhotoSelector = (function(module, $) {
 		}
 
 		FB.api('/'+ albumId +'/photos?fields=id,picture,source,name,place.fields(name)&limit=' + limit + '&offset=' + offset, function(response) {
-			if (response.data) {
+			if (response.data && response.data.length > 0) {
 				setPhotos(response.data);
 				// Build the markup
 				buildSecondMarkup();
