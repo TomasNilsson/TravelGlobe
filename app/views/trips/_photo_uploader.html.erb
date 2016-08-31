@@ -9,7 +9,7 @@
         <%= cl_image_upload_tag("photo[]", 
                                 :crop => :limit, :width => 720, :height => 720,
                                 :eager => [{ :crop => :fit, :width => 130, :height => 130 }],
-                                :html => { :multiple => true, :class => "image-upload" }) %>
+                                :html => { :multiple => true, :class => "image-upload", :accept => "image/*" }) %>
       </span>
     </div>
   </div>

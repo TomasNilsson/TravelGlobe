@@ -1,5 +1,14 @@
 $('#myTripsModal').modal('hide');
+$('#tripInfoModal').removeClass('bottom');
 $('#tripInfoModal .modal-content').html("<%= j render 'show' %>");
+$('#tripInfoMapButton').click(function() {
+    $('#tripInfoModal').toggleClass('bottom');
+    if ($('#tripInfoModal').hasClass('bottom')) {
+    	$('#tripInfoMapButtonText').text('Info');
+    } else {
+    	$('#tripInfoMapButtonText').text('Map');
+    }
+});
 $('#tripInfoModal').modal('show');
 // Include first place to make sure that both the country and the place is shown (needed for islands far away from the rest of the country)
 // TODO: use all places and zoom out instead of using countries to move map?

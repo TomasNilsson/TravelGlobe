@@ -79,20 +79,22 @@
       <h4>Select Photos</h4>
       <button type="button" class="btn btn-primary" id="fbPhotoSelect">Facebook</button>
       <a class="btn btn-default" data-toggle="modal" data-target="#photoUploaderModal">Upload Photos</a>
-      <table id="selectedPhotos" class="table table-hover">
-        <thead>
-          <tr>
-            <th>Preview</th>
-            <th>Caption</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <%= f.fields_for :photos do |photo| %>
-            <%= render partial: 'photos_fields', locals: { f: photo, length: @trip.photos.length } %>
-          <% end %>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table id="selectedPhotos" class="table table-hover">
+          <thead>
+            <tr>
+              <th class="thumb-field">Preview</th>
+              <th class="caption-field">Caption</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= f.fields_for :photos do |photo| %>
+              <%= render partial: 'photos_fields', locals: { f: photo, length: @trip.photos.length } %>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
       <%= link_to_add_association '', f, :photos, {partial: 'trips/photos_fields', "data-association-insertion-node": '#selectedPhotos > tbody', "data-association-insertion-method": 'append', id: "addPhoto", style: "display:none;" } %>
     </div>
   </div>  

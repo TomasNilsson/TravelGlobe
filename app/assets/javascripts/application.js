@@ -76,6 +76,12 @@ $(document).ready(function(){
     $('.navbar a').click(function() {
         $('.modal.in').modal('hide');
     });
+
+    $(document).on('click','.navbar-collapse.in',function(e) {
+        if( $(e.target).is('a') && $(e.target).attr('class') != 'dropdown-toggle' ) {
+            $(this).collapse('hide');
+        }
+    });
 });
 
 function moveUp(item, sortableList) {
@@ -198,6 +204,8 @@ function hideTooltip(btn) {
     $.fn.datepicker.defaults.format = 'yyyy-mm-dd';
     $.fn.datepicker.defaults.autoclose = true;
     $.fn.datepicker.defaults.weekStart = 1;
+    $.fn.datepicker.defaults.disableTouchKeyboard = true;
+    $.fn.datepicker.defaults.enableOnReadonly = false;
 
     $.fn.render_form_errors = function(model_name, errors) {
         form = this

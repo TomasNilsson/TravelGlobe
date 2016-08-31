@@ -32,13 +32,17 @@
     
     $(window).resize(function() {
       $("#map").css("height", $(window).height() - $('#navbar').height());
-      $(".modal-left .modal-content").css("height", $(window).height() - $('#navbar').height());
     }).resize();
 
     $('#trips').DataTable({
       "lengthChange": false,
       "info": false,
       "autoWidth": false,
+      "drawCallback": function( settings ) {
+        if(!$("#trips").parent().hasClass("table-responsive")){
+          $("#trips").wrap("<div class='table-responsive'></div>");
+        }
+      },
       "order": [[0, "desc"]],
       "language": {
         "zeroRecords": "No matching trips found"
@@ -68,6 +72,11 @@
       "lengthChange": false,
       "info": false,
       "autoWidth": false,
+      "drawCallback": function( settings ) {
+        if(!$("#placesLived").parent().hasClass("table-responsive")){
+          $("#placesLived").wrap("<div class='table-responsive'></div>");
+        }
+      },
       "order": [[0, "desc"]],
       "language": {
         "zeroRecords": "No matching places found"
