@@ -641,8 +641,28 @@ var CSPhotoSelector = (function(module, $) {
 					$photosWrapper.addClass('CSPhoto_container_active');
 				}
 			} else {
-				log('CSPhotoSelector - showPhotoSelector - No photos returned');
-				return false;
+				// Try again without place info (apparently not allowed to get place info if the photo is part of a post by another user 
+				// and that user has unchecked "Posts on my Timeline" under "Apps others use" at https://www.facebook.com/settings?tab=applications)
+				FB.api('/'+ albumId +'/photos?fields=id,picture,source,name&limit=' + limit + '&offset=' + offset, function(response) {
+					if (response.data && response.data.length > 0) {
+						setPhotos(response.data);
+						// Build the markup
+						buildSecondMarkup();
+						// Call the callback
+						if (typeof callback === 'function') {
+							callback();
+							// hide the loader and pagination
+							$loader.hide();
+							//$pagination.hide();
+							// set the photo container to active
+							$photosWrapper.addClass('CSPhoto_container_active');
+						}
+					} else {
+						log('CSPhotoSelector - showPhotoSelector - No photos returned');
+						$loader.hide();
+						return false;
+					}
+				});
 			}
 		});
 
