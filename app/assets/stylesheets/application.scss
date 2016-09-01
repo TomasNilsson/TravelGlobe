@@ -126,7 +126,10 @@ html, body {
 #tripInfoMapButton {
     float: right;
     margin-right: 20px;
-    outline: none;
+}
+
+.btn {
+    outline: none !important;
 }
 
 .modal-content {
@@ -264,6 +267,14 @@ div.thumbnail {
 
 .table-responsive {
     border: 0px !important;
+}
+
+#shareRequestFormTable tr {
+    cursor: pointer;
+}
+
+#shareRequestFormTable tr input {
+    cursor: default;
 }
 
 @media (min-width: 768px) {

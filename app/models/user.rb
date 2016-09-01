@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :trips
   has_many :travel_partners
   has_many :places_lived, class_name: 'PlaceLived'
+  has_many :share_requests, foreign_key: "to_user_id"
   has_secure_token
 
   def visited_countries_count

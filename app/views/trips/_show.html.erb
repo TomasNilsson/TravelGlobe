@@ -12,7 +12,7 @@
   </p>
   <p><strong>Date:</strong> <%= @trip.date %></p>
   <% if @trip.travel_partners.present? %>
-    <p><strong>Travel Partners:</strong> <%= @trip.travel_partners.map(&:name).join(", ") %></p>
+    <p><strong>Travel Partners:</strong> <%= @trip.travel_partners.where(user_id: @user.id).map(&:name).join(", ") %></p>
   <% end %>
   <p><strong>Countries:</strong> <span id="countryNames"><%= @trip.countries.map(&:name).join(", ") %></span></p>
   <p><strong>Places:</strong> <%= @trip.places.map(&:name).join(", ") %> <span id="placesInfo"><%= raw @trip.places.pluck(:name, :latitude, :longitude).to_json %></span></p>
@@ -28,6 +28,7 @@
 </div>
 <div class="modal-footer">
   <% if current_user %>
+    <%= link_to "Share", '#', class: "btn btn-default", 'data-toggle': "modal", 'data-target': "#shareTripModal" %>
     <%= link_to "Edit", edit_trip_path(@trip), class: "btn btn-primary", remote: true %>
     <%= link_to "Delete", trip_path(@trip), class: "delete-trip btn btn-danger", method: :delete, remote: true, data: { confirm: "Do you really want to delete the trip?"} %>
   <% end %>

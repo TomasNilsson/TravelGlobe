@@ -6,11 +6,17 @@ Rails.application.routes.draw do
 
   get 'users/:id/visited_countries', to: 'users#visited_countries'
 
-  resources :trips, except: [:index]
+  resources :trips, except: [:index] do
+    member do
+      post 'share'
+    end
+  end
 
   resources :places_lived, except: [:index]
 
   get 'share/:token', to: 'home#share'
+
+  post 'share_requests/accept', to: "share_requests#accept", as: :accept_share_request
 
   get 'policies/privacy', to: 'home#privacy'
 end

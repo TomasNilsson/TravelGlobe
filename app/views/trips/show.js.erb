@@ -15,3 +15,23 @@ $('#tripInfoModal').modal('show');
 moveMap($('#countryNames').text().split(', '), [<%= @trip.places.first.latitude %>, <%= @trip.places.first.longitude %>]);
 removeMarkers();
 addMarkers(JSON.parse($('#placesInfo').text()));
+
+<% if current_user %>
+$('#shareTripModal .modal-content').html("<%= j render 'share' %>");
+
+$(".select-box-share").select2({
+    theme: "bootstrap",
+    placeholder: "Select a friend",
+    allowClear: true,
+    dropdownParent: $('#shareTripModal')
+});
+
+$('#shareTripForm').on('ajax:success', function(event, data, status, xhr) {
+    $('.modal.in').modal('hide');
+});
+
+$('#shareTripForm').on('ajax:error', function(event, xhr, status, error) {
+    // TODO: handle error
+    $('.modal.in').modal('hide');
+});
+<% end %>

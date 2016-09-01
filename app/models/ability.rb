@@ -11,6 +11,7 @@ class Ability
         can :manage, Photo, trip_id: user.trip_ids
         can :manage, Category, user_id: user.id
         can :manage, PlaceLived, user_id: user.id
+        can :manage, ShareRequest, from_user_id: user.id
     end
   end
 end

@@ -1,4 +1,53 @@
 <% if current_user %>
+<% if @share_requests.present? %>
+<!-- Modal -->
+<div class="modal fade" data-keyboard="false" data-backdrop="static" id="shareRequestModal" tabindex="-1" role="dialog" aria-labelledby="shareRequestModalLabel">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="shareRequestModalLabel">Share Requests</h4>
+        </div>
+        <%= form_tag accept_share_request_path, remote: true, id: "shareRequestForm" do %>
+        <div class="modal-body">
+          <p>Other TravelGlobe users want to share the following trips with you:</p>
+          <div class="table-responsive">
+            <table class="table table-hover" id="shareRequestFormTable">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>From</th>
+                  <th>Trip name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @share_requests.each do |s| %>
+                  <tr>
+                    <td><%= check_box_tag "share_request_ids[]", s.id, true %></td>
+                    <td><%= s.from_user.name %></td>
+                    <td><%= s.trip.name %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+          <p>If you accept the share requests, the trips will be included on your travel map.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <%= submit_tag "Accept selected", class: "btn btn-primary" %>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  $(window).load(function(){
+      $('#shareRequestModal').modal('show');
+  });
+</script>
+<% end %>
 <!-- Modal -->
 <div class="modal fade" data-backdrop="static" id="tripFormModal" tabindex="-1" role="dialog" aria-labelledby="tripFormModalLabel">
   <div class="vertical-alignment-helper">
@@ -93,7 +142,7 @@
             <% @trips.each do |t| %>
               <tr>
                 <td><%= t.date %></td>
-                <td><%= link_to t.name, trip_path(t), remote: true %></td>
+                <td><%= link_to t.name, trip_path(t, user: @user.id), remote: true %></td>
                 <td><%= t.countries.map(&:name).join(", ") %></td>
                 <td><%= t.categories.map(&:name).join(", ") %></td>
                 <td><%= t.travel_partners.map(&:name).join(", ") %></td>
@@ -196,6 +245,13 @@
 </div>
 <!-- Modal Sidebar-->
 <div class="modal modal-left fade" data-backdrop="false" id="tripInfoModal" tabindex="-1" role="dialog" aria-labelledby="tripInfoModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" data-backdrop="false" id="shareTripModal" tabindex="-1" role="dialog" aria-labelledby="shareTripModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
     </div>

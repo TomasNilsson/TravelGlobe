@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160802085313) do
+ActiveRecord::Schema.define(version: 20160901183858) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name"
@@ -93,13 +93,28 @@ ActiveRecord::Schema.define(version: 20160802085313) do
   add_index "places_lived", ["country_id"], name: "index_places_lived_on_country_id"
   add_index "places_lived", ["user_id"], name: "index_places_lived_on_user_id"
 
+  create_table "share_requests", force: :cascade do |t|
+    t.integer  "trip_id"
+    t.integer  "from_user_id"
+    t.integer  "to_user_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.string   "status"
+  end
+
+  add_index "share_requests", ["from_user_id"], name: "index_share_requests_on_from_user_id"
+  add_index "share_requests", ["to_user_id"], name: "index_share_requests_on_to_user_id"
+  add_index "share_requests", ["trip_id"], name: "index_share_requests_on_trip_id"
+
   create_table "travel_partners", force: :cascade do |t|
     t.string   "name"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.integer  "shared_user_id"
   end
 
+  add_index "travel_partners", ["shared_user_id"], name: "index_travel_partners_on_shared_user_id"
   add_index "travel_partners", ["user_id"], name: "index_travel_partners_on_user_id"
 
   create_table "travel_partners_trips", id: false, force: :cascade do |t|

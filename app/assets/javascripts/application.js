@@ -82,6 +82,23 @@ $(document).ready(function(){
             $(this).collapse('hide');
         }
     });
+
+    $('#shareRequestFormTable tr').click(function(event) {
+        if (event.target.type !== 'checkbox') {
+          $(':checkbox', this).trigger('click');
+        }
+    });
+
+    $('#shareRequestForm').on('ajax:success', function(event, data, status, xhr) {
+        $('#shareRequestModal').modal('hide');
+        // TODO: don't reload page (use AJAX instead to update different elements)
+        location.reload();
+    });
+
+    $('#shareRequestForm').on('ajax:error', function(event, xhr, status, error) {
+        // TODO: handle error
+        $('#shareRequestModal').modal('hide');
+    });
 });
 
 function moveUp(item, sortableList) {
@@ -128,7 +145,7 @@ $(document).ready(function(){
     $('form').each(function() { this.reset() });
 
     $(document).on('ajax:success', 'a.delete-trip', function(event, data, status, xhr) {
-        $('#myTripsModal').modal('hide');
+        $('.modal.in').modal('hide');
         // TODO: don't reload page (use AJAX instead to update different elements) and handle errors
         location.reload();
     });

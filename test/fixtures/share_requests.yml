@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  trip_id: 
+  from_user_id: 
+  to_user_id: 
+
+two:
+  trip_id: 
+  from_user_id: 
+  to_user_id: 
