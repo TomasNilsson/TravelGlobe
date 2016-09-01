@@ -263,19 +263,19 @@
   <div class="vertical-alignment-helper">
     <div class="modal-dialog vertical-align-center" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="loginModalLabel">Welcome to TravelGlobe!</h4>
-        </div>
         <div class="modal-body">
-          <% if alert %>
-            <div class="alert alert-danger alert-dismissable" role="alert">
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <strong>Error: </strong><%= alert %>
-            </div>
-          <% end %>
-          <%= link_to image_tag("facebook.png"), "/auth/facebook" %>
-        </div>
-        <div class="modal-footer">
+          <div class="jumbotron">
+            <%= image_tag("travelglobe.png", class: "img-responsive") %>
+            <h2>Welcome to TravelGlobe!</h2>
+            <% if alert %>
+              <div class="alert alert-danger alert-dismissable" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Error: </strong><%= alert %>
+              </div>
+            <% end %>
+            <p>Create a <span class="text-important">map-based overview</span> of where in the world you have been <span class="text-important">travelling</span>, including <span class="text-important">photos and info for each trip.</span></p>
+            <%= link_to image_tag("facebook.png"), "/auth/facebook" %>
+          </div>
         </div>
       </div>
     </div>

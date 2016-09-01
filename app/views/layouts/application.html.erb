@@ -5,6 +5,12 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="description" content="A map-based overview of where in the world you have been travelling, including photos and info for each trip." />
+  <meta property="og:url" content="<%= request.original_url %>" />
+  <meta property="og:title" content="TravelGlobe<%= " - #{@user.name}" if @user %>" />
+  <meta property="og:description" content="A map-based overview of where in the world you have been travelling, including photos and info for each trip." />
+  <meta property="og:image" content="<%= URI.join(root_url, image_path('travelglobe.png')) %>" />
+  <meta property="fb:app_id" content="1696173967323541">
   <%= favicon_link_tag 'favicon.ico' %>
   <%= stylesheet_link_tag 'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>

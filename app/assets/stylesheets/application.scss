@@ -80,6 +80,18 @@ html, body {
     margin-right: auto
 }
 
+#loginModal {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.text-important {
+    color: $brand-primary;
+    font-weight: bold;
+}
+
 .modal .modal-tabs {
     height: 425px;
     overflow-y: auto;
