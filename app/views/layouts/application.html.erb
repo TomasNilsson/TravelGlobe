@@ -253,6 +253,9 @@
         return;
       }
 
+      // Remove focus from the search box
+      searchInput.blur();
+
       var place = places[0];
 
       removeMarkers();
