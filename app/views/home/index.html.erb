@@ -231,7 +231,7 @@
             <h4>Top 10 Travel Partners:</h4>
             <ol class="colored-list">
               <% @travel_partners_toplist.each do |t| %>
-                <li><strong><%= t.name %></strong>, <%= pluralize(t.trip_count, 'trip')  %></li>
+                <li><strong><%= t.name %></strong>, <%= link_to pluralize(t.trip_count, 'trip'), '#', class: "travelpartner", remote: true %></li>
               <% end %>
             </ol>
           </div>
@@ -273,7 +273,7 @@
                 <strong>Error: </strong><%= alert %>
               </div>
             <% end %>
-            <p>Create a <span class="text-important">map-based overview</span> of where in the world you have been <span class="text-important">travelling</span>, including <span class="text-important">photos and info for each trip.</span></p>
+            <p>Create a <span class="text-important">map-based overview</span> of where in the world you have been <span class="text-important">travelling</span>, including <span class="text-important">photos and info for each trip</span>.</p>
             <%= link_to image_tag("facebook.png"), "/auth/facebook" %>
           </div>
         </div>

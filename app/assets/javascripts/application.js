@@ -176,6 +176,12 @@ $(document).ready(function(){
         removeMarkers();
     });
 
+    $('#statisticsModal a.travelpartner').click(function() {
+        $('.modal.in').modal('hide');
+        $('#myTripsModal').modal('show');
+        $('#trips').DataTable().search($(this).siblings('strong').first().text()).draw();
+    });
+
     $('#copy-btn').tooltip({
         trigger: 'click'
     });
@@ -191,6 +197,8 @@ $(document).ready(function(){
         setTooltip(e.trigger, 'Failed!');
         hideTooltip(e.trigger);
     });
+
+
 
     /*$('#logout').click(function (e) {
         // Check that the user is logged in to Facebook
