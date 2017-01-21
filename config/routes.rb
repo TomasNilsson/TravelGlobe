@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   delete 'logout', to: 'sessions#destroy'
 
   get 'users/:id/visited_countries', to: 'users#visited_countries'
+  get 'photos/update_facebook_urls', to: 'photos#update_facebook_urls'
 
   resources :trips, except: [:index] do
     member do
