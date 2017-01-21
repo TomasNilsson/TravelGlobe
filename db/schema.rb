@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170121013139) do
+ActiveRecord::Schema.define(version: 20170121185503) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name"
@@ -146,14 +146,16 @@ ActiveRecord::Schema.define(version: 20170121013139) do
   add_index "trips_users", ["user_id"], name: "index_trips_users_on_user_id"
 
   create_table "users", force: :cascade do |t|
-    t.string   "uid",              null: false
+    t.string   "uid",                null: false
     t.string   "name"
     t.string   "image_url"
     t.string   "oauth_token"
     t.datetime "oauth_expires_at"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.string   "token"
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
   end
 
   add_index "users", ["token"], name: "index_users_on_token"

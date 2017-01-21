@@ -40,6 +40,11 @@
       $("#map").css("height", $(window).height() - $('#navbar').height());
     }).resize();
 
+    <% if current_user %>
+    // Update Facebook image URLs since they expire after some time
+    $.get("/photos/update_facebook_urls");
+    <% end %>
+
     $('#trips').DataTable({
       "lengthChange": false,
       "info": false,
