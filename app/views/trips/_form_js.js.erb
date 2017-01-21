@@ -149,6 +149,8 @@ fbphotoSelect = function(id) {
             $("#addPhoto").click();
             tablerow = $("#selectedPhotos tr:last");
             thumb = tablerow.find('td.thumb-field')
+            thumb.find("input.external_id").val(photo.id);
+            thumb.find("input.from").val("facebook");
             thumb.find("input.thumb-url").val(photo.picture);
             thumb.find("input.image-url").val(photo.source);
             thumb.find(".thumbnail").append('<img src="' + photo.picture + '">');
@@ -203,6 +205,8 @@ $(".cloudinary-fileupload")
         $("#addPhoto").click();
         var tablerow = $("#selectedPhotos tr:last");
         var thumb = tablerow.find('td.thumb-field')
+        thumb.find("input.external_id").val(data.result.public_id);
+        thumb.find("input.from").val("cloudinary");
         thumb.find("input.thumb-url").val($.cloudinary.url(data.result.public_id, {
             format: data.result.format, width: 130, height: 130, crop: "fit", secure: true
         }));

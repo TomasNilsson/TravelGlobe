@@ -6,9 +6,12 @@
         <img src="<%= f.object.thumb_url %>">
       <% end %>
     </div>
+    <%= f.hidden_field :external_id, class: "external_id" %>
+    <%= f.hidden_field :from, class: "from" %>
     <%= f.hidden_field :thumb_url, class: "thumb-url" %>
     <%= f.hidden_field :image_url, class: "image-url" %>
     <%= f.hidden_field :order, class: "order" %>
+    <%= f.hidden_field :user_id, class: "user_id", value: current_user.id %>
   </td>
   <td class="caption-field">
     <%= f.text_field :caption, class: "form-control" %>

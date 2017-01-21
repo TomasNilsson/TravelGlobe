@@ -120,6 +120,6 @@ class TripsController < ApplicationController
     end
 
     def trip_params
-      params.require(:trip).permit(:name, :start_date, :end_date, {:country_ids => []}, {:travel_partner_ids => []}, {:category_ids => []}, photos_attributes: [:id, :thumb_url, :image_url, :caption, :order, :_destroy], places_attributes: [:id, :name, :latitude, :longitude, :order, :_destroy])
+      params.require(:trip).permit(:name, :start_date, :end_date, {:country_ids => []}, {:travel_partner_ids => []}, {:category_ids => []}, photos_attributes: [:id, :thumb_url, :image_url, :caption, :order, :user_id, :external_id, :from, :_destroy], places_attributes: [:id, :name, :latitude, :longitude, :order, :_destroy])
     end
 end
