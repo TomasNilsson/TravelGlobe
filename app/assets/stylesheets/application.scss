@@ -8,6 +8,7 @@ $input-border-focus: $brand-primary;
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic);
 @import "jquery-ui/sortable";
 @import "photoselector";
+@import "ekko-lightbox.min";
 
 html, body {
     height: 100%;
@@ -203,6 +204,14 @@ ol.colored-list li:before {
 
 .ekko-lightbox a.glyphicon, a.glyphicon:hover, a.glyphicon:focus {
     color: #ffffff;
+}
+
+.ekko-lightbox .ekko-lightbox-container {
+    overflow: hidden !important;
+    -webkit-transition: width 250ms ease-in-out, height 250ms ease-in-out !important;
+    -moz-transition: width 250ms ease-in-out, height 250ms ease-in-out !important;
+    -o-transition: width 250ms ease-in-out, height 250ms ease-in-out !important;
+    transition: width 250ms ease-in-out, height 250ms ease-in-out !important;
 }
 
 .dropzone {

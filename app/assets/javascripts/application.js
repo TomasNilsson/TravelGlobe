@@ -19,6 +19,7 @@
 //= require cocoon
 //= require cloudinary
 //= require data-confirm-modal
+//= require ekko-lightbox.min.js
 
 $(document).ready(function(){
     var tripDuration = 0;
