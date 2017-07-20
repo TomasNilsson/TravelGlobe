@@ -8,13 +8,15 @@ placeLivedAutocomplete.addListener('place_changed', function() {
     var addressComponents = {
       street_number: 'short_name',
       route: 'long_name',
-      locality: 'long_name'
+      locality: 'long_name',
+      postal_town: 'long_name'
     };
+    streetNumberBeforeAddress = $.isNumeric(place.formatted_address.charAt(0))
     for (var i = 0; i < place.address_components.length; i++) {
       var addressType = place.address_components[i].types[0];
       if (addressComponents[addressType]) {
         var val = place.address_components[i][addressComponents[addressType]];
-        address[(addressType==="route" && !$.isNumeric(place.formatted_address.charAt(0)))?"unshift":"push"](val);
+        address[(i === 1 && (addressType === "route" && !streetNumberBeforeAddress) || (addressType === "street_number" && streetNumberBeforeAddress)) ? "unshift" : "push"](val);
       }
     }
     if (address.length > 2) {
