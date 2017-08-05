@@ -47,6 +47,11 @@ gem 'validates_timeliness', '~> 4.0'
 # Use Data-Confirm Modal to use confirmation modals
 gem 'data-confirm-modal'
 
+# Use Axlsx to export to Excel
+gem 'rubyzip', '~> 1.1.0'
+gem 'axlsx', '2.1.0.pre'
+gem 'axlsx_rails'
+
 group :development do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'

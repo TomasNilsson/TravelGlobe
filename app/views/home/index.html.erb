@@ -154,7 +154,7 @@
                 <td><%= link_to t.name, trip_path(t, user: @user.id), remote: true %></td>
                 <td><%= t.countries.map(&:name).join(", ") %></td>
                 <td><%= t.categories.map(&:name).join(", ") %></td>
-                <td><%= t.travel_partners.map(&:name).join(", ") %></td>
+                <td><%= t.travel_partners.where(user_id: @user.id).map(&:name).join(", ") %></td>
                 <% if current_user %>
                   <td><%= link_to icon("pencil"), edit_trip_path(t), remote: true %></td>
                   <td><%= link_to icon('remove'), trip_path(t), class: "delete-trip", method: :delete, remote: true, data: { confirm: "Do you really want to delete the trip?"} %></td>

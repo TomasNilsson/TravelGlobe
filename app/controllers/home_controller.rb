@@ -24,6 +24,12 @@ class HomeController < ApplicationController
     end
   end
 
+  def excel_export
+    @trips = current_user.trips.order(:start_date)
+    @places_lived = current_user.places_lived.order(:start_date)
+    render xlsx: 'excel_export', filename: "TravelGlobe_#{current_user.name.gsub(/\s+/, '')}.xlsx"
+  end
+
   def privacy
   end
 

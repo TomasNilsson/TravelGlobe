@@ -17,6 +17,8 @@ Rails.application.routes.draw do
 
   get 'share/:token', to: 'home#share'
 
+  get 'excel_export', to: 'home#excel_export'
+
   post 'share_requests/accept', to: "share_requests#accept", as: :accept_share_request
 
   get 'policies/privacy', to: 'home#privacy'

@@ -1,0 +1,30 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "My Trips") do |sheet|
+  header = sheet.styles.add_style(b: true)
+  sheet.add_row ["Date", "Name", "Countries/States", "Places", "Categories", "Travel Partners"], style: header
+  @trips.each do |t|
+    sheet.add_row [
+      t.date, 
+      t.name, 
+      t.countries.map(&:name).join(", "), 
+      t.places.map(&:name).join(", "), 
+      t.categories.map(&:name).join(", "), 
+      t.travel_partners.where(user_id: current_user.id).map(&:name).join(", ")
+    ]
+  end
+  sheet.auto_filter = "A1:F#{@trips.size + 1}"
+end
+
+wb.add_worksheet(name: "Places I've Lived") do |sheet|
+  header = sheet.styles.add_style(b: true)
+  sheet.add_row ["Date", "Address", "Country/State"], style: header
+  @places_lived.each do |p|
+    sheet.add_row [
+      p.date, 
+      p.address, 
+      p.country.name
+    ]
+  end
+  sheet.auto_filter = "A1:C#{@places_lived.size + 1}"
+end
