@@ -102,8 +102,9 @@ $('#tripForm').on('ajax:error', function(event, xhr, status, error) {
     $('#tripFormTabs a:first').tab('show');
 });
 
+
 /* --------------------------------------------------------------------
- * Photo selector
+ * Facebook Photo selector
  * ----------------------------------------------------------------- */
 
 var selector, callbackAlbumSelected, callbackPhotoUnselected, callbackSubmit;
@@ -131,7 +132,7 @@ fbphotoSelect = function(id) {
     };
 
     callbackSubmit = function(photos) {
-        var photo, i, len, caption, tablerow, thumb;
+        var photo, i, len, caption, tableRow, thumb;
         for (i = 0, len = photos.length; i < len; i += 1) {
             photo = photos[i];
             if (typeof photo.name === "undefined") {
@@ -147,14 +148,14 @@ fbphotoSelect = function(id) {
                 }
             }
             $("#addPhoto").click();
-            tablerow = $("#selectedPhotos tr:last");
-            thumb = tablerow.find('td.thumb-field')
+            tableRow = $("#selectedPhotos tr:last");
+            thumb = tableRow.find('td.thumb-field');
             thumb.find("input.external_id").val(photo.id);
             thumb.find("input.from").val("facebook");
             thumb.find("input.thumb-url").val(photo.picture);
             thumb.find("input.image-url").val(photo.source);
             thumb.find(".thumbnail").append('<img src="' + photo.picture + '">');
-            tablerow.find('td.caption-field').find("input").val(caption);
+            tableRow.find('td.caption-field').find("input").val(caption);
         }
     };
 
@@ -178,6 +179,11 @@ $("#fbPhotoSelect").click(function (e) {
     e.preventDefault();
     fbphotoSelect();
 });
+
+
+/* --------------------------------------------------------------------
+ * Photo uploader
+ * ----------------------------------------------------------------- */
 
 // Cloudinary jQuery integration library uses jQuery File Upload widget
 // (see http://blueimp.github.io/jQuery-File-Upload/).
@@ -203,8 +209,8 @@ $(".cloudinary-fileupload")
     })
     .on("cloudinarydone", function (e, data) {
         $("#addPhoto").click();
-        var tablerow = $("#selectedPhotos tr:last");
-        var thumb = tablerow.find('td.thumb-field')
+        var tableRow = $("#selectedPhotos tr:last");
+        var thumb = tableRow.find('td.thumb-field');
         thumb.find("input.external_id").val(data.result.public_id);
         thumb.find("input.from").val("cloudinary");
         thumb.find("input.thumb-url").val($.cloudinary.url(data.result.public_id, {
@@ -233,3 +239,69 @@ $('#dropzone')
         counter = 0;
         $(this).removeClass('hover');
     });
+
+
+/* --------------------------------------------------------------------
+ * Video selector
+ * ----------------------------------------------------------------- */
+
+var defaultVideoThumbUrl = '<%= image_url("default-video-thumbnail.jpg") %>'
+
+$('.video-url').bind('input propertychange', function() {
+    var youTubeRegexMatch = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/.exec($(this).val());
+    if (youTubeRegexMatch) {
+        $(this).parent().removeClass('has-error has-feedback');
+        $(this).next('.form-control-feedback').hide();
+        var videoId = youTubeRegexMatch[1];
+        var thumbUrl = 'https://i.ytimg.com/vi/' + videoId + '/mqdefault.jpg';
+        var tableRow = $(this).closest('tr');
+        tableRow.find('input.video-id').val(videoId);
+        tableRow.find('.thumb-img').attr('src', thumbUrl);
+        $('#videoSelectorModal .modal-footer .btn-primary').prop('disabled', false);
+    } else {
+        $(this).parent().addClass('has-error has-feedback');
+        $(this).next('.form-control-feedback').show();
+        var tableRow = $(this).closest('tr');
+        tableRow.find('input.video-id').val('');
+        tableRow.find('.thumb-img').attr('src', defaultVideoThumbUrl);
+        if ($('#selectedVideos > tbody > tr').length === 1) {
+            $('#videoSelectorModal .modal-footer .btn-primary').prop('disabled', true);
+        }
+    }
+});
+
+$('#videoSelectorModal #add-more').click(function() {
+    var tableRow = $('#selectedVideos tr:last').clone(true);
+    tableRow.find('.thumb-img').attr('src', defaultVideoThumbUrl);
+    tableRow.find('input').val('');
+    tableRow.appendTo('#selectedVideos > tbody');
+    $('#selectedVideos .remove-video').show();
+    this.blur();
+});
+
+$('#videoSelectorModal').on('click', '.remove-video', function(){
+    $(this).closest('tr').remove();
+    if ($('#selectedVideos > tbody > tr').length === 1) {
+       $('#selectedVideos .remove-video').hide(); 
+    }
+});
+
+$('#videoSelectorModal .modal-footer .btn-primary').click(function() {
+    $('#selectedVideos > tbody > tr').each(function() {
+        var videoId = $(this).find('input.video-id').val();
+        if (videoId) {
+            $('#addPhoto').click();
+            var thumbUrl = $(this).find('.thumb-img').attr('src');
+            var tableRow = $('#selectedPhotos tr:last');
+            thumb = tableRow.find('td.thumb-field');
+            thumb.find('input.external_id').val(videoId);
+            thumb.find('input.from').val('youtube');
+            thumb.find('input.thumb-url').val(thumbUrl);
+            thumb.find('input.image-url').val($(this).find('input.video-url').val());
+            thumb.find('.thumbnail').append('<img src="' + thumbUrl + '">');
+            tableRow.find('td.caption-field').find('input').val('Video');
+        }
+    });
+    $('#videoSelectorModal').modal('hide');
+    this.blur();
+});

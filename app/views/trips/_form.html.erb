@@ -7,7 +7,7 @@
   <ul class="nav nav-tabs" id="tripFormTabs" role="tablist">
     <li role="presentation" class="active"><a href="#tripFormInfo" aria-controls="tripFormInfo" role="tab" data-toggle="tab">Info</a></li>
     <li role="presentation"><a href="#tripFormPlaces" aria-controls="tripFormPlaces" role="tab" data-toggle="tab">Places</a></li>
-    <li role="presentation"><a href="#tripFormPhotos" aria-controls="tripFormPhotos" role="tab" data-toggle="tab">Photos</a></li>
+    <li role="presentation"><a href="#tripFormPhotosVideos" aria-controls="tripFormPhotosVideos" role="tab" data-toggle="tab">Photos/Videos</a></li>
   </ul>
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane fade in active" id="tripFormInfo">
@@ -75,10 +75,11 @@
       </ul>
       <%= link_to_add_association '', f, :places, {partial: 'trips/places_fields', "data-association-insertion-node": '#selectedPlaces', "data-association-insertion-method": 'append', id: "addPlace", style: "display:none;" } %>
     </div>
-    <div role="tabpanel" class="tab-pane fade" id="tripFormPhotos">
-      <h4>Select Photos</h4>
-      <button type="button" class="btn btn-primary" id="fbPhotoSelect">Facebook</button>
+    <div role="tabpanel" class="tab-pane fade" id="tripFormPhotosVideos">
+      <h4>Select Photos/Videos</h4>
+      <button type="button" class="btn btn-primary" id="fbPhotoSelect">Facebook Photos</button>
       <a class="btn btn-default" data-toggle="modal" data-target="#photoUploaderModal">Upload Photos</a>
+      <a class="btn btn-danger" data-toggle="modal" data-target="#videoSelectorModal">YouTube Videos</a>
       <div class="table-responsive">
         <table id="selectedPhotos" class="table table-hover">
           <thead>
@@ -105,7 +106,7 @@
     <div class="CSPhotoSelector_form">
       <div class="CSPhotoSelector_header">
           <a href="#" id="CSPhotoSelector_buttonClose">x</a>
-          <p>Choose from Photos</p>
+          <p>Facebook Photos</p>
       </div>
       <div class="CSPhotoSelector_content CSAlbumSelector_wrapper">
         <div class="CSPhotoSelector_searchContainer CSPhotoSelector_clearfix">

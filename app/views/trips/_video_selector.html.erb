@@ -1,0 +1,43 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="videoSelectorModalLabel">Video Selector</h4>
+</div>
+<div class="modal-body">
+  <div class="table-responsive">
+    <table id="selectedVideos" class="table table-hover">
+      <thead>
+        <tr>
+          <th class="thumb-field">Preview</th>
+          <th class="video-url-field">Video URL</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="thumb-field">
+            <div class="thumbnail">
+              <%= image_tag("default-video-thumbnail.jpg", class: "thumb-img", alt: "Video Preview") %>
+            </div>
+          </td>
+          <td class="video-url-field">
+            <div class="form-group">
+              <%= text_field_tag "video_url", nil, placeholder: "Enter YouTube Video URL", class: "form-control video-url" %>
+              <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" style="display: none;"></span>
+              <%= hidden_field_tag "video_id", '', class: "video-id" %>
+            </div>
+          </td>
+          <td>
+            <span class="pull-right">
+              <%= link_to icon('remove'), "#", class: "remove-video", style: "display:none;" %>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button type="button" class="btn btn-default btn-sm" id="add-more"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add More</button>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+  <button type="button" class="btn btn-primary" disabled="disabled">Add Videos</button>
+</div>

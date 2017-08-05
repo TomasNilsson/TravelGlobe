@@ -27,6 +27,7 @@ html, body {
 .navbar {
     margin: 0;
     padding: 0;
+    border-radius: 0;
 }
 
 .navbar-inverse .navbar-nav > li > a:focus {
@@ -278,11 +279,15 @@ div.thumbnail {
     width: 160px;
 }
 
-.caption-field {
+.thumb-field .thumbnail {
+    margin-bottom: 0;
+}
+
+.caption-field, .video-url-field {
     width: 326px;
 }
 
-.caption-field input {
+.caption-field input, .video-url-field input {
     width: 310px;
 }
 

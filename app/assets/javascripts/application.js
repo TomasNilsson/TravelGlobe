@@ -163,6 +163,16 @@ $(document).ready(function(){
         $('#progress .progress-bar').css('width', '0%');
     });
 
+    $('#videoSelectorModal').on('hidden.bs.modal', function(){
+        // Reset everything
+        $(this).find('#selectedVideos > tbody > tr:gt(0)').remove();
+        var tableRow = $(this).find('#selectedVideos > tbody > tr:first')
+        tableRow.find('.thumb-img').attr('src', defaultVideoThumbUrl)
+        tableRow.find('input').val('');
+        tableRow.find('.remove-video').hide();
+        $('#videoSelectorModal .modal-footer .btn-primary').prop('disabled', true);
+    });
+
     $('#myTripsModal').on('hidden.bs.modal', function(){
         // Reset filter
         $('#trips').DataTable().search('').draw();
@@ -198,8 +208,6 @@ $(document).ready(function(){
         setTooltip(e.trigger, 'Failed!');
         hideTooltip(e.trigger);
     });
-
-
 
     /*$('#logout').click(function (e) {
         // Check that the user is logged in to Facebook

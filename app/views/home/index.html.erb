@@ -1,6 +1,6 @@
 <% if current_user %>
 <% if @share_requests.present? %>
-<!-- Modal -->
+<!-- Share Request Modal -->
 <div class="modal fade" data-keyboard="false" data-backdrop="static" id="shareRequestModal" tabindex="-1" role="dialog" aria-labelledby="shareRequestModalLabel">
   <div class="vertical-alignment-helper">
     <div class="modal-dialog vertical-align-center" role="document">
@@ -48,7 +48,7 @@
   });
 </script>
 <% end %>
-<!-- Modal -->
+<!-- Trip Form Modal -->
 <div class="modal fade" data-backdrop="static" id="tripFormModal" tabindex="-1" role="dialog" aria-labelledby="tripFormModalLabel">
   <div class="vertical-alignment-helper">
     <div class="modal-dialog vertical-align-center" role="document">
@@ -57,7 +57,7 @@
     </div>
   </div>
 </div>
-<!-- Modal -->
+<!-- Photo Uploader Modal -->
 <div class="modal fade" id="photoUploaderModal" tabindex="-1" role="dialog" aria-labelledby="photoUploaderModalLabel">
   <div class="vertical-alignment-helper">
     <div class="modal-dialog vertical-align-center" role="document">
@@ -75,7 +75,16 @@
     </div>
   </div>
 </div>
-<!-- Modal -->
+<!-- Video Selector Modal -->
+<div class="modal fade" id="videoSelectorModal" tabindex="-1" role="dialog" aria-labelledby="videoSelectorModalLabel">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center" role="document">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Place Lived Form Modal -->
 <div class="modal fade" data-backdrop="static" id="placeLivedFormModal" tabindex="-1" role="dialog" aria-labelledby="placeLivedFormModalLabel">
   <div class="vertical-alignment-helper">
     <div class="modal-dialog vertical-align-center" role="document">
@@ -84,7 +93,7 @@
     </div>
   </div>
 </div>
-<!-- Modal -->
+<!-- Share Modal -->
 <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel">
   <div class="vertical-alignment-helper">
     <div class="modal-dialog vertical-align-center" role="document">
@@ -114,7 +123,7 @@
 </div>
 <% end %>
 <% if @user %>
-<!-- Modal -->
+<!-- My Trips Modal -->
 <div class="modal fade" id="myTripsModal" tabindex="-1" role="dialog" aria-labelledby="myTripsModalLabel">
   <div class="vertical-alignment-helper">
     <div class="modal-dialog modal-lg vertical-align-center" role="document">
@@ -165,7 +174,7 @@
     </div>
   </div>
 </div>
-<!-- Modal -->
+<!-- Places Lived Modal -->
 <div class="modal fade" id="placesLivedModal" tabindex="-1" role="dialog" aria-labelledby="placesLivedModalLabel">
   <div class="vertical-alignment-helper">
     <div class="modal-dialog modal-lg vertical-align-center" role="document">
@@ -212,7 +221,7 @@
     </div>
   </div>
 </div>
-<!-- Modal -->
+<!-- Statistics Modal -->
 <div class="modal fade" id="statisticsModal" tabindex="-1" role="dialog" aria-labelledby="statisticsModalLabel">
   <div class="vertical-alignment-helper">
     <div class="modal-dialog vertical-align-center" role="document">
@@ -244,14 +253,14 @@
     </div>
   </div>
 </div>
-<!-- Modal Sidebar-->
+<!-- Trip Info Modal (Sidebar) -->
 <div class="modal modal-left fade" data-backdrop="false" id="tripInfoModal" tabindex="-1" role="dialog" aria-labelledby="tripInfoModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
     </div>
   </div>
 </div>
-<!-- Modal -->
+<!-- Share Trip Modal -->
 <div class="modal fade" data-backdrop="false" id="shareTripModal" tabindex="-1" role="dialog" aria-labelledby="shareTripModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -259,7 +268,7 @@
   </div>
 </div>
 <% else %>
-<!-- Modal -->
+<!-- Login Modal -->
 <div class="modal fade" data-keyboard="false" data-backdrop="static" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
   <div class="vertical-alignment-helper">
     <div class="modal-dialog vertical-align-center" role="document">

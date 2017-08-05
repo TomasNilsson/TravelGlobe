@@ -20,7 +20,7 @@
     <div class="row">
     <% photo_group.each do |p| %>
       <div class="col-xs-6 col-md-6">
-        <%= link_to image_tag(p.thumb_url), p.image_url, {"class": "thumbnail", "data-toggle": "lightbox", "data-gallery": "tripLightbox", "data-title": @trip.name, "data-footer": p.caption} %>
+        <%= link_to image_tag(p.thumb_url), p.image_url, {"class": "thumbnail", "data-toggle": "lightbox", "data-gallery": "tripLightbox", "data-title": @trip.name, "data-footer": p.caption, "data-width": ("960" if p.from == "youtube")}.compact %>
       </div>
     <% end %>
     </div>
