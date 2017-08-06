@@ -52,6 +52,9 @@ gem 'rubyzip', '~> 1.1.0'
 gem 'axlsx', '2.1.0.pre'
 gem 'axlsx_rails'
 
+# Use jQuery HotKeys for WYSIWYG editor
+gem 'jquery-hotkeys-rails'
+
 group :development do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'

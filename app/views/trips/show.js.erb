@@ -16,6 +16,8 @@ moveMap($('#countryNames').text().split(', '), [<%= @trip.places.first.latitude 
 removeMarkers();
 addMarkers(JSON.parse($('#placesInfo').text()));
 
+$('#tripNotesModal .modal-body').html('<%= @trip.notes.present? ? raw(@trip.notes) : '' %>');
+
 <% if current_user %>
 $('#shareTripModal .modal-content').html("<%= j render 'share' %>");
 

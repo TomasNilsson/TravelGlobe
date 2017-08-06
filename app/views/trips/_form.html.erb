@@ -8,6 +8,7 @@
     <li role="presentation" class="active"><a href="#tripFormInfo" aria-controls="tripFormInfo" role="tab" data-toggle="tab">Info</a></li>
     <li role="presentation"><a href="#tripFormPlaces" aria-controls="tripFormPlaces" role="tab" data-toggle="tab">Places</a></li>
     <li role="presentation"><a href="#tripFormPhotosVideos" aria-controls="tripFormPhotosVideos" role="tab" data-toggle="tab">Photos/Videos</a></li>
+    <li role="presentation"><a href="#tripFormNotes" aria-controls="tripFormNotes" role="tab" data-toggle="tab">Notes</a></li>
   </ul>
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane fade in active" id="tripFormInfo">
@@ -98,7 +99,12 @@
       </div>
       <%= link_to_add_association '', f, :photos, {partial: 'trips/photos_fields', "data-association-insertion-node": '#selectedPhotos > tbody', "data-association-insertion-method": 'append', id: "addPhoto", style: "display:none;" } %>
     </div>
-  </div>  
+    <div role="tabpanel" class="tab-pane fade" id="tripFormNotes">
+      <h4>Trip Notes</h4>
+      <%= f.text_area :notes, id: "trip-notes", style: "display: none;" %>
+      <%= render partial: 'wysiwyg_editor' %>
+    </div>
+  </div>
 </div>
 <!-- Markup for Carson Shold's Photo Selector -->
 <div id="CSPhotoSelector">

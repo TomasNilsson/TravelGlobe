@@ -1,0 +1,80 @@
+<div class="btn-toolbar" data-role="editor-toolbar" data-target="#trip-notes-editor">
+  <div class="btn-group btn-group-sm">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-hover="tooltip" data-placement="top" title="Paragraph Format">
+      <%= icon('text-size') %>
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li><a href="#" data-edit="format-div">Normal</a></li>
+      <li><a href="#" data-edit="format-h4" class="format-h4">Heading 1</a></li>
+      <li><a href="#" data-edit="format-h5" class="format-h5">Heading 2</a></li>
+    </ul>
+  </div>
+  <div class="btn-group btn-group-sm">
+    <button type="button" class="btn btn-default" data-edit="bold" data-hover="tooltip" data-placement="top" title="Bold (Ctrl/Cmd+B)">
+      <%= icon('bold') %>
+    </button>
+    <button type="button" class="btn btn-default" data-edit="italic" data-hover="tooltip" data-placement="top" title="Italic (Ctrl/Cmd+I)">
+      <%= icon('italic') %>
+    </button>
+  </div>
+  <div class="btn-group btn-group-sm">
+    <button type="button" class="btn btn-default" data-edit="justifyleft" data-hover="tooltip" data-placement="top" title="Align Left (Ctrl/Cmd+L)">
+      <%= icon('align-left') %>
+    </button>
+    <button type="button" class="btn btn-default" data-edit="justifycenter" data-hover="tooltip" data-placement="top" title="Center (Ctrl/Cmd+E)">
+      <%= icon('align-center') %>
+    </button>
+    <button type="button" class="btn btn-default" data-edit="justifyright" data-hover="tooltip" data-placement="top" title="Align Right (Ctrl/Cmd+R)">
+      <%= icon('align-right') %>
+    </button>
+  </div>
+  <div class="btn-group btn-group-sm">
+    <div class="btn-group btn-group-sm">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-hover="tooltip" data-placement="top" title="List">
+        <%= icon('list') %>
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a href="#" data-edit="insertunorderedlist">Bullet List</a></li>
+        <li><a href="#" data-edit="insertorderedlist">Number List</a></li>
+      </ul>
+    </div>
+    <button type="button" class="btn btn-default" data-edit="outdent" data-hover="tooltip" data-placement="top" title="Reduce Indent (Shift+Tab)">
+      <%= icon('indent-right') %>
+    </button>
+    <button type="button" class="btn btn-default" data-edit="indent" data-hover="tooltip" data-placement="top" title="Indent (Tab)">
+      <%= icon('indent-left') %>
+    </button>
+  </div>
+  <div class="btn-group btn-group-sm">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-hover="tooltip" data-placement="top" title="Link">
+      <%= icon('link') %>
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li>
+        <div class="dropdown-input-group">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Link URL" data-edit="createLink">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button">Add</button>
+            </span>
+          </div>
+        </div>
+      </li>
+      <li role="separator" class="divider"></li>
+      <li><a href="#" data-edit="unlink">Remove Link</a></li>
+    </ul>
+  </div>
+  <div class="btn-group btn-group-sm">
+    <button type="button" class="btn btn-default" data-edit="undo" data-hover="tooltip" data-placement="top" title="Undo (Ctrl/Cmd+Z)">
+      <%= icon('repeat', 'horizontal-flip') %>
+    </button>
+    <button type="button" class="btn btn-default" data-edit="redo" data-hover="tooltip" data-placement="top" title="Redo (Ctrl/Cmd+Y)">
+      <%= icon('repeat') %>
+    </button>
+  </div>
+</div>
+
+<div id="trip-notes-editor" class="form-control trip-notes"><%= raw @trip.notes %></div>

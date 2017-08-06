@@ -20,6 +20,8 @@
 //= require cloudinary
 //= require data-confirm-modal
 //= require ekko-lightbox.min.js
+//= require jquery-hotkeys
+//= require bootstrap-wysiwyg.min.js
 
 $(document).ready(function(){
     var tripDuration = 0;

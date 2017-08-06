@@ -305,3 +305,9 @@ $('#videoSelectorModal .modal-footer .btn-primary').click(function() {
     $('#videoSelectorModal').modal('hide');
     this.blur();
 });
+
+$('#trip-notes-editor').wysiwyg().on('change', function() {
+    $('#trip-notes').val($(this).cleanHtml());
+});
+
+$('[data-hover="tooltip"]').tooltip({container: "body"})

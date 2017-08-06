@@ -16,7 +16,7 @@ html, body {
     padding: 0;
     overflow: hidden;
     background-color: #3b5998;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     counter-reset: toplist;
 }
   
@@ -305,6 +305,62 @@ div.thumbnail {
 
 .jumbotron {
     margin-bottom: 0;
+}
+
+#tripFormNotes > .btn-toolbar > .btn-group {
+    margin-bottom: 10px;
+
+    .format-h4 {
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    .format-h5 {
+        font-size: 14px;
+        font-weight: 500;   
+    }
+
+    .dropdown-menu > li > a.btn-primary {
+        color: white;
+
+        &:hover, &:focus {
+            background-color: #23365b;
+            border-color: #192642;
+        }
+    }
+
+    .dropdown-input-group {
+        padding: 3px 5px;
+
+        .input-group {
+            float: none;
+        }
+    }
+}
+
+#trip-notes-editor {
+    max-height: 274px;
+    height: 274px;
+    background-color: white;
+    overflow: auto;
+    color: #333333;
+}
+
+.trip-notes {
+    blockquote {
+        padding: 0;
+        margin: 0;
+        font-size: inherit;
+        border: none;
+    }
+}
+
+.horizontal-flip {
+    -moz-transform: scale(-1, 1);
+    -webkit-transform: scale(-1, 1);
+    -o-transform: scale(-1, 1);
+    -ms-transform: scale(-1, 1);
+    transform: scale(-1, 1);
 }
 
 @media (min-width: 768px) {

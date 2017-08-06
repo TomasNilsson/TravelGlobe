@@ -1,5 +1,5 @@
 module ApplicationHelper
-  def icon(name)
-    content_tag(:i, nil, class: "glyphicon glyphicon-#{name}")
+  def icon(name, extra_classes='')
+    content_tag(:i, nil, class: "glyphicon glyphicon-#{name} #{extra_classes}")
   end
 end

@@ -16,6 +16,7 @@
   <% end %>
   <p><strong>Countries:</strong> <span id="countryNames"><%= @trip.countries.map(&:name).join(", ") %></span></p>
   <p><strong>Places:</strong> <%= @trip.places.map(&:name).join(", ") %> <span id="placesInfo"><%= raw @trip.places.pluck(:name, :latitude, :longitude).to_json %></span></p>
+  <p><%= link_to "Trip Notes", '#', class: "btn btn-primary", 'data-toggle': "modal", 'data-target': "#tripNotesModal" if @trip.notes.present? %></p>
   <% @trip.photos.each_slice(2) do |photo_group| %>
     <div class="row">
     <% photo_group.each do |p| %>
