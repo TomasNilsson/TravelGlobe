@@ -35,7 +35,6 @@ $('#selectedPlaces').sortable({
         updateOrder($(this));
     }
 });
-$('#selectedPlaces').disableSelection();
 
 $('#selectedPlaces').on('click', '.up', function(event){
     moveUp($(this).closest("li"), $('#selectedPlaces'));
@@ -58,7 +57,6 @@ $('#selectedPhotos > tbody').sortable({
         updateOrder($(this));
     }
 });
-$('#selectedPhotos > tbody').disableSelection();
 
 $('#selectedPhotos > tbody').on('click', '.up', function(event){
     moveUp($(this).closest("tr"), $('#selectedPhotos > tbody'));

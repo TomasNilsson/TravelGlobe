@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5'
+gem 'rails', '4.2.10'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -48,8 +48,8 @@ gem 'validates_timeliness', '~> 4.0'
 gem 'data-confirm-modal'
 
 # Use Axlsx to export to Excel
-gem 'rubyzip', '~> 1.1.0'
-gem 'axlsx', '2.1.0.pre'
+gem 'rubyzip', '>= 1.2.1'
+gem 'axlsx', git: 'https://github.com/randym/axlsx.git', ref: 'c8ac844'
 gem 'axlsx_rails'
 
 # Use jQuery HotKeys for WYSIWYG editor
@@ -78,5 +78,5 @@ end
 
 group :production do
   # Use mysql2 as the database for production
-  gem 'mysql2'
+  gem 'mysql2', '~> 0.4.0'
 end
