@@ -1,4 +1,4 @@
-class CreateShareRequests < ActiveRecord::Migration
+class CreateShareRequests < ActiveRecord::Migration[4.2]
   def change
     create_table :share_requests do |t|
       t.references :trip, index: true, foreign_key: true

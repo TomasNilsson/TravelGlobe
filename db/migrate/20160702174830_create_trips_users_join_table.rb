@@ -1,4 +1,4 @@
-class CreateTripsUsersJoinTable < ActiveRecord::Migration
+class CreateTripsUsersJoinTable < ActiveRecord::Migration[4.2]
   def change
     create_table :trips_users, id: false do |t|
       t.integer :trip_id

@@ -1,4 +1,4 @@
-class CreateHomeCountriesUsersJoinTable < ActiveRecord::Migration
+class CreateHomeCountriesUsersJoinTable < ActiveRecord::Migration[4.2]
   def change
     create_table :home_countries_users, id: false do |t|
       t.integer :country_id

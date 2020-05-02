@@ -1,4 +1,4 @@
-class CreatePlacesLived < ActiveRecord::Migration
+class CreatePlacesLived < ActiveRecord::Migration[4.2]
   def change
     create_table :places_lived do |t|
       t.string :address

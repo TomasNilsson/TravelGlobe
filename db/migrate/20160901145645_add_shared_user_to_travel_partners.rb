@@ -1,4 +1,4 @@
-class AddSharedUserToTravelPartners < ActiveRecord::Migration
+class AddSharedUserToTravelPartners < ActiveRecord::Migration[4.2]
   def change
     add_reference :travel_partners, :shared_user, index: true
     add_foreign_key :travel_partners, :users, column: :shared_user_id

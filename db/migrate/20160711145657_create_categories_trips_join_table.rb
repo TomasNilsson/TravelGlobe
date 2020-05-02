@@ -1,4 +1,4 @@
-class CreateCategoriesTripsJoinTable < ActiveRecord::Migration
+class CreateCategoriesTripsJoinTable < ActiveRecord::Migration[4.2]
   def change
   	create_table :categories_trips, id: false do |t|
       t.integer :category_id
