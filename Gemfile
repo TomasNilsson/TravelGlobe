@@ -66,8 +66,9 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
   
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
+  # Use 'ruby-debug-ide' and 'debase' to enable debugging in VS Code
+  gem 'ruby-debug-ide'
+  gem 'debase'
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'

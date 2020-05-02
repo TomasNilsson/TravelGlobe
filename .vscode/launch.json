@@ -1,0 +1,21 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+
+  // Requires the Ruby extension (https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby).
+  // Run 'rdebug-ide ./bin/rails s' in the terminal before running 'Debug Rails'
+
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Rails",
+      "type": "Ruby",
+      "request": "attach",
+      "cwd": "${workspaceRoot}",
+      "remoteHost": "127.0.0.1",
+      "remotePort": "1234",
+      "remoteWorkspaceRoot": "${workspaceRoot}"
+    }
+  ]
+}
