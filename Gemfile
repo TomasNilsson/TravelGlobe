@@ -4,10 +4,8 @@ source 'https://rubygems.org'
 gem 'rails', '6.0.2.2'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 2.7.2'
-# Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 5.0.0'
+# Use Webpacker as JavaScript compiler. Read more: https://github.com/rails/webpacker
+gem 'webpacker'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
