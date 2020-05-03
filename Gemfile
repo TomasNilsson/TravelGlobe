@@ -6,6 +6,8 @@ gem 'rails', '6.0.2.2'
 gem 'sass-rails', '~> 6.0'
 # Use Webpacker as JavaScript compiler. Read more: https://github.com/rails/webpacker
 gem 'webpacker'
+# Use React with Rails
+gem 'react-rails'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
