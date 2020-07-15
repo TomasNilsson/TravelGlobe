@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TravelGlobe<%= " - #{@user.name}" if @user %></title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="description" content="A map-based overview of where in the world you have been travelling, including photos and info for each trip." />
+  <meta property="og:url" content="<%= request.original_url %>" />
+  <meta property="og:title" content="TravelGlobe<%= " - #{@user.name}" if @user %>" />
+  <meta property="og:description" content="A map-based overview of where in the world you have been travelling, including photos and info for each trip." />
+  <meta property="og:image" content="<%= URI.join(root_url, image_path('travelglobe.png')) %>" />
+  <meta property="fb:app_id" content="1696173967323541">
+  <%= favicon_link_tag 'favicon.ico' %>
+  <%= stylesheet_link_tag 'old', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.8/select2-bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.css"/>
+  <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
+  <%= cloudinary_js_config %>
+  <%= csrf_meta_tags %>
+</head>
+<body data-rails-env="<%= Rails.env %>">
+<%= render 'layouts/header' %>
+<input id="search" class="controls" type="text" placeholder="Search">
+<div id="map"></div>
+<script>
+  var map;
+  var markers = [];
+
+  $(document).ready(function() {
+    // TODO: Move to js file
+    
+    $(window).resize(function() {
+      $("#map").css("height", $(window).height() - $('#navbar').height());
+    }).resize();
+
+    <% if current_user %>
+    // Update Facebook image URLs since they expire after some time
+    $.get("/photos/update_facebook_urls");
+    <% end %>
+
+    $('#trips').DataTable({
+      "lengthChange": false,
+      "info": false,
+      "autoWidth": false,
+      "drawCallback": function( settings ) {
+        if(!$("#trips").parent().hasClass("table-responsive")){
+          $("#trips").wrap("<div class='table-responsive'></div>");
+        }
+      },
+      "order": [[0, "desc"]],
+      "language": {
+        "zeroRecords": "No matching trips found"
+      },
+      <% if current_user %>
+      "columns": [
+        {"width": "22.5%"},
+        {"width": "22.5%"},
+        {"width": "22.5%"},
+        {"width": "22.5%"},
+        {"visible": false},
+        { "width": "5%", "orderable": false },
+        { "width": "5%", "orderable": false }
+      ]
+      <% else %>
+      "columns": [
+        {"width": "25%"},
+        {"width": "25%"},
+        {"width": "25%"},
+        {"width": "25%"},
+        {"visible": false}
+      ]
+      <% end %>
+    });
+
+    $('#placesLived').DataTable({
+      "lengthChange": false,
+      "info": false,
+      "autoWidth": false,
+      "drawCallback": function( settings ) {
+        if(!$("#placesLived").parent().hasClass("table-responsive")){
+          $("#placesLived").wrap("<div class='table-responsive'></div>");
+        }
+      },
+      "order": [[0, "desc"]],
+      "language": {
+        "zeroRecords": "No matching places found"
+      },
+      <% if current_user %>
+      "columns": [
+        { "width": "30%" },
+        { "width": "30%" },
+        { "width": "30%" },
+        { "width": "5%", "orderable": false },
+        { "width": "5%", "orderable": false }
+      ]
+      <% else %>
+      "columns": [
+        { "width": "33.3%" },
+        { "width": "33.3%" },
+        { "width": "33.3%" }
+      ]
+      <% end %>
+    });
+  });
+
+  function initMap() {
+    var travelGlobeMapType = new google.maps.StyledMapType([
+      {
+        "featureType": "all",
+        "elementType": "all",
+        "stylers": [
+          {"hue": "#3b5998"},
+          {"saturation": -22}
+        ]
+      }, {
+        "featureType": "administrative",
+        "elementType": "labels.icon",
+        "stylers": [
+          {"visibility": "on"},
+          {"color": "#3b5998"}
+        ]
+      }, {
+        "featureType": "administrative.country",
+        "elementType": "geometry.stroke",
+        "stylers": [
+          {"visibility": "simplified"},
+          {"color": "#3b5998"}
+        ]
+      }, {
+        "featureType": "landscape",
+        "elementType": "geometry",
+        "stylers": [
+          {"visibility": "on"},
+          {"color": "#f7f7f7"},
+          {"saturation": 10},
+          {"lightness": 76}
+        ]
+      }, {
+        "featureType": "landscape.natural",
+        "elementType": "geometry",
+        "stylers": [
+          {"color": "#f7f7f7"}
+        ]
+      }, {
+        "featureType": "road.highway",
+        "elementType": "all",
+        "stylers": [
+          {"color": "#8b9dc3"},
+          {"visibility": "simplified"}
+        ]
+      }, {
+        "featureType": "road.highway",
+        "elementType": "labels.icon",
+        "stylers": [
+          {"visibility": "off"}
+        ]
+      }, {
+        "featureType": "road.local",
+        "elementType": "geometry.fill",
+        "stylers": [
+          {"color": "#8b9dc3"}
+        ]
+      }, {
+        "featureType": "transit.line",
+        "elementType": "all",
+        "stylers": [
+          {"color": "#ffffff"},
+          {"weight": 0.43}
+        ]
+      }, {
+        "featureType": "transit",
+        "elementType": "labels",
+        "stylers": [
+          {"visibility": "off"}
+        ]
+      }, {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [
+          {"color": "#3b5998"}
+        ]
+      }, {
+        "featureType": "water",
+        "elementType": "labels",
+        "stylers": [
+          {"color": "#3b5998"},
+          {"saturation": 10},
+          {"lightness": 30},
+          {"weight": 0.43}
+        ]
+      }
+    ], {name: 'TravelGlobe Map'});
+
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 25, lng: 25},
+      zoom: 3,
+      minZoom: 3,
+      maxZoom: 9,
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: false,
+      keyboardShortcuts: false
+    });
+
+    map.mapTypes.set("travelglobe", travelGlobeMapType);
+    map.setMapTypeId("travelglobe");
+
+    // Prevent panning outside map boundaries
+    map.addListener('center_changed', function() {
+      var latNorth = map.getBounds().getNorthEast().lat();
+      var latSouth = map.getBounds().getSouthWest().lat();
+      var newLat;
+
+      if (latNorth < 85 && latSouth > -85)  // OK (both top and bottom within boundaries)
+        return;
+      else {
+        if (latNorth > 85 && latSouth < -85)  // OK (both top and bottom outside boundaries)
+          return;
+        else {
+          if (latNorth > 85)
+            newLat =  map.getCenter().lat() - (latNorth - 85);  // Too far north, centering
+          if (latSouth < -85) 
+            newLat =  map.getCenter().lat() - (latSouth + 85);  // Too far south, centering
+        }
+      }
+      if (newLat) {
+          var newCenter = new google.maps.LatLng(newLat, map.getCenter().lng());
+          map.setCenter(newCenter);
+      }
+    });
+
+    // Create the search box and link it to the UI element.
+    var searchInput = document.getElementById('search');
+    var searchBox = new google.maps.places.SearchBox(searchInput);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(searchInput);
+
+    // Bias the SearchBox results towards current map's viewport.
+    map.addListener('bounds_changed', function() {
+      searchBox.setBounds(map.getBounds());
+    });
+
+    // Listen for the event fired when the user selects a prediction and retrieve
+    // more details for that place.
+    searchBox.addListener('places_changed', function() {
+      var places = searchBox.getPlaces();
+
+      if (places.length == 0) {
+        return;
+      }
+
+      // Remove focus from the search box
+      searchInput.blur();
+
+      var place = places[0];
+
+      removeMarkers();
+
+      // Create a marker for each place.
+      markers.push(new google.maps.Marker({
+        map: map,
+        title: place.name,
+        position: place.geometry.location,
+        label: "\u25CF",
+        icon: {
+          url: "<%= URI.join(root_url, image_path('map-marker.png')) %>",
+          labelOrigin: new google.maps.Point(21, 10)
+        }
+      }));
+
+      if (place.geometry.viewport) {
+        // Only geocodes have viewport.
+        map.fitBounds(place.geometry.viewport);
+      } else {
+        map.setCenter(place.geometry.location);
+        map.setZoom(9);
+      }
+    });
+
+    <% if @user %>
+    var user_id = <%= @user.id %>;
+    // Color visited countries
+    var visitedCountries = $.getJSON("/users/"+user_id+"/visited_countries").success(function(data) {
+      var layerVisited = new google.maps.FusionTablesLayer({
+        query: {
+          select: 'Geometry',
+          from: '1N2E7_-NS9_cQ7NKL61BwtvcrNLEeYB4Mk1G8LZzd',
+          where: 'Code IN (\'' + data.countries.join('\',\'') + '\')' 
+        },
+        styles: [{
+          polygonOptions: {
+            fillColor: '#00FF00',
+            fillOpacity: 0.3
+          }
+        }],
+        suppressInfoWindows: true
+      });
+      layerVisited.setMap(map);
+      google.maps.event.addListener(layerVisited, "click", function(event) {
+        $('.modal.in').modal('hide');
+        $('#myTripsModal').modal('show');
+        $('#trips').DataTable().search(event.row.Name.value).draw();
+      });
+    });
+
+    // Add markers to places lived
+    addHouseMarkers(<%= raw @places_lived.pluck(:address, :latitude, :longitude).to_json %>);
+
+    <% end %>
+  }
+
+  function moveMap(countries, place) {
+    var geocoder = new google.maps.Geocoder();
+    var bounds = new google.maps.LatLngBounds();
+    bounds.extend(new google.maps.LatLng(place[0], place[1]));
+    countries.forEach(function(country) {
+      geocoder.geocode( { 'address': country}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          bounds.union(results[0].geometry.viewport);
+          // FIXME: don't call fitBounds multiple times
+          map.fitBounds(bounds);
+        }
+      });
+    });
+  }
+
+  function moveMapLatLng(latitude, longitude) {
+    var location = new google.maps.LatLng(latitude, longitude);
+    map.setCenter(location);
+    map.setZoom(9);
+  }
+
+  function addMarkers(places) {
+    var infowindow = new google.maps.InfoWindow();
+    if (places.length < 10) {
+      var labels = '123456789';
+    } else {
+      var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    }
+    places.forEach(function(place, i) {
+      var marker = new google.maps.Marker({
+        position: {lat: parseFloat(place[1]), lng: parseFloat(place[2])},
+        label: labels[i % labels.length],
+        title: place[0],
+        icon: {
+          url: "<%= URI.join(root_url, image_path('map-marker.png')) %>",
+          labelOrigin: new google.maps.Point(21, 12)
+        },
+        map: map
+      });
+      marker.addListener('click', function() {
+        infowindow.setContent("<b>" + place[0] + "</b>");
+        infowindow.open(map, marker);
+      });
+      markers.push(marker);
+    });
+  }
+
+  function removeMarkers() {
+    markers.forEach(function(marker) {
+      marker.setMap(null);
+    });
+    markers = [];
+  }
+
+  function addHouseMarkers(places) {
+    var infowindow = new google.maps.InfoWindow();
+    places.forEach(function(place, i) {
+      var marker = new google.maps.Marker({
+        position: {lat: parseFloat(place[1]), lng: parseFloat(place[2])},
+        title: place[0],
+        icon: {
+          url: "<%= URI.join(root_url, image_path('house-marker.png')) %>",
+          anchor: new google.maps.Point(16,20)
+        },
+        map: map
+      });
+      marker.addListener('click', function() {
+        infowindow.setContent("<b>" + place[0] + "</b>");
+        infowindow.open(map, marker);
+      });
+    });
+  }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.37&key=<%= ENV['GOOGLE_API_KEY'] %>&callback=initMap&libraries=places&language=en" async defer></script>
+
+<%= yield %>
+
+</body>
+</html>

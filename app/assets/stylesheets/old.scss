@@ -1,0 +1,438 @@
+/* Customize variables before Bootstrap is included */
+$brand-primary: darken(#3b5998, 6.5%);
+$input-border-focus: $brand-primary;
+
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import "bootstrap-datepicker3";
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic);
+@import "jquery-ui/sortable";
+@import "photoselector";
+@import "ekko-lightbox.min";
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #3b5998;
+    font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    counter-reset: toplist;
+}
+  
+#map {
+    height: 100%;
+}
+
+.navbar {
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+}
+
+.navbar-inverse .navbar-nav > li > a:focus {
+  color: #9d9d9d;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+  color: #fff;
+  background-color: transparent;
+}
+
+.controls {
+    margin-top: 10px;
+    border: 1px solid transparent;
+    border-radius: 2px 0 0 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 32px;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#search {
+    background-color: #fff;
+    font-size: 15px;
+    font-weight: 300;
+    margin-left: 12px;
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+    width: 300px;
+}
+
+#search:focus {
+    border-color: #4d90fe;
+}
+
+.pac-container {
+    z-index: 100000;
+}
+
+.sortable {
+    cursor: move;
+}
+
+#placesInfo {
+    display: none;
+}
+
+.modal img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+#loginModal {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.text-important {
+    color: $brand-primary;
+    font-weight: bold;
+}
+
+.modal .modal-tabs {
+    height: 425px;
+    overflow-y: auto;
+}
+
+.modal-left {
+    top: 0;
+    z-index: 1040;
+    overflow: visible !important;
+}
+
+.modal-left.bottom {
+    top: auto;
+}
+
+.modal-left .modal-content {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.modal-left .modal-dialog {
+    position: fixed;
+    margin: auto;
+    height: 100%;
+    width: 100%;
+    -webkit-transform: translate3d(0%, 0, 0);
+        -ms-transform: translate3d(0%, 0, 0);
+         -o-transform: translate3d(0%, 0, 0);
+            transform: translate3d(0%, 0, 0);
+}
+
+.modal-left.fade.bottom .modal-dialog {
+    bottom: calc(-75% + 62px);
+    -webkit-transform: translate3d(0, 25%, 0);
+        -ms-transform: translate3d(0, 25%, 0);
+         -o-transform: translate3d(0, 25%, 0);
+            transform: translate3d(0, 25%, 0);
+}
+
+#tripInfoModal .label {
+    font-size: 84%;
+}
+
+#tripInfoMapButton {
+    float: right;
+    margin-right: 20px;
+}
+
+.btn {
+    outline: none !important;
+}
+
+.modal-content {
+    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+    width:inherit;
+    height:inherit;
+    /* To center horizontally */
+    margin: 0 auto;
+    pointer-events: all;
+}
+
+.label-statistics {
+    font-size: 14px;
+}
+
+ol.colored-list {
+   list-style: none;
+   padding-left: 10px;
+}
+
+ol.colored-list li {
+    counter-increment: toplist;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+ol.colored-list li:before {
+    margin-right: 10px;
+    content: counter(toplist);
+    background: #f3e820;
+    border-radius: 100%;
+    color: #000000;
+    width: 1.2em;
+    text-align: center;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.input-group-addon {
+    cursor: pointer;
+}
+
+.select2-container--bootstrap .select2-selection {
+    border-bottom-left-radius: 0px !important;
+    border-top-left-radius: 0px !important;
+}
+
+.select2-search__field:not([placeholder='']) {
+    width: 20em !important;
+}
+
+.select2-container--focus .select2-selection, .select2-container--open .select2-selection, .select2-dropdown {
+    border-color: $brand-primary !important;
+}
+
+.select2-results__option--highlighted[aria-selected] {
+    background-color: $brand-primary !important;
+}
+
+.ekko-lightbox a.glyphicon, a.glyphicon:hover, a.glyphicon:focus {
+    color: #ffffff;
+}
+
+.ekko-lightbox .ekko-lightbox-container {
+    overflow: hidden !important;
+    -webkit-transition: width 250ms ease-in-out, height 250ms ease-in-out !important;
+    -moz-transition: width 250ms ease-in-out, height 250ms ease-in-out !important;
+    -o-transition: width 250ms ease-in-out, height 250ms ease-in-out !important;
+    transition: width 250ms ease-in-out, height 250ms ease-in-out !important;
+}
+
+.dropzone {
+    width: 80%;
+    height: 85px;
+    border: 4px dashed #ccc;
+    margin: 5px auto;
+}
+
+.dropzone.hover {
+    border-color: $brand-primary;
+}
+
+.dropzone .drop-inner {
+    width: 100%;
+    margin: 21px auto 0 auto;
+    height: 34px;
+    text-align: center;
+}
+
+.dropzone .drop-inner span.drop-text {
+    display: none;
+}
+
+.dropzone .drop-inner span.small {
+    float: none;
+    font-weight: normal;
+    font-size: 14px;
+    padding: 0 38px;
+}
+
+.dropzone .button-holder {
+    position: relative;
+    display: inline-block;
+    height: 34px;
+}
+
+.fileinput-button {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+.fileinput-button input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    opacity: 0;
+    -ms-filter: 'alpha(opacity=0)';
+    font-size: 200px !important;
+    direction: ltr;
+    cursor: pointer;
+}
+
+.progress {
+    margin-top: 20px;
+}
+
+div.thumbnail {
+    width: 142px;
+}
+
+.thumb-field {
+    width: 160px;
+}
+
+.thumb-field .thumbnail {
+    margin-bottom: 0;
+}
+
+.caption-field, .video-url-field {
+    width: 326px;
+}
+
+.caption-field input, .video-url-field input {
+    width: 310px;
+}
+
+.table-responsive {
+    border: 0px !important;
+}
+
+#shareRequestFormTable tr {
+    cursor: pointer;
+}
+
+#shareRequestFormTable tr input {
+    cursor: default;
+}
+
+.jumbotron {
+    margin-bottom: 0;
+}
+
+#tripFormNotes > .btn-toolbar > .btn-group {
+    margin-bottom: 10px;
+
+    .format-h4 {
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    .format-h5 {
+        font-size: 14px;
+        font-weight: 500;   
+    }
+
+    .dropdown-menu > li > a.btn-primary {
+        color: white;
+
+        &:hover, &:focus {
+            background-color: #23365b;
+            border-color: #192642;
+        }
+    }
+
+    .dropdown-input-group {
+        padding: 3px 5px;
+
+        .input-group {
+            float: none;
+        }
+    }
+}
+
+#trip-notes-editor {
+    max-height: 274px;
+    height: 274px;
+    background-color: white;
+    overflow: auto;
+    color: #333333;
+}
+
+.trip-notes {
+    blockquote {
+        padding: 0;
+        margin: 0;
+        font-size: inherit;
+        border: none;
+    }
+}
+
+.horizontal-flip {
+    -moz-transform: scale(-1, 1);
+    -webkit-transform: scale(-1, 1);
+    -o-transform: scale(-1, 1);
+    -ms-transform: scale(-1, 1);
+    transform: scale(-1, 1);
+}
+
+@media (min-width: 768px) {
+    .navbar-nav > li > a {
+        padding-top: 4px;
+        padding-bottom: 4px;
+        line-height: 50px;
+        outline: none;
+    }
+
+    .navbar-brand {
+        padding-top: 4px;
+        padding-bottom: 4px;
+        line-height: 50px;
+    }
+
+    #tripInfoMapButton {
+        display: none;
+    }
+
+    .modal-left {
+        top: 60px;
+        right: auto;
+    }
+
+    .modal-left .modal-dialog {
+        width: 360px;
+    }
+
+    .modal-left .modal-content {
+        height: calc(100% - 60px);
+    }
+
+    .modal-left.fade:not(.in) .modal-dialog {
+        left: -320px;
+        -webkit-transform: translate3d(-25%, 0, 0);
+            -ms-transform: translate3d(-25%, 0, 0);
+             -o-transform: translate3d(-25%, 0, 0);
+                transform: translate3d(-25%, 0, 0);
+    }
+
+    .modal-left.fade.in .modal-dialog {
+        left: 0;
+    }
+
+    .vertical-alignment-helper {
+        display:table;
+        height: 100%;
+        width: 100%;
+        pointer-events:none; /* This makes sure that we can still click outside of the modal to close it */
+    }
+
+    .vertical-align-center {
+        /* To center vertically */
+        display: table-cell;
+        vertical-align: middle;
+        pointer-events:none;
+    }
+
+    .dropzone .drop-inner {
+        width: 340px;
+        margin: 21px auto 0 auto;
+        height: 34px;
+        text-align: center;
+    }
+
+    .dropzone .drop-inner span.drop-text {
+        float: left;
+        display: inline-block;
+        font-weight: normal;
+        font-size: 18px;
+        color: #999;
+        line-height: 34px;
+    }
+}
