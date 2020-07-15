@@ -361,19 +361,6 @@ div.thumbnail {
 }
 
 @media (min-width: 768px) {
-    .navbar-nav > li > a {
-        padding-top: 4px;
-        padding-bottom: 4px;
-        line-height: 50px;
-        outline: none;
-    }
-
-    .navbar-brand {
-        padding-top: 4px;
-        padding-bottom: 4px;
-        line-height: 50px;
-    }
-
     #tripInfoMapButton {
         display: none;
     }
