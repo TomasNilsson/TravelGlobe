@@ -30,7 +30,7 @@ const NavigationHeader = ({ user, isLoggedIn }) => {
     : [{ text: 'Create your own TravelGlobe', href: '/', icon: FaUserPlus }]
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg">
+    <Navbar fixed="top" bg="dark" variant="dark" expand="lg">
       <Navbar.Brand href="/">TravelGlobe</Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">

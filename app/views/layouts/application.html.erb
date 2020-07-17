@@ -27,7 +27,6 @@
 <body data-rails-env="<%= Rails.env %>">
 <%= react_component('App', { user: @user ? @user.slice(:name, :image_url) : nil, isLoggedIn: current_user.present? }, { camelize_props: true, id: 'app' }) %>
 <input id="search" class="controls" type="text" placeholder="Search">
-<div id="map"></div>
 <script>
   var map;
   var markers = [];
@@ -387,7 +386,6 @@
     });
   }
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?v=3.37&key=<%= ENV['GOOGLE_API_KEY'] %>&callback=initMap&libraries=places&language=en" async defer></script>
 
 <%= yield %>
 

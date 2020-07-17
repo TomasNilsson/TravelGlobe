@@ -15,15 +15,16 @@
 /log/*
 !/log/.keep
 /tmp
-
-# Ignore database and application configuration and secrets
-config/database.yml
-config/secrets.yml
-config/application.yml
-config/cloudinary.yml
 /public/packs
 /public/packs-test
 /node_modules
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+# Ignore database and application configuration and secrets
+config/database.yml
+config/secrets.yml
+config/application.yml
+config/cloudinary.yml
+.env
