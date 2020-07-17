@@ -109,93 +109,6 @@
   });
 
   function initMap() {
-    var travelGlobeMapType = new google.maps.StyledMapType([
-      {
-        "featureType": "all",
-        "elementType": "all",
-        "stylers": [
-          {"hue": "#3b5998"},
-          {"saturation": -22}
-        ]
-      }, {
-        "featureType": "administrative",
-        "elementType": "labels.icon",
-        "stylers": [
-          {"visibility": "on"},
-          {"color": "#3b5998"}
-        ]
-      }, {
-        "featureType": "administrative.country",
-        "elementType": "geometry.stroke",
-        "stylers": [
-          {"visibility": "simplified"},
-          {"color": "#3b5998"}
-        ]
-      }, {
-        "featureType": "landscape",
-        "elementType": "geometry",
-        "stylers": [
-          {"visibility": "on"},
-          {"color": "#f7f7f7"},
-          {"saturation": 10},
-          {"lightness": 76}
-        ]
-      }, {
-        "featureType": "landscape.natural",
-        "elementType": "geometry",
-        "stylers": [
-          {"color": "#f7f7f7"}
-        ]
-      }, {
-        "featureType": "road.highway",
-        "elementType": "all",
-        "stylers": [
-          {"color": "#8b9dc3"},
-          {"visibility": "simplified"}
-        ]
-      }, {
-        "featureType": "road.highway",
-        "elementType": "labels.icon",
-        "stylers": [
-          {"visibility": "off"}
-        ]
-      }, {
-        "featureType": "road.local",
-        "elementType": "geometry.fill",
-        "stylers": [
-          {"color": "#8b9dc3"}
-        ]
-      }, {
-        "featureType": "transit.line",
-        "elementType": "all",
-        "stylers": [
-          {"color": "#ffffff"},
-          {"weight": 0.43}
-        ]
-      }, {
-        "featureType": "transit",
-        "elementType": "labels",
-        "stylers": [
-          {"visibility": "off"}
-        ]
-      }, {
-        "featureType": "water",
-        "elementType": "geometry",
-        "stylers": [
-          {"color": "#3b5998"}
-        ]
-      }, {
-        "featureType": "water",
-        "elementType": "labels",
-        "stylers": [
-          {"color": "#3b5998"},
-          {"saturation": 10},
-          {"lightness": 30},
-          {"weight": 0.43}
-        ]
-      }
-    ], {name: 'TravelGlobe Map'});
-
     map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 25, lng: 25},
       zoom: 3,
@@ -205,33 +118,6 @@
       streetViewControl: false,
       fullscreenControl: false,
       keyboardShortcuts: false
-    });
-
-    map.mapTypes.set("travelglobe", travelGlobeMapType);
-    map.setMapTypeId("travelglobe");
-
-    // Prevent panning outside map boundaries
-    map.addListener('center_changed', function() {
-      var latNorth = map.getBounds().getNorthEast().lat();
-      var latSouth = map.getBounds().getSouthWest().lat();
-      var newLat;
-
-      if (latNorth < 85 && latSouth > -85)  // OK (both top and bottom within boundaries)
-        return;
-      else {
-        if (latNorth > 85 && latSouth < -85)  // OK (both top and bottom outside boundaries)
-          return;
-        else {
-          if (latNorth > 85)
-            newLat =  map.getCenter().lat() - (latNorth - 85);  // Too far north, centering
-          if (latSouth < -85) 
-            newLat =  map.getCenter().lat() - (latSouth + 85);  // Too far south, centering
-        }
-      }
-      if (newLat) {
-          var newCenter = new google.maps.LatLng(newLat, map.getCenter().lng());
-          map.setCenter(newCenter);
-      }
     });
 
     // Create the search box and link it to the UI element.
