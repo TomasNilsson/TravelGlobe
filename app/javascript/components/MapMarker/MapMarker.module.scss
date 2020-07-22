@@ -1,0 +1,27 @@
+$marker-size: 35px;
+
+:global(#app) {
+  .marker {
+    position: absolute;
+    left: -$marker-size / 2;
+    top: -$marker_size;
+    color: #b30000;
+    font-size: $marker-size;
+    cursor: pointer;
+
+    &.hover {
+      color: #990000;
+    }
+  }
+
+  .markerLabel {
+    position: absolute;
+    top: -$marker-size + 3px;
+    left: -$marker-size / 2;
+    width: $marker-size;
+    text-align: center;
+    color: #ffffff;
+    font: 14px Arial, sans-serif;
+    cursor: pointer;
+  }
+}

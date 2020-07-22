@@ -3,6 +3,7 @@ import GoogleMap from 'google-map-react'
 import { GoogleMapsOverlay as DeckOverlay } from '@deck.gl/google-maps'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import MapSearchBox from '../MapSearchBox'
+import MapMarker from '../MapMarker'
 
 // GeoJSON from Natural Earth via http://geojson.xyz
 const COUNTRIES_GEOJSON_URL =
@@ -18,6 +19,7 @@ const Map = ({
 }) => {
   const [mapInstance, setMapInstance] = useState(null)
   const [mapsApi, setMapsApi] = useState(null)
+  const markers = [] // TODO: get from Redux state
 
   const handleApiLoaded = (map, maps) => {
     setMapInstance(map)
@@ -145,7 +147,15 @@ const Map = ({
           ],
           ...options,
         }}
-      />
+      >
+        {markers.map((marker, i) => (
+          <MapMarker
+            {...marker}
+            label={markers.length > 1 ? i + 1 : ''}
+            key={marker.text}
+          />
+        ))}
+      </GoogleMap>
       <MapSearchBox mapsApi={mapsApi} map={mapInstance} />
     </>
   )
