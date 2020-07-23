@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import map from './map'
+import mapReducer from './mapReducer'
 
 export default combineReducers({
-  map,
+  map: mapReducer,
 })

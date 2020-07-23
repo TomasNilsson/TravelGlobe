@@ -1,9 +1,12 @@
 import React, { useRef, useEffect } from 'react'
 import { Form } from 'react-bootstrap'
+import { useDispatch } from 'react-redux'
+import { mapActions } from '../../app/actions'
 import styles from './MapSearchBox.module.scss'
 
 const MapSearchBox = ({ mapsApi, map, placeholder = 'Search' }) => {
   const inputRef = useRef(null)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (mapsApi && map) {
@@ -35,6 +38,8 @@ const MapSearchBox = ({ mapsApi, map, placeholder = 'Search' }) => {
           map.setCenter(location)
           map.setZoom(9)
         }
+
+        dispatch(mapActions.setMarkers([{ ...location.toJSON(), text: name }]))
 
         // Remove focus from the search box
         inputRef.current.blur()

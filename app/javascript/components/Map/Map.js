@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import GoogleMap from 'google-map-react'
 import { GoogleMapsOverlay as DeckOverlay } from '@deck.gl/google-maps'
 import { GeoJsonLayer } from '@deck.gl/layers'
+import { mapSelectors } from '../../app/selectors'
 import MapSearchBox from '../MapSearchBox'
 import MapMarker from '../MapMarker'
 
@@ -19,7 +21,7 @@ const Map = ({
 }) => {
   const [mapInstance, setMapInstance] = useState(null)
   const [mapsApi, setMapsApi] = useState(null)
-  const markers = [] // TODO: get from Redux state
+  const markers = useSelector(mapSelectors.getMarkers)
 
   const handleApiLoaded = (map, maps) => {
     setMapInstance(map)
