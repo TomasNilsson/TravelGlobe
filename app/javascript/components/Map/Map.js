@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import GoogleMap from 'google-map-react'
 import { GoogleMapsOverlay as DeckOverlay } from '@deck.gl/google-maps'
 import { GeoJsonLayer } from '@deck.gl/layers'
@@ -13,15 +13,11 @@ const COUNTRIES_GEOJSON_URL =
 const US_STATES_GEOJSON_URL =
   'https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_110m_admin_1_states_provinces.geojson'
 
-const Map = ({
-  center = { lat: 30, lng: 25 },
-  zoom = 3,
-  options = {},
-  highlightedCountries = [],
-}) => {
+const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
   const [mapInstance, setMapInstance] = useState(null)
   const [mapsApi, setMapsApi] = useState(null)
 
+  const visitedCountries = useSelector(mapSelectors.getVisitedCountries)
   const markers = useSelector(mapSelectors.getMarkers)
   const houseMarkers = useSelector(mapSelectors.getHouseMarkers)
 
@@ -36,7 +32,7 @@ const Map = ({
           data: COUNTRIES_GEOJSON_URL,
           dataTransform: (data) =>
             data.features.filter((country) =>
-              highlightedCountries.includes(country.properties.iso_a2)
+              visitedCountries.includes(country.properties.iso_a2)
             ),
           getFillColor: [0, 255, 0, 100],
         }),
@@ -45,7 +41,7 @@ const Map = ({
           data: US_STATES_GEOJSON_URL,
           dataTransform: (data) =>
             data.features.filter((state) =>
-              highlightedCountries.includes(state.properties.iso_3166_2)
+              visitedCountries.includes(state.properties.iso_3166_2)
             ),
           getFillColor: [0, 255, 0, 100],
         }),
