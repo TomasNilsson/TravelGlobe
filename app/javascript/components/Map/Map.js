@@ -21,7 +21,9 @@ const Map = ({
 }) => {
   const [mapInstance, setMapInstance] = useState(null)
   const [mapsApi, setMapsApi] = useState(null)
+
   const markers = useSelector(mapSelectors.getMarkers)
+  const houseMarkers = useSelector(mapSelectors.getHouseMarkers)
 
   const handleApiLoaded = (map, maps) => {
     setMapInstance(map)
@@ -156,6 +158,9 @@ const Map = ({
             label={markers.length > 1 ? i + 1 : ''}
             key={marker.text}
           />
+        ))}
+        {houseMarkers.map((marker) => (
+          <MapMarker {...marker} icon="house" key={marker.text} />
         ))}
       </GoogleMap>
       <MapSearchBox mapsApi={mapsApi} map={mapInstance} />

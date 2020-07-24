@@ -8,6 +8,7 @@ $marker-size: 35px;
     color: #b30000;
     font-size: $marker-size;
     cursor: pointer;
+    filter: drop-shadow(0 2px 2px #ffffff);
 
     &.hover {
       color: #990000;
