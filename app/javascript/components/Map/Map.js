@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import GoogleMap from 'google-map-react'
 import { GoogleMapsOverlay as DeckOverlay } from '@deck.gl/google-maps'
 import { GeoJsonLayer } from '@deck.gl/layers'
-import { mapSelectors } from '../../app/selectors'
+import { mapSelectors, placesLivedSelectors } from '../../app/selectors'
 import MapSearchBox from '../MapSearchBox'
 import MapMarker from '../MapMarker'
 
@@ -18,8 +18,8 @@ const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
   const [mapsApi, setMapsApi] = useState(null)
 
   const visitedCountries = useSelector(mapSelectors.getVisitedCountries)
+  const placesLived = useSelector(placesLivedSelectors.getPlacesLived)
   const markers = useSelector(mapSelectors.getMarkers)
-  const houseMarkers = useSelector(mapSelectors.getHouseMarkers)
 
   const handleApiLoaded = (map, maps) => {
     setMapInstance(map)
@@ -155,8 +155,14 @@ const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
             key={marker.text}
           />
         ))}
-        {houseMarkers.map((marker) => (
-          <MapMarker {...marker} icon="house" key={marker.text} />
+        {placesLived.map((place) => (
+          <MapMarker
+            lat={place.latitude}
+            lng={place.longitude}
+            text={place.address}
+            icon="house"
+            key={place.id}
+          />
         ))}
       </GoogleMap>
       <MapSearchBox mapsApi={mapsApi} map={mapInstance} />

@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   delete 'logout', to: 'sessions#destroy'
 
   get 'users/:id/visited_countries', to: 'users#visited_countries'
+  get 'users/:id/places_lived', to: 'users#places_lived'
+  
   get 'photos/update_facebook_urls', to: 'photos#update_facebook_urls'
 
   resources :trips, except: [:index] do
