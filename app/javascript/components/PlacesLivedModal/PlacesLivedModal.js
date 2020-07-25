@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap'
 import BootstrapTable from 'react-bootstrap-table-next'
+import paginationFactory from 'react-bootstrap-table2-paginator'
 import { placesLivedActions } from '../../app/actions'
 import { placesLivedSelectors } from '../../app/selectors'
 
@@ -38,7 +39,7 @@ const PlacesLivedModal = ({ isLoggedIn }) => {
   const defaultSorted = [
     {
       dataField: 'date',
-      order: 'asc',
+      order: 'desc',
     },
   ]
 
@@ -53,8 +54,9 @@ const PlacesLivedModal = ({ isLoggedIn }) => {
           data={placesLived}
           columns={columns}
           defaultSorted={defaultSorted}
-          bordered={false}
+          pagination={paginationFactory()}
           bootstrap4
+          bordered={false}
           hover
         />
       </Modal.Body>

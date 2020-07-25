@@ -7,6 +7,7 @@ import Map from '../components/Map'
 import PlacesLivedModal from '../components/PlacesLivedModal'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
+import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css'
 import styles from './App.module.scss'
 
 const store = configureStore()
