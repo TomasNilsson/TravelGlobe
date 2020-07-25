@@ -10,15 +10,28 @@ import {
   FaPowerOff,
   FaUserPlus,
 } from 'react-icons/fa'
+import { useDispatch } from 'react-redux'
+import { placesLivedActions } from '../../app/actions'
 
 const NavigationHeader = ({ user, isLoggedIn }) => {
+  const dispatch = useDispatch()
+
   const navLinks = [
     ...(isLoggedIn
-      ? [{ text: 'Add New Trip', href: '#', icon: FaPlaneDeparture }]
+      ? [
+          {
+            text: 'Add New Trip',
+            icon: FaPlaneDeparture,
+          },
+        ]
       : []),
-    { text: 'My Trips', href: '#', icon: FaGlobeEurope },
-    { text: 'Places Lived', href: '#', icon: FaHome },
-    { text: 'Statistics', href: '#', icon: FaChartBar },
+    { text: 'My Trips', icon: FaGlobeEurope },
+    {
+      text: 'Places Lived',
+      action: placesLivedActions.togglePlacesLivedModal(),
+      icon: FaHome,
+    },
+    { text: 'Statistics', icon: FaChartBar },
   ]
 
   const dropdownLinks = isLoggedIn
@@ -35,9 +48,13 @@ const NavigationHeader = ({ user, isLoggedIn }) => {
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto" as="ul">
-          {navLinks.map(({ text, href, icon: LinkIcon }) => (
+          {navLinks.map(({ text, action, icon: LinkIcon }) => (
             <Nav.Item key={text} as="li">
-              <Nav.Link href={href} className="px-lg-3">
+              <Nav.Link
+                eventKey={text}
+                onSelect={() => dispatch(action)}
+                className="px-lg-3"
+              >
                 <LinkIcon /> {text}
               </Nav.Link>
             </Nav.Item>
