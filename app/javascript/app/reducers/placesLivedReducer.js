@@ -7,7 +7,7 @@ const initialState = {
   isModalOpen: false,
 }
 
-const userReducer = (state = initialState, { type, payload }) => {
+const placesLivedReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case TYPES.FETCH_PLACES_LIVED_SUCCESS:
       return { ...state, places: payload }
@@ -18,4 +18,4 @@ const userReducer = (state = initialState, { type, payload }) => {
   }
 }
 
-export default userReducer
+export default placesLivedReducer

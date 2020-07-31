@@ -2,16 +2,15 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap'
 import DataTable from '../DataTable'
-import { placesLivedActions } from '../../app/actions'
-import { placesLivedSelectors } from '../../app/selectors'
+import { myTripsActions } from '../../app/actions'
+import { myTripsSelectors } from '../../app/selectors'
 
-const PlacesLivedModal = ({ isLoggedIn }) => {
+const MyTripsModal = ({ isLoggedIn }) => {
   const dispatch = useDispatch()
-  const handleClose = () =>
-    dispatch(placesLivedActions.togglePlacesLivedModal())
+  const handleClose = () => dispatch(myTripsActions.toggleMyTripsModal())
 
-  const isOpen = useSelector(placesLivedSelectors.getIsPlacesLivedModalOpen)
-  const placesLived = useSelector(placesLivedSelectors.getPlacesLived)
+  const isOpen = useSelector(myTripsSelectors.getIsMyTripsModalOpen)
+  const trips = useSelector(myTripsSelectors.getMyTrips)
 
   const columns = [
     {
@@ -24,14 +23,29 @@ const PlacesLivedModal = ({ isLoggedIn }) => {
       sort: true,
     },
     {
-      dataField: 'address',
-      text: 'Address',
+      dataField: 'name',
+      text: 'Name',
       sort: true,
     },
     {
-      dataField: 'country',
-      text: 'Country/State',
+      dataField: 'countries',
+      text: 'Countries/States',
       sort: true,
+      formatter: (cell) => cell.join(', '),
+      sortValue: (cell) => cell.join(', '),
+    },
+    {
+      dataField: 'categories',
+      text: 'Categories',
+      sort: true,
+      formatter: (cell) => cell.join(', '),
+      sortValue: (cell) => cell.join(', '),
+    },
+    {
+      dataField: 'travel_partners',
+      hidden: true,
+      formatter: (cell) => cell.join(', '),
+      sortValue: (cell) => cell.join(', '),
     },
   ]
 
@@ -45,12 +59,12 @@ const PlacesLivedModal = ({ isLoggedIn }) => {
   return (
     <Modal centered size="xl" show={isOpen} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Places I've Lived</Modal.Title>
+        <Modal.Title>My Trips</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <DataTable
           keyField="id"
-          data={placesLived}
+          data={trips}
           columns={columns}
           defaultSorted={defaultSorted}
         />
@@ -61,7 +75,7 @@ const PlacesLivedModal = ({ isLoggedIn }) => {
         </Button>
         {isLoggedIn && (
           <Button variant="primary" onClick={() => null}>
-            Add New Place
+            Add New Trip
           </Button>
         )}
       </Modal.Footer>
@@ -69,4 +83,4 @@ const PlacesLivedModal = ({ isLoggedIn }) => {
   )
 }
 
-export default PlacesLivedModal
+export default MyTripsModal

@@ -11,7 +11,7 @@ import {
   FaUserPlus,
 } from 'react-icons/fa'
 import { useDispatch } from 'react-redux'
-import { placesLivedActions } from '../../app/actions'
+import { myTripsActions, placesLivedActions } from '../../app/actions'
 
 const NavigationHeader = ({ user, isLoggedIn }) => {
   const dispatch = useDispatch()
@@ -25,7 +25,11 @@ const NavigationHeader = ({ user, isLoggedIn }) => {
           },
         ]
       : []),
-    { text: 'My Trips', icon: FaGlobeEurope },
+    {
+      text: 'My Trips',
+      action: myTripsActions.toggleMyTripsModal(),
+      icon: FaGlobeEurope,
+    },
     {
       text: 'Places Lived',
       action: placesLivedActions.togglePlacesLivedModal(),

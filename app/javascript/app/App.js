@@ -4,6 +4,7 @@ import configureStore from './configureStore'
 import { userActions } from './actions'
 import NavigationHeader from '../components/NavigationHeader'
 import Map from '../components/Map'
+import MyTripsModal from '../components/MyTripsModal'
 import PlacesLivedModal from '../components/PlacesLivedModal'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
@@ -22,6 +23,7 @@ const App = ({ user, isLoggedIn }) => {
       <div className={styles.travelGlobeWrapper}>
         <NavigationHeader user={user} isLoggedIn={isLoggedIn} />
         <Map />
+        <MyTripsModal isLoggedIn={isLoggedIn} />
         <PlacesLivedModal isLoggedIn={isLoggedIn} />
       </div>
     </Provider>

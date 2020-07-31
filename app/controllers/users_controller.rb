@@ -12,4 +12,9 @@ class UsersController < ApplicationController
       render json: places_lived, each_serializer: PlaceLivedSerializer
     end
 
+    def trips
+      trips = User.find(params[:id]).trips.order(:start_date)
+      render json: trips, each_serializer: TripsSerializer
+    end
+
 end
