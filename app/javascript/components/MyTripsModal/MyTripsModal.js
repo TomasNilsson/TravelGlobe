@@ -42,7 +42,7 @@ const MyTripsModal = ({ isLoggedIn }) => {
       sortValue: (cell) => cell.join(', '),
     },
     {
-      dataField: 'travel_partners',
+      dataField: 'travelPartners',
       hidden: true,
       formatter: (cell) => cell.join(', '),
       sortValue: (cell) => cell.join(', '),

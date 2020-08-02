@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get 'users/:id/visited_countries', to: 'users#visited_countries'
   get 'users/:id/places_lived', to: 'users#places_lived'
   get 'users/:id/trips', to: 'users#trips'
+  get 'users/:id/statistics', to: 'users#statistics'
   
   get 'photos/update_facebook_urls', to: 'photos#update_facebook_urls'
 

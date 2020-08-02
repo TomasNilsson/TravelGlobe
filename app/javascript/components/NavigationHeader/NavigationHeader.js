@@ -11,7 +11,11 @@ import {
   FaUserPlus,
 } from 'react-icons/fa'
 import { useDispatch } from 'react-redux'
-import { myTripsActions, placesLivedActions } from '../../app/actions'
+import {
+  myTripsActions,
+  placesLivedActions,
+  statisticsActions,
+} from '../../app/actions'
 
 const NavigationHeader = ({ user, isLoggedIn }) => {
   const dispatch = useDispatch()
@@ -35,7 +39,11 @@ const NavigationHeader = ({ user, isLoggedIn }) => {
       action: placesLivedActions.togglePlacesLivedModal(),
       icon: FaHome,
     },
-    { text: 'Statistics', icon: FaChartBar },
+    {
+      text: 'Statistics',
+      action: statisticsActions.toggleStatisticsModal(),
+      icon: FaChartBar,
+    },
   ]
 
   const dropdownLinks = isLoggedIn

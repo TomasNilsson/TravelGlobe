@@ -17,4 +17,9 @@ class UsersController < ApplicationController
       render json: trips, each_serializer: TripsSerializer
     end
 
+    def statistics
+      user = User.find(params[:id])
+      render json: user, serializer: UserStatisticsSerializer
+    end
+
 end

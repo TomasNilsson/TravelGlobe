@@ -9,7 +9,7 @@ class TripsSerializer < ActiveModel::Serializer
     object.categories.map(&:name)
   end
 
-  has_many :travel_partners do
+  has_many :travel_partners, key: :travelPartners do
     object.travel_partners.map(&:name)
   end
 end
