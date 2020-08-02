@@ -8,6 +8,9 @@ import { myTripsSelectors } from '../../app/selectors'
 const MyTripsModal = ({ isLoggedIn }) => {
   const dispatch = useDispatch()
   const handleClose = () => dispatch(myTripsActions.toggleMyTripsModal())
+  const showTripInfo = (tripId) => {
+    dispatch(myTripsActions.showTripInfo(tripId))
+  }
 
   const isOpen = useSelector(myTripsSelectors.getIsMyTripsModalOpen)
   const trips = useSelector(myTripsSelectors.getMyTrips)
@@ -26,6 +29,15 @@ const MyTripsModal = ({ isLoggedIn }) => {
       dataField: 'name',
       text: 'Name',
       sort: true,
+      formatter: (cell) => (
+        <Button variant="link" className="p-0">
+          {cell}
+        </Button>
+      ),
+      events: {
+        onClick: (e, column, columnIndex, row, rowIndex) =>
+          showTripInfo(row.id),
+      },
     },
     {
       dataField: 'countries',

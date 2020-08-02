@@ -14,7 +14,7 @@ class UsersController < ApplicationController
 
     def trips
       trips = User.find(params[:id]).trips.order(:start_date)
-      render json: trips, each_serializer: TripsSerializer
+      render json: trips, each_serializer: TripSerializer
     end
 
     def statistics

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   resources :trips, except: [:index] do
     member do
       post 'share'
+      get 'info'
     end
   end
 

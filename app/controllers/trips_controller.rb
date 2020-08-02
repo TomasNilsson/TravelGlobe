@@ -1,5 +1,5 @@
 class TripsController < ApplicationController
-  before_action :set_trip, only: [:show, :edit, :update, :destroy]
+  before_action :set_trip, only: [:show, :edit, :update, :destroy, :info]
 
   def new
     @trip = Trip.new
@@ -112,6 +112,10 @@ class TripsController < ApplicationController
       end
     end
     render json: {}, status: :ok
+  end
+
+  def info
+    render json: @trip, serializer: TripInfoSerializer
   end
 
   private

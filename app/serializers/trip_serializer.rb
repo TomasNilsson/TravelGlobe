@@ -1,4 +1,4 @@
-class TripsSerializer < ActiveModel::Serializer
+class TripSerializer < ActiveModel::Serializer
   attributes :id, :name, :date
 
   has_many :countries do

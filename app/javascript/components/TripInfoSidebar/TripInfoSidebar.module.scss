@@ -1,0 +1,28 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins/_breakpoints';
+
+@include media-breakpoint-up(lg) {
+  :global(.modal) {
+    .modalLeftSidebar {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      height: calc(100vh - 60px);
+      width: 380px;
+      margin: 0;
+    }
+  }
+
+  :global(.modal.fade) {
+    .modalLeftSidebar {
+      transform: translate3d(-25%, 0, 0) !important;
+    }
+  }
+
+  :global(.modal.fade.show) {
+    .modalLeftSidebar {
+      transform: none !important;
+    }
+  }
+}
