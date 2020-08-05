@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import GoogleMap from 'google-map-react'
 import { GoogleMapsOverlay as DeckOverlay } from '@deck.gl/google-maps'
@@ -20,6 +20,18 @@ const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
   const visitedCountries = useSelector(mapSelectors.getVisitedCountries)
   const placesLived = useSelector(placesLivedSelectors.getPlacesLived)
   const markers = useSelector(mapSelectors.getMarkers)
+
+  useEffect(() => {
+    // Adjust the map position and zoom level to show all markers
+    if (markers.length > 0 && mapsApi && mapInstance) {
+      const bounds = new mapsApi.LatLngBounds()
+      markers.forEach(({ lat, lng }) => bounds.extend({ lat, lng }))
+      mapInstance.fitBounds(bounds, 150)
+      if (mapInstance.getZoom() > 7) {
+        mapInstance.setZoom(7)
+      }
+    }
+  }, [markers])
 
   const handleApiLoaded = (map, maps) => {
     setMapInstance(map)

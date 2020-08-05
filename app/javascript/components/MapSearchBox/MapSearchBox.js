@@ -31,14 +31,6 @@ const MapSearchBox = ({ mapsApi, map, placeholder = 'Search' }) => {
           geometry: { location, viewport },
         } = places[0]
 
-        // Zoom in on the selected place
-        if (viewport) {
-          map.fitBounds(viewport)
-        } else {
-          map.setCenter(location)
-          map.setZoom(9)
-        }
-
         dispatch(mapActions.setMarkers([{ ...location.toJSON(), text: name }]))
 
         // Remove focus from the search box

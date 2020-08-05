@@ -3,7 +3,7 @@
 @import '~bootstrap/scss/mixins/_breakpoints';
 
 @include media-breakpoint-up(lg) {
-  :global(.modal) {
+  :global(.modal-open) {
     .modalLeftSidebar {
       position: fixed;
       top: 60px;
@@ -11,6 +11,10 @@
       height: calc(100vh - 60px);
       width: 380px;
       margin: 0;
+    }
+
+    .modalWrapper {
+      width: 0; // To allow map interaction when sidebar is open
     }
   }
 

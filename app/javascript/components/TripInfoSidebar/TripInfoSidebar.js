@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   Modal,
@@ -10,13 +10,14 @@ import {
   Image,
   Button,
 } from 'react-bootstrap'
-import { myTripsActions } from '../../app/actions'
+import { mapActions, myTripsActions } from '../../app/actions'
 import { myTripsSelectors } from '../../app/selectors'
 import styles from './TripInfoSidebar.module.scss'
 
 const TripInfoSidebar = () => {
   const dispatch = useDispatch()
   const handleClose = () => dispatch(myTripsActions.toggleTripInfoSidebar())
+  const removeMarkers = () => dispatch(mapActions.removeMarkers())
 
   const isOpen = useSelector(myTripsSelectors.getIsTripInfoSidebarOpen)
   const {
@@ -29,23 +30,36 @@ const TripInfoSidebar = () => {
     photos = [],
   } = useSelector(myTripsSelectors.getTripInfoForSelectedId)
 
+  useEffect(() => {
+    if (places.length > 0) {
+      const markers = places.map(({ latitude, longitude, name }) => ({
+        lat: latitude,
+        lng: longitude,
+        text: name,
+      }))
+      dispatch(mapActions.setMarkers(markers))
+    }
+  }, [places])
+
   const tripDetails = [
     { label: 'Date', value: date },
     ...(travelPartners.length > 0
       ? [{ label: 'Travel Partners', value: travelPartners.join(', ') }]
       : []),
     { label: 'Countries', value: countries.join(', ') },
-    { label: 'Places', value: places.join(', ') },
+    { label: 'Places', value: places.map((place) => place.name).join(', ') },
   ]
 
   return (
     <Modal
       centered
       scrollable
+      backdrop={false}
       dialogClassName={styles.modalLeftSidebar}
-      className={styles.modalContent}
       show={isOpen}
       onHide={handleClose}
+      onExit={removeMarkers}
+      bsPrefix={`modal ${styles.modalWrapper}`}
     >
       <Modal.Header closeButton>
         <Modal.Title>Trip Info</Modal.Title>
