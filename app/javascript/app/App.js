@@ -4,6 +4,7 @@ import configureStore from './configureStore'
 import { userActions } from './actions'
 import NavigationHeader from '../components/NavigationHeader'
 import Map from '../components/Map'
+import LoginModal from '../components/LoginModal'
 import MyTripsModal from '../components/MyTripsModal'
 import PlacesLivedModal from '../components/PlacesLivedModal'
 import StatisticsModal from '../components/StatisticsModal'
@@ -17,7 +18,9 @@ const store = configureStore()
 
 const App = ({ user, isLoggedIn }) => {
   useEffect(() => {
-    store.dispatch(userActions.setUserData(user))
+    if (user) {
+      store.dispatch(userActions.setUserData(user))
+    }
   }, [user])
 
   return (
@@ -25,10 +28,16 @@ const App = ({ user, isLoggedIn }) => {
       <div className={styles.travelGlobeWrapper}>
         <NavigationHeader user={user} isLoggedIn={isLoggedIn} />
         <Map />
-        <MyTripsModal isLoggedIn={isLoggedIn} />
-        <PlacesLivedModal isLoggedIn={isLoggedIn} />
-        <StatisticsModal />
-        <TripInfoSidebar />
+        {user ? (
+          <>
+            <MyTripsModal isLoggedIn={isLoggedIn} />
+            <PlacesLivedModal isLoggedIn={isLoggedIn} />
+            <StatisticsModal />
+            <TripInfoSidebar />
+          </>
+        ) : (
+          <LoginModal />
+        )}
       </div>
     </Provider>
   )
