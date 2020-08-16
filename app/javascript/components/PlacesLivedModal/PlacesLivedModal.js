@@ -9,6 +9,9 @@ const PlacesLivedModal = ({ isLoggedIn }) => {
   const dispatch = useDispatch()
   const handleClose = () =>
     dispatch(placesLivedActions.togglePlacesLivedModal())
+  const setSelectedPlace = (placeId) => {
+    dispatch(placesLivedActions.setSelectedPlaceId(placeId))
+  }
 
   const isOpen = useSelector(placesLivedSelectors.getIsPlacesLivedModalOpen)
   const placesLived = useSelector(placesLivedSelectors.getPlacesLived)
@@ -27,6 +30,15 @@ const PlacesLivedModal = ({ isLoggedIn }) => {
       dataField: 'address',
       text: 'Address',
       sort: true,
+      formatter: (cell) => (
+        <Button variant="link" className="p-0">
+          {cell}
+        </Button>
+      ),
+      events: {
+        onClick: (e, column, columnIndex, row, rowIndex) =>
+          setSelectedPlace(row.id),
+      },
     },
     {
       dataField: 'country',

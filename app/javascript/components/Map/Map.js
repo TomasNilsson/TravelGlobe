@@ -13,12 +13,17 @@ const COUNTRIES_GEOJSON_URL =
 const US_STATES_GEOJSON_URL =
   'https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_110m_admin_1_states_provinces.geojson'
 
+const ZOOM_LEVEL_SHOW_DETAILS = 7
+
 const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
   const [mapInstance, setMapInstance] = useState(null)
   const [mapsApi, setMapsApi] = useState(null)
 
   const visitedCountries = useSelector(mapSelectors.getVisitedCountries)
   const placesLived = useSelector(placesLivedSelectors.getPlacesLived)
+  const selectedPlaceLived = useSelector(
+    placesLivedSelectors.getPlaceInfoForSelectedId
+  )
   const markers = useSelector(mapSelectors.getMarkers)
 
   useEffect(() => {
@@ -27,11 +32,22 @@ const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
       const bounds = new mapsApi.LatLngBounds()
       markers.forEach(({ lat, lng }) => bounds.extend({ lat, lng }))
       mapInstance.fitBounds(bounds, 150)
-      if (mapInstance.getZoom() > 7) {
-        mapInstance.setZoom(7)
+      if (mapInstance.getZoom() > ZOOM_LEVEL_SHOW_DETAILS) {
+        mapInstance.setZoom(ZOOM_LEVEL_SHOW_DETAILS)
       }
     }
   }, [markers])
+
+  useEffect(() => {
+    // Adjust the map position and zoom level to show selected place
+    if (selectedPlaceLived && mapInstance) {
+      mapInstance.setCenter({
+        lat: selectedPlaceLived.latitude,
+        lng: selectedPlaceLived.longitude,
+      })
+      mapInstance.setZoom(ZOOM_LEVEL_SHOW_DETAILS)
+    }
+  }, [selectedPlaceLived])
 
   const handleApiLoaded = (map, maps) => {
     setMapInstance(map)
