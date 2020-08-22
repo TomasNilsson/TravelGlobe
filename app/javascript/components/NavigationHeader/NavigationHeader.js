@@ -25,6 +25,7 @@ const NavigationHeader = ({ user, isLoggedIn }) => {
       ? [
           {
             text: 'Add New Trip',
+            action: myTripsActions.showTripForm(),
             icon: FaPlaneDeparture,
           },
         ]

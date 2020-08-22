@@ -5,6 +5,7 @@ const { TYPES } = myTripsActions
 const initialState = {
   trips: [],
   isMyTripsModalOpen: false,
+  isTripFormModalOpen: false,
   isTripInfoSidebarOpen: false,
   selectedTripId: null,
 }
@@ -20,6 +21,13 @@ const myTripsReducer = (state = initialState, { type, payload }) => {
           trip.id === payload.id ? payload : trip
         ),
       }
+    case TYPES.SHOW_TRIP_FORM:
+      return {
+        ...state,
+        selectedTripId: payload,
+        isMyTripsModalOpen: false,
+        isTripFormModalOpen: true,
+      }
     case TYPES.SHOW_TRIP_INFO:
       return {
         ...state,
@@ -29,6 +37,8 @@ const myTripsReducer = (state = initialState, { type, payload }) => {
       }
     case TYPES.TOGGLE_MY_TRIPS_MODAL:
       return { ...state, isMyTripsModalOpen: !state.isMyTripsModalOpen }
+    case TYPES.TOGGLE_TRIP_FORM_MODAL:
+      return { ...state, isTripFormModalOpen: !state.isTripFormModalOpen }
     case TYPES.TOGGLE_TRIP_INFO_SIDEBAR:
       return { ...state, isTripInfoSidebarOpen: !state.isTripInfoSidebarOpen }
     default:

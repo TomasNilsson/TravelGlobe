@@ -13,6 +13,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css'
 import styles from './App.module.scss'
+import TripFormModal from '../components/TripFormModal'
 
 const store = configureStore()
 
@@ -30,6 +31,7 @@ const App = ({ user, isLoggedIn }) => {
         <Map />
         {user ? (
           <>
+            {isLoggedIn && <TripFormModal />}
             <MyTripsModal isLoggedIn={isLoggedIn} />
             <PlacesLivedModal isLoggedIn={isLoggedIn} />
             <StatisticsModal />

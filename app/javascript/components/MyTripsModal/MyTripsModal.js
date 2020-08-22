@@ -8,9 +8,8 @@ import { myTripsSelectors } from '../../app/selectors'
 const MyTripsModal = ({ isLoggedIn }) => {
   const dispatch = useDispatch()
   const handleClose = () => dispatch(myTripsActions.toggleMyTripsModal())
-  const showTripInfo = (tripId) => {
-    dispatch(myTripsActions.showTripInfo(tripId))
-  }
+  const showTripInfo = (tripId) => dispatch(myTripsActions.showTripInfo(tripId))
+  const showTripForm = (tripId) => dispatch(myTripsActions.showTripForm(tripId))
 
   const isOpen = useSelector(myTripsSelectors.getIsMyTripsModalOpen)
   const trips = useSelector(myTripsSelectors.getMyTrips)
@@ -86,7 +85,7 @@ const MyTripsModal = ({ isLoggedIn }) => {
           Close
         </Button>
         {isLoggedIn && (
-          <Button variant="primary" onClick={() => null}>
+          <Button variant="primary" onClick={showTripForm}>
             Add New Trip
           </Button>
         )}
