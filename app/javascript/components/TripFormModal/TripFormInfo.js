@@ -2,6 +2,7 @@ import React from 'react'
 import { useFormContext, Controller } from 'react-hook-form'
 import { Card, Form, Row, Col, InputGroup } from 'react-bootstrap'
 import { FaInfoCircle, FaCalendarAlt, FaUser, FaTags } from 'react-icons/fa'
+import DatePicker from 'react-datepicker'
 import CreatableSelect from 'react-select/creatable'
 import styles from './TripForm.module.scss'
 
@@ -39,10 +40,23 @@ const TripFormInfo = () => {
                   <FaCalendarAlt />
                 </InputGroup.Text>
               </InputGroup.Prepend>
-              <Form.Control
-                placeholder="YYYY-MM-DD"
+              <Controller
                 name="start_date"
-                ref={register}
+                control={control}
+                defaultValue={null}
+                render={({ onChange, onBlur, value }) => (
+                  <DatePicker
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    selected={value}
+                    dateFormat="yyyy-MM-dd"
+                    placeholderText="Click to select a date"
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"
+                    className="form-control"
+                  />
+                )}
               />
             </InputGroup>
           </Form.Group>
@@ -56,10 +70,23 @@ const TripFormInfo = () => {
                   <FaCalendarAlt />
                 </InputGroup.Text>
               </InputGroup.Prepend>
-              <Form.Control
-                placeholder="YYYY-MM-DD"
+              <Controller
                 name="end_date"
-                ref={register}
+                control={control}
+                defaultValue={null}
+                render={({ onChange, onBlur, value }) => (
+                  <DatePicker
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    selected={value}
+                    dateFormat="yyyy-MM-dd"
+                    placeholderText="Click to select a date"
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"
+                    className="form-control"
+                  />
+                )}
               />
             </InputGroup>
           </Form.Group>
