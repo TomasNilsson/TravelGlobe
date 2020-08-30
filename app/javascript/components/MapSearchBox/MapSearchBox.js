@@ -1,26 +1,25 @@
 import React, { useRef, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { Form } from 'react-bootstrap'
-import { useDispatch } from 'react-redux'
-import { mapActions } from '../../app/actions'
+import { mapSelectors } from '../../app/selectors'
 import styles from './MapSearchBox.module.scss'
 
-const MapSearchBox = ({ mapsApi, map, placeholder = 'Search' }) => {
+const MapSearchBox = ({
+  placeholder = 'Search',
+  onSelect,
+  clearAfterSelect = false,
+}) => {
   const inputRef = useRef(null)
-  const dispatch = useDispatch()
+  const isMapsApiLoaded = useSelector(mapSelectors.getIsMapsApiLoaded)
 
   useEffect(() => {
-    if (mapsApi && map) {
+    if (isMapsApiLoaded) {
       initSearchBox()
     }
-  }, [mapsApi])
+  }, [isMapsApiLoaded])
 
   const initSearchBox = () => {
-    const searchBox = new mapsApi.places.SearchBox(inputRef.current)
-
-    // Bias the SearchBox results towards current map's viewport
-    map.addListener('bounds_changed', function () {
-      searchBox.setBounds(map.getBounds())
-    })
+    const searchBox = new window.google.maps.places.SearchBox(inputRef.current)
 
     // Listen for the event fired when the user selects an item from the search suggestions
     searchBox.addListener('places_changed', () => {
@@ -28,13 +27,19 @@ const MapSearchBox = ({ mapsApi, map, placeholder = 'Search' }) => {
       if (places.length > 0) {
         const {
           name,
-          geometry: { location, viewport },
+          geometry: { location },
         } = places[0]
 
-        dispatch(mapActions.setMarkers([{ ...location.toJSON(), text: name }]))
+        if (typeof onSelect === 'function') {
+          onSelect({ name, ...location.toJSON() })
+        }
 
         // Remove focus from the search box
         inputRef.current.blur()
+
+        if (clearAfterSelect) {
+          inputRef.current.value = ''
+        }
       }
     })
   }

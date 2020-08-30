@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useForm, FormProvider } from 'react-hook-form'
 import { Modal, Tabs, Tab, Form, Button } from 'react-bootstrap'
+import { format } from 'date-fns'
 import TripFormInfo from './TripFormInfo'
 import TripFormPlaces from './TripFormPlaces'
 import TripFormPhotosVideo from './TripFormPhotosVideo'
@@ -14,7 +15,16 @@ const TripFormModal = () => {
   const handleClose = () => dispatch(myTripsActions.toggleTripFormModal())
 
   const formMethods = useForm()
-  const onSubmit = (data) => console.log(data) // TODO: dispatch action
+  const onSubmit = (tripData) => {
+    dispatch(
+      myTripsActions.addTrip({
+        ...tripData,
+        start_date: format(tripData.start_date, 'yyyy-MM-dd'),
+        end_date: format(tripData.end_date, 'yyyy-MM-dd'),
+        country_ids: tripData.countries.map((country) => country.value),
+      })
+    )
+  }
 
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
 
@@ -62,18 +72,21 @@ const TripFormModal = () => {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            {selectedTabIndex < tabs.length - 1 ? (
+            {selectedTabIndex < tabs.length - 1 && (
               <Button
                 variant="primary"
                 onClick={() => setSelectedTabIndex(selectedTabIndex + 1)}
               >
                 Next
               </Button>
-            ) : (
-              <Button variant="primary" type="submit">
-                Save
-              </Button>
             )}
+            <Button
+              variant="primary"
+              className={selectedTabIndex < tabs.length - 1 ? 'd-none' : ''}
+              type="submit"
+            >
+              Save
+            </Button>
           </Modal.Footer>
         </Form>
       </FormProvider>

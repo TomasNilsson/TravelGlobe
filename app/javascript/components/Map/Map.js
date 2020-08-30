@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import GoogleMap from 'google-map-react'
 import { GoogleMapsOverlay as DeckOverlay } from '@deck.gl/google-maps'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import { mapSelectors, placesLivedSelectors } from '../../app/selectors'
+import { mapActions } from '../../app/actions'
 import MapSearchBox from '../MapSearchBox'
 import MapMarker from '../MapMarker'
 
@@ -25,6 +26,10 @@ const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
     placesLivedSelectors.getPlaceInfoForSelectedId
   )
   const markers = useSelector(mapSelectors.getMarkers)
+
+  const dispatch = useDispatch()
+  const onMapSearchSelect = ({ lat, lng, name }) =>
+    dispatch(mapActions.setMarkers([{ lat, lng, text: name }]))
 
   useEffect(() => {
     // Adjust the map position and zoom level to show all markers
@@ -52,6 +57,7 @@ const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
   const handleApiLoaded = (map, maps) => {
     setMapInstance(map)
     setMapsApi(maps)
+    dispatch(mapActions.mapsApiLoaded())
 
     const deckOverlay = new DeckOverlay({
       layers: [
@@ -176,13 +182,6 @@ const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
           ...options,
         }}
       >
-        {markers.map((marker, i) => (
-          <MapMarker
-            {...marker}
-            label={markers.length > 1 ? i + 1 : ''}
-            key={marker.text}
-          />
-        ))}
         {placesLived.map((place) => (
           <MapMarker
             lat={place.latitude}
@@ -192,8 +191,15 @@ const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
             key={place.id}
           />
         ))}
+        {markers.map((marker, i) => (
+          <MapMarker
+            {...marker}
+            label={markers.length > 1 ? i + 1 : ''}
+            key={marker.text}
+          />
+        ))}
       </GoogleMap>
-      <MapSearchBox mapsApi={mapsApi} map={mapInstance} />
+      <MapSearchBox onSelect={onMapSearchSelect} />
     </>
   )
 }

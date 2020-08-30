@@ -22,6 +22,8 @@ Rails.application.routes.draw do
 
   resources :places_lived, except: [:index]
 
+  resources :countries, only: [:index]
+
   get 'share/:token', to: 'home#share'
 
   get 'excel_export', to: 'home#excel_export'

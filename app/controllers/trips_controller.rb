@@ -6,7 +6,8 @@ class TripsController < ApplicationController
   end
   
   def create
-    params[:trip][:category_ids].map! { |element|
+    # DEPRECATED: category_ids have been replaced by categories in new solution
+    (params[:trip][:category_ids] || []).map! { |element|
       # Create new category if element is a name instead of an id
       if element.present? && (element.to_i.to_s != element)
         Category.create(name: element, user_id: current_user.id).id
@@ -14,7 +15,9 @@ class TripsController < ApplicationController
         element
       end
     }
-    params[:trip][:travel_partner_ids].map! { |element|
+
+    # DEPRECATED: travel_partner_ids have been replaced by travel_partners in new solution
+    (params[:trip][:travel_partner_ids] || []).map! { |element|
       # Create new travel partner if element is a name instead of an id
       if element.present? && (element.to_i.to_s != element)
         TravelPartner.create(name: element, user_id: current_user.id).id
@@ -22,6 +25,7 @@ class TripsController < ApplicationController
         element
       end
     }
+
     @trip = Trip.new(trip_params)
     @trip.users << current_user
     authorize! :create, @trip
@@ -124,6 +128,6 @@ class TripsController < ApplicationController
     end
 
     def trip_params
-      params.require(:trip).permit(:name, :start_date, :end_date, :notes, {:country_ids => []}, {:travel_partner_ids => []}, {:category_ids => []}, photos_attributes: [:id, :thumb_url, :image_url, :caption, :order, :user_id, :external_id, :from, :_destroy], places_attributes: [:id, :name, :latitude, :longitude, :order, :_destroy])
+      params.require(:trip).permit(:name, :start_date, :end_date, { travel_partners: [] }, { categories: [] }, { countries: [] }, :notes, { country_ids: [] }, { travel_partner_ids: [] }, { category_ids: [] }, photos_attributes: [:id, :thumb_url, :image_url, :caption, :order, :user_id, :external_id, :from, :_destroy], places_attributes: [:trip_id, :id, :name, :latitude, :longitude, :order, :_destroy])
     end
 end

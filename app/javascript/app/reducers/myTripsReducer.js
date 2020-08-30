@@ -12,6 +12,12 @@ const initialState = {
 
 const myTripsReducer = (state = initialState, { type, payload }) => {
   switch (type) {
+    case TYPES.ADD_TRIP_SUCCESS:
+      return {
+        ...state,
+        trips: [...state.trips, payload],
+        isTripFormModalOpen: false,
+      }
     case TYPES.FETCH_MY_TRIPS_SUCCESS:
       return { ...state, trips: payload }
     case TYPES.FETCH_TRIP_INFO_SUCCESS:

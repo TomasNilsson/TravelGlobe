@@ -7,3 +7,7 @@
     margin: 0 10px;
   }
 }
+
+:global(.pac-container) {
+  z-index: 10000;
+}

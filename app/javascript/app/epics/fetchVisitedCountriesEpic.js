@@ -3,18 +3,20 @@ import { mergeMap, map } from 'rxjs/operators'
 import { userSelectors } from '../selectors'
 import { mapActions, userActions } from '../actions'
 
-const fetchVisitedCountriesEpic = (action$, state$, { getJSON }) =>
+const fetchVisitedCountriesEpic = (action$, state$, { ajax }) =>
   action$.pipe(
     ofType(
       userActions.TYPES.SET_USER_DATA,
       mapActions.TYPES.FETCH_VISITED_COUNTRIES
     ),
     mergeMap(() =>
-      getJSON(
-        `/users/${userSelectors.getUserId(state$.value)}/visited_countries`
-      ).pipe(
-        map((response) => mapActions.fetchVisitedCountriesSuccess(response))
-      )
+      ajax
+        .getJSON(
+          `/users/${userSelectors.getUserId(state$.value)}/visited_countries`
+        )
+        .pipe(
+          map((response) => mapActions.fetchVisitedCountriesSuccess(response))
+        )
     )
   )
 

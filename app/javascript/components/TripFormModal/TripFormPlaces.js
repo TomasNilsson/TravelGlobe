@@ -1,12 +1,32 @@
-import React from 'react'
-import { useFormContext, Controller } from 'react-hook-form'
-import { Card, Form, Row, Col, InputGroup } from 'react-bootstrap'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { useFormContext, useFieldArray, Controller } from 'react-hook-form'
+import { Card, Form, Row, Col, InputGroup, ListGroup } from 'react-bootstrap'
 import { FaGlobeEurope, FaMapMarkerAlt } from 'react-icons/fa'
 import Select from 'react-select'
+import { mapSelectors } from '../../app/selectors'
+import MapSearchBox from '../MapSearchBox'
 import styles from './TripForm.module.scss'
+import { mapActions } from '../../app/actions'
 
 const TripFormPlaces = () => {
   const { register, control } = useFormContext()
+  const places = useFieldArray({
+    control,
+    name: 'places_attributes', // TODO: rename to "places" in backend
+  })
+
+  const dispatch = useDispatch()
+
+  const countries = useSelector(mapSelectors.getCountries).map((country) => ({
+    value: country.id,
+    label: country.name,
+  }))
+
+  useEffect(() => {
+    dispatch(mapActions.fetchCountries())
+  }, [])
+
   return (
     <Card.Body>
       <Card.Title>Select Places</Card.Title>
@@ -25,11 +45,7 @@ const TripFormPlaces = () => {
                 name="countries"
                 control={control}
                 defaultValue={[]}
-                options={[
-                  { value: 'Country 1', label: 'country_1' },
-                  { value: 'Country 2', label: 'country_2' },
-                  { value: 'Country 3', label: 'country_3' },
-                ]}
+                options={countries}
                 isMulti
                 placeholder="Select one or many countries/states"
                 className={styles.selectInput}
@@ -48,15 +64,40 @@ const TripFormPlaces = () => {
                   <FaMapMarkerAlt />
                 </InputGroup.Text>
               </InputGroup.Prepend>
-              <Form.Control
+              <MapSearchBox
                 placeholder="Enter a location"
-                name="places"
-                ref={register}
+                onSelect={(location) => places.append(location)}
+                clearAfterSelect
               />
             </InputGroup>
           </Form.Group>
         </Col>
       </Row>
+      <ListGroup as="ol">
+        {places.fields.map((place, index) => (
+          <ListGroup.Item as="li" key={place.name}>
+            {place.name}
+            <Form.Control
+              type="hidden"
+              name={`places_attributes[${index}].name`}
+              ref={register}
+              defaultValue={place.name}
+            />
+            <Form.Control
+              type="hidden"
+              name={`places_attributes[${index}].latitude`}
+              ref={register}
+              defaultValue={place.lat}
+            />
+            <Form.Control
+              type="hidden"
+              name={`places_attributes[${index}].longitude`}
+              ref={register}
+              defaultValue={place.lng}
+            />
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
     </Card.Body>
   )
 }

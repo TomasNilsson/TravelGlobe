@@ -6,7 +6,7 @@ import rootReducer from './reducers'
 import rootEpic from './epics'
 
 const epicMiddleware = createEpicMiddleware({
-  dependencies: { getJSON: ajax.getJSON },
+  dependencies: { ajax },
 })
 
 const configureStore = () => {
