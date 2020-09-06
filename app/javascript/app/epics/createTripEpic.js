@@ -1,6 +1,5 @@
 import { ofType } from 'redux-observable'
 import { mergeMap, map } from 'rxjs/operators'
-import { userSelectors } from '../selectors'
 import { myTripsActions } from '../actions'
 
 const createTripEpic = (action$, state$, { ajax }) =>
@@ -11,6 +10,7 @@ const createTripEpic = (action$, state$, { ajax }) =>
         url: '/trips',
         method: 'POST',
         headers: {
+          Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         body: {

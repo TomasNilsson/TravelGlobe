@@ -1,25 +1,22 @@
 class UsersController < ApplicationController
+  before_action :authorize_request
 
-    # TODO: add access control (based on session cookie or token)
+  def visited_countries
+    countries = @current_user.countries
+    render json: countries.pluck(:code)
+  end
 
-    def visited_countries
-      countries = User.find(params[:id]).countries
-      render json: countries.pluck(:code)
-    end
+  def places_lived
+    places_lived = @current_user.places_lived.order(:start_date)
+    render json: places_lived, each_serializer: PlaceLivedSerializer
+  end
 
-    def places_lived
-      places_lived = User.find(params[:id]).places_lived.order(:start_date)
-      render json: places_lived, each_serializer: PlaceLivedSerializer
-    end
+  def trips
+    trips = @current_user.trips.order(:start_date)
+    render json: trips, each_serializer: TripSerializer
+  end
 
-    def trips
-      trips = User.find(params[:id]).trips.order(:start_date)
-      render json: trips, each_serializer: TripSerializer
-    end
-
-    def statistics
-      user = User.find(params[:id])
-      render json: user, serializer: UserStatisticsSerializer
-    end
-
+  def statistics
+    render json: @current_user, serializer: UserStatisticsSerializer
+  end
 end

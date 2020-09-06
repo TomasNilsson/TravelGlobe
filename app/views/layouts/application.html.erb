@@ -13,9 +13,8 @@
   <meta property="fb:app_id" content="1696173967323541">
   <%= favicon_link_tag 'favicon.ico' %>
   <%= javascript_pack_tag 'application' %>
-  <%= csrf_meta_tags %>
 </head>
 <body data-rails-env="<%= Rails.env %>">
-  <%= react_component('App', { user: @user ? @user.slice(:id, :name, :image_url) : nil, isLoggedIn: current_user.present? }, { camelize_props: true, id: 'app' }) %>
+  <%= yield %>
 </body>
 </html>

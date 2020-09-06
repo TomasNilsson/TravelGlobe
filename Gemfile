@@ -24,6 +24,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'bootstrap-sass', '~> 3.4.1'
 gem 'bootstrap-datepicker-rails'
 
+# Use jwt for authorization
+gem 'jwt'
 # Use Facebook authentication
 gem 'omniauth-facebook'
 # Koala is a Facebook library for Ruby, supporting e.g. the Graph API 

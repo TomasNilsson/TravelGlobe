@@ -338,6 +338,7 @@ DEPENDENCIES
   jquery-hotkeys-rails
   jquery-rails
   jquery-ui-rails
+  jwt
   koala (~> 2.2)
   listen (~> 3.0)
   mysql2 (~> 0.4.0)
