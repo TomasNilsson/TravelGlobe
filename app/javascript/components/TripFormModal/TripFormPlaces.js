@@ -5,6 +5,7 @@ import { Card, Form, Row, Col, InputGroup, ListGroup } from 'react-bootstrap'
 import { FaGlobeEurope, FaMapMarkerAlt } from 'react-icons/fa'
 import Select from 'react-select'
 import classNames from 'classnames'
+import { FIELD_NAMES } from './constants'
 import { mapSelectors } from '../../app/selectors'
 import MapSearchBox from '../MapSearchBox'
 import styles from './TripForm.module.scss'
@@ -14,11 +15,11 @@ const TripFormPlaces = () => {
   const { register, trigger, errors, control } = useFormContext()
   const { fields: places, append: appendPlaces } = useFieldArray({
     control,
-    name: 'places',
+    name: FIELD_NAMES.PLACES,
   })
 
   useEffect(() => {
-    if (places.length) trigger('places') // Trigger valiation when places are added/removed
+    if (places.length) trigger(FIELD_NAMES.PLACES) // Trigger validation when places are added/removed
   }, [places])
 
   const dispatch = useDispatch()
@@ -37,7 +38,7 @@ const TripFormPlaces = () => {
       <Card.Title>Select Places</Card.Title>
       <Row>
         <Col md={8}>
-          <Form.Group controlId="countries">
+          <Form.Group controlId={FIELD_NAMES.COUNTRIES}>
             <Form.Label>Countries/States</Form.Label>
             <InputGroup>
               <InputGroup.Prepend>
@@ -47,7 +48,7 @@ const TripFormPlaces = () => {
               </InputGroup.Prepend>
               <Controller
                 as={Select}
-                name="countries"
+                name={FIELD_NAMES.COUNTRIES}
                 control={control}
                 defaultValue={[]}
                 options={countries}
@@ -55,11 +56,14 @@ const TripFormPlaces = () => {
                 placeholder="Select one or many countries/states"
                 className={classNames(
                   styles.selectInput,
-                  !!errors.countries && ['is-invalid', styles.error]
+                  !!errors[FIELD_NAMES.COUNTRIES] && [
+                    'is-invalid',
+                    styles.error,
+                  ]
                 )}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.countries?.message}
+                {errors[FIELD_NAMES.COUNTRIES]?.message}
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
@@ -67,7 +71,7 @@ const TripFormPlaces = () => {
       </Row>
       <Row>
         <Col md={8}>
-          <Form.Group controlId="places">
+          <Form.Group controlId={FIELD_NAMES.PLACES}>
             <Form.Label>Places</Form.Label>
             <InputGroup>
               <InputGroup.Prepend>
@@ -79,10 +83,10 @@ const TripFormPlaces = () => {
                 placeholder="Enter a location"
                 onSelect={(location) => appendPlaces(location)}
                 clearAfterSelect
-                isInvalid={!!errors.places}
+                isInvalid={!!errors[FIELD_NAMES.PLACES]}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.places?.message}
+                {errors[FIELD_NAMES.PLACES]?.message}
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>

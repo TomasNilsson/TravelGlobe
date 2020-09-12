@@ -6,6 +6,7 @@ import * as yup from 'yup'
 import { Modal, Tabs, Tab, Form, Button } from 'react-bootstrap'
 import { format } from 'date-fns'
 import classNames from 'classnames'
+import { FIELD_NAMES } from './constants'
 import TripFormInfo from './TripFormInfo'
 import TripFormPlaces from './TripFormPlaces'
 import TripFormPhotosVideo from './TripFormPhotosVideo'
@@ -14,18 +15,24 @@ import { myTripsActions } from '../../app/actions'
 import { myTripsSelectors } from '../../app/selectors'
 
 const formSchema = yup.object().shape({
-  name: yup.string().required('Name is required'),
-  startDate: yup.date().required('Start date is required').nullable(),
-  endDate: yup
+  [FIELD_NAMES.NAME]: yup.string().required('Name is required'),
+  [FIELD_NAMES.START_DATE]: yup
+    .date()
+    .required('Start date is required')
+    .nullable(),
+  [FIELD_NAMES.END_DATE]: yup
     .date()
     .required('End date is required')
-    .min(yup.ref('startDate'), "End date can't be before start date")
+    .min(yup.ref(FIELD_NAMES.START_DATE), "End date can't be before start date")
     .nullable(),
-  countries: yup
+  [FIELD_NAMES.COUNTRIES]: yup
     .array()
     .required('At least one country/state is required')
     .nullable(),
-  places: yup.array().required('At least one place is required').nullable(),
+  [FIELD_NAMES.PLACES]: yup
+    .array()
+    .required('At least one place is required')
+    .nullable(),
 })
 
 const TripFormModal = () => {
@@ -36,15 +43,33 @@ const TripFormModal = () => {
     mode: 'onBlur', // Validation will trigger on the blur event.
     resolver: yupResolver(formSchema),
   })
-  const onSubmit = (tripData) => {
+
+  const onValidSubmit = (tripData) => {
     dispatch(
       myTripsActions.addTrip({
         ...tripData,
-        start_date: format(tripData.startDate, 'yyyy-MM-dd'),
-        end_date: format(tripData.endDate, 'yyyy-MM-dd'),
-        country_ids: tripData.countries.map((country) => country.value),
-        places_attributes: tripData.places, // TODO: rename to "places" in backend,
+        start_date: format(tripData[FIELD_NAMES.START_DATE], 'yyyy-MM-dd'),
+        end_date: format(tripData[FIELD_NAMES.END_DATE], 'yyyy-MM-dd'),
+        country_ids: tripData[FIELD_NAMES.COUNTRIES].map(
+          (country) => country.value
+        ),
+        places_attributes: tripData[FIELD_NAMES.PLACES], // TODO: rename to "places" in backend,
       })
+    )
+  }
+
+  const onInvalidSubmit = (fieldErrors = {}) => {
+    // Open the first tab with errors
+    setSelectedTabIndex(
+      Object.keys(fieldErrors).some((field) =>
+        [
+          FIELD_NAMES.NAME,
+          FIELD_NAMES.START_DATE,
+          FIELD_NAMES.END_DATE,
+        ].includes(field)
+      )
+        ? 0
+        : 1
     )
   }
 
@@ -70,9 +95,13 @@ const TripFormModal = () => {
       backdrop="static"
       show={isOpen}
       onHide={handleClose}
+      onExited={() => setSelectedTabIndex(0)}
     >
       <FormProvider {...formMethods}>
-        <Form noValidate onSubmit={formMethods.handleSubmit(onSubmit)}>
+        <Form
+          noValidate
+          onSubmit={formMethods.handleSubmit(onValidSubmit, onInvalidSubmit)}
+        >
           <Modal.Header closeButton>
             <Modal.Title>New Trip</Modal.Title>
           </Modal.Header>
