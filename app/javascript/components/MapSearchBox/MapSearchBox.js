@@ -8,6 +8,7 @@ const MapSearchBox = ({
   placeholder = 'Search',
   onSelect,
   clearAfterSelect = false,
+  isInvalid = false,
 }) => {
   const inputRef = useRef(null)
   const isMapsApiLoaded = useSelector(mapSelectors.getIsMapsApiLoaded)
@@ -50,6 +51,7 @@ const MapSearchBox = ({
       type="text"
       className={styles.searchBox}
       placeholder={placeholder}
+      isInvalid={isInvalid}
     />
   )
 }

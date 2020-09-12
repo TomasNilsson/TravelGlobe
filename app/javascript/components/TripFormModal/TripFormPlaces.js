@@ -4,17 +4,22 @@ import { useFormContext, useFieldArray, Controller } from 'react-hook-form'
 import { Card, Form, Row, Col, InputGroup, ListGroup } from 'react-bootstrap'
 import { FaGlobeEurope, FaMapMarkerAlt } from 'react-icons/fa'
 import Select from 'react-select'
+import classNames from 'classnames'
 import { mapSelectors } from '../../app/selectors'
 import MapSearchBox from '../MapSearchBox'
 import styles from './TripForm.module.scss'
 import { mapActions } from '../../app/actions'
 
 const TripFormPlaces = () => {
-  const { register, control } = useFormContext()
-  const places = useFieldArray({
+  const { register, trigger, errors, control } = useFormContext()
+  const { fields: places, append: appendPlaces } = useFieldArray({
     control,
-    name: 'places_attributes', // TODO: rename to "places" in backend
+    name: 'places',
   })
+
+  useEffect(() => {
+    if (places.length) trigger('places') // Trigger valiation when places are added/removed
+  }, [places])
 
   const dispatch = useDispatch()
 
@@ -48,8 +53,14 @@ const TripFormPlaces = () => {
                 options={countries}
                 isMulti
                 placeholder="Select one or many countries/states"
-                className={styles.selectInput}
+                className={classNames(
+                  styles.selectInput,
+                  !!errors.countries && ['is-invalid', styles.error]
+                )}
               />
+              <Form.Control.Feedback type="invalid">
+                {errors.countries?.message}
+              </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
         </Col>
@@ -66,32 +77,36 @@ const TripFormPlaces = () => {
               </InputGroup.Prepend>
               <MapSearchBox
                 placeholder="Enter a location"
-                onSelect={(location) => places.append(location)}
+                onSelect={(location) => appendPlaces(location)}
                 clearAfterSelect
+                isInvalid={!!errors.places}
               />
+              <Form.Control.Feedback type="invalid">
+                {errors.places?.message}
+              </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
         </Col>
       </Row>
       <ListGroup as="ol">
-        {places.fields.map((place, index) => (
+        {places.map((place, index) => (
           <ListGroup.Item as="li" key={place.name}>
             {place.name}
             <Form.Control
               type="hidden"
-              name={`places_attributes[${index}].name`}
+              name={`places[${index}].name`}
               ref={register}
               defaultValue={place.name}
             />
             <Form.Control
               type="hidden"
-              name={`places_attributes[${index}].latitude`}
+              name={`places[${index}].latitude`}
               ref={register}
               defaultValue={place.lat}
             />
             <Form.Control
               type="hidden"
-              name={`places_attributes[${index}].longitude`}
+              name={`places[${index}].longitude`}
               ref={register}
               defaultValue={place.lng}
             />

@@ -1,5 +1,14 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
 :global(.modal-open) {
   .selectInput {
     flex: 1;
+
+    &.error {
+      div:first-child {
+        border-color: $form-feedback-invalid-color;
+      }
+    }
   }
 }

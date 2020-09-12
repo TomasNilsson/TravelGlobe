@@ -1,9 +1,11 @@
 {
   "dependencies": {
     "@babel/preset-react": "^7.9.4",
+    "@hookform/resolvers": "^0.1.1",
     "@rails/webpacker": "5.1.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "bootstrap": "^4.5.0",
+    "classnames": "^2.2.6",
     "date-fns": "^2.15.0",
     "deck.gl": "^8.2.3",
     "google-map-react": "^1.1.7",
@@ -21,7 +23,8 @@
     "react_ujs": "^2.6.1",
     "redux": "^4.0.5",
     "redux-observable": "^1.2.0",
-    "rxjs": "^6.6.0"
+    "rxjs": "^6.6.0",
+    "yup": "^0.29.3"
   },
   "devDependencies": {
     "babel-plugin-transform-imports": "^2.0.0",

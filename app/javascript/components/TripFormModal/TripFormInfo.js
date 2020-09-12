@@ -4,10 +4,11 @@ import { Card, Form, Row, Col, InputGroup } from 'react-bootstrap'
 import { FaInfoCircle, FaCalendarAlt, FaUser, FaTags } from 'react-icons/fa'
 import DatePicker from 'react-datepicker'
 import CreatableSelect from 'react-select/creatable'
+import classNames from 'classnames'
 import styles from './TripForm.module.scss'
 
 const TripFormInfo = () => {
-  const { register, control } = useFormContext()
+  const { register, errors, control } = useFormContext()
   return (
     <Card.Body>
       <Card.Title>Trip Info</Card.Title>
@@ -25,7 +26,11 @@ const TripFormInfo = () => {
                 placeholder="E.g. California Road Trip"
                 name="name"
                 ref={register}
+                isInvalid={!!errors.name}
               />
+              <Form.Control.Feedback type="invalid">
+                {errors.name?.message}
+              </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
         </Col>
@@ -41,7 +46,7 @@ const TripFormInfo = () => {
                 </InputGroup.Text>
               </InputGroup.Prepend>
               <Controller
-                name="start_date"
+                name="startDate"
                 control={control}
                 defaultValue={null}
                 render={({ onChange, onBlur, value }) => (
@@ -54,10 +59,19 @@ const TripFormInfo = () => {
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"
-                    className="form-control"
+                    wrapperClassName={classNames(
+                      !!errors.startDate && 'is-invalid'
+                    )}
+                    className={classNames(
+                      'form-control',
+                      !!errors.startDate && 'is-invalid'
+                    )}
                   />
                 )}
               />
+              <Form.Control.Feedback type="invalid">
+                {errors.startDate?.message}
+              </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
         </Col>
@@ -71,7 +85,7 @@ const TripFormInfo = () => {
                 </InputGroup.Text>
               </InputGroup.Prepend>
               <Controller
-                name="end_date"
+                name="endDate"
                 control={control}
                 defaultValue={null}
                 render={({ onChange, onBlur, value }) => (
@@ -84,10 +98,19 @@ const TripFormInfo = () => {
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"
-                    className="form-control"
+                    wrapperClassName={classNames(
+                      !!errors.endDate && 'is-invalid'
+                    )}
+                    className={classNames(
+                      'form-control',
+                      !!errors.endDate && 'is-invalid'
+                    )}
                   />
                 )}
               />
+              <Form.Control.Feedback type="invalid">
+                {errors.endDate?.message}
+              </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
         </Col>
@@ -104,7 +127,7 @@ const TripFormInfo = () => {
               </InputGroup.Prepend>
               <Controller
                 as={CreatableSelect}
-                name="travel_partners"
+                name="travelPartners"
                 control={control}
                 defaultValue={[]}
                 options={[
