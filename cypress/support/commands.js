@@ -25,3 +25,12 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import '@testing-library/cypress/add-commands'
+
+Cypress.Commands.add('login', () => {
+  cy.setCookie(
+    'jwt',
+    //  Seeded user token
+    Cypress.env('TEST_USER_TOKEN'),
+    { httpOnly: true }
+  )
+})

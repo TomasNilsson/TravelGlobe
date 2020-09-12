@@ -40,7 +40,7 @@ const TripFormPlaces = () => {
       <Row>
         <Col md={8}>
           <Form.Group controlId={FIELD_NAMES.COUNTRIES}>
-            <Form.Label>Countries/States</Form.Label>
+            <Form.Label id="countriesOrStates">Countries/States</Form.Label>
             <InputGroup>
               <InputGroup.Prepend>
                 <InputGroup.Text>
@@ -62,6 +62,7 @@ const TripFormPlaces = () => {
                     styles.error,
                   ]
                 )}
+                aria-labelledby="countriesOrStates"
               />
               <Form.Control.Feedback type="invalid">
                 {errors[FIELD_NAMES.COUNTRIES]?.message}
@@ -73,7 +74,7 @@ const TripFormPlaces = () => {
       <Row>
         <Col md={8}>
           <Form.Group controlId={FIELD_NAMES.PLACES}>
-            <Form.Label>Places</Form.Label>
+            <Form.Label id="places">Places</Form.Label>
             <InputGroup>
               <InputGroup.Prepend>
                 <InputGroup.Text>
@@ -85,6 +86,7 @@ const TripFormPlaces = () => {
                 onSelect={(location) => appendPlaces(location)}
                 clearAfterSelect
                 isInvalid={!!errors[FIELD_NAMES.PLACES]}
+                aria-labelledby="places"
               />
               <Form.Control.Feedback type="invalid">
                 {errors[FIELD_NAMES.PLACES]?.message}

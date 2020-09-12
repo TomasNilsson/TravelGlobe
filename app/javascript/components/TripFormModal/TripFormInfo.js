@@ -67,6 +67,7 @@ const TripFormInfo = () => {
                       'form-control',
                       !!errors[FIELD_NAMES.START_DATE] && 'is-invalid'
                     )}
+                    id="startDate"
                   />
                 )}
               />
@@ -106,6 +107,7 @@ const TripFormInfo = () => {
                       'form-control',
                       !!errors[FIELD_NAMES.END_DATE] && 'is-invalid'
                     )}
+                    id="endDate"
                   />
                 )}
               />
@@ -119,7 +121,7 @@ const TripFormInfo = () => {
       <Row>
         <Col md={8}>
           <Form.Group controlId={FIELD_NAMES.TRAVEL_PARTNERS}>
-            <Form.Label>Travel Partners</Form.Label>
+            <Form.Label id="travelPartners">Travel Partners</Form.Label>
             <InputGroup>
               <InputGroup.Prepend>
                 <InputGroup.Text>
@@ -139,6 +141,7 @@ const TripFormInfo = () => {
                 isMulti
                 placeholder="Select from the list or create new"
                 className={styles.selectInput}
+                aria-labelledby="travelPartners"
               />
             </InputGroup>
           </Form.Group>
@@ -147,7 +150,7 @@ const TripFormInfo = () => {
       <Row>
         <Col md={8}>
           <Form.Group controlId={FIELD_NAMES.CATEGORIES}>
-            <Form.Label>Categories</Form.Label>
+            <Form.Label id="categories">Categories</Form.Label>
             <InputGroup>
               <InputGroup.Prepend>
                 <InputGroup.Text>
@@ -167,6 +170,7 @@ const TripFormInfo = () => {
                 isMulti
                 placeholder="Select from the list or create new"
                 className={styles.selectInput}
+                aria-labelledby="categories"
               />
             </InputGroup>
           </Form.Group>
