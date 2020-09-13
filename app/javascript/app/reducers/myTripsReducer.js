@@ -47,6 +47,15 @@ const myTripsReducer = (state = initialState, { type, payload }) => {
       return { ...state, isTripFormModalOpen: !state.isTripFormModalOpen }
     case TYPES.TOGGLE_TRIP_INFO_SIDEBAR:
       return { ...state, isTripInfoSidebarOpen: !state.isTripInfoSidebarOpen }
+    case TYPES.UPDATE_TRIP_SUCCESS:
+      return {
+        ...state,
+        trips: state.trips.map((trip) => ({
+          ...trip,
+          ...(trip.id === payload.id && payload),
+        })),
+        isTripFormModalOpen: false,
+      }
     default:
       return state
   }

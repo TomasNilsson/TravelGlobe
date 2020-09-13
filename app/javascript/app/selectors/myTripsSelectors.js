@@ -3,7 +3,7 @@ const getMyTripsState = (state) => state.myTrips
 export const getMyTrips = (state) => getMyTripsState(state).trips
 
 export const getTripInfoById = (state, tripId) =>
-  getMyTrips(state).find((trip) => trip.id === tripId) || {}
+  getMyTrips(state).find((trip) => trip.id === tripId)
 
 export const getSelectedTripId = (state) =>
   getMyTripsState(state).selectedTripId

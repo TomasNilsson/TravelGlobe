@@ -1,9 +1,7 @@
 class TripInfoSerializer < ActiveModel::Serializer
-  attributes :id, :name, :date, :notes
+  attributes :id, :name, :startDate, :endDate, :notes
 
-  has_many :countries do
-    object.countries.map(&:name)
-  end
+  has_many :countries
 
   has_many :places
 
@@ -15,10 +13,18 @@ class TripInfoSerializer < ActiveModel::Serializer
     object.travel_partners.map(&:name)
   end
 
+  def startDate
+    object.start_date.strftime("%Y-%m-%d")
+  end
+
+  def endDate
+    object.end_date.strftime("%Y-%m-%d")
+  end
+
   has_many :photos
 
   class PlaceSerializer < ActiveModel::Serializer
-    attributes :name, :latitude, :longitude
+    attributes :id, :name, :latitude, :longitude
 
     def latitude
       object.latitude.to_f

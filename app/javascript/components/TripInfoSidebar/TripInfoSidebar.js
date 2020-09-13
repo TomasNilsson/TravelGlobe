@@ -23,12 +23,13 @@ const TripInfoSidebar = () => {
   const {
     categories = [],
     countries = [],
-    date,
+    startDate,
+    endDate,
     name,
     places = [],
     travelPartners = [],
     photos = [],
-  } = useSelector(myTripsSelectors.getTripInfoForSelectedId)
+  } = useSelector(myTripsSelectors.getTripInfoForSelectedId) || {}
 
   useEffect(() => {
     if (places.length > 0) {
@@ -42,11 +43,14 @@ const TripInfoSidebar = () => {
   }, [places])
 
   const tripDetails = [
-    { label: 'Date', value: date },
+    { label: 'Date', value: `${startDate} - ${endDate}` },
     ...(travelPartners.length > 0
       ? [{ label: 'Travel Partners', value: travelPartners.join(', ') }]
       : []),
-    { label: 'Countries', value: countries.join(', ') },
+    {
+      label: 'Countries',
+      value: countries.map((country) => country.name).join(', '),
+    },
     { label: 'Places', value: places.map((place) => place.name).join(', ') },
   ]
 

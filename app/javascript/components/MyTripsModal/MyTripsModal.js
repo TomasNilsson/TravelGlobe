@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap'
+import { FaEdit } from 'react-icons/fa'
 import DataTable from '../DataTable'
 import { myTripsActions } from '../../app/actions'
 import { myTripsSelectors } from '../../app/selectors'
@@ -21,29 +22,34 @@ const MyTripsModal = ({ isLoggedIn }) => {
     },
     {
       dataField: 'date',
+      isDummyField: true,
       text: 'Date',
       sort: true,
+      formatter: (cell, row) => `${row.startDate} - ${row.endDate}`,
+      sortValue: (cell, row) => `${row.startDate} - ${row.endDate}`,
     },
     {
       dataField: 'name',
       text: 'Name',
       sort: true,
-      formatter: (cell) => (
-        <Button variant="link" className="p-0">
+      formatter: (cell, row) => (
+        <Button
+          variant="link"
+          className="p-0"
+          onClick={() => showTripInfo(row.id)}
+        >
           {cell}
         </Button>
       ),
-      events: {
-        onClick: (e, column, columnIndex, row, rowIndex) =>
-          showTripInfo(row.id),
-      },
     },
     {
       dataField: 'countries',
       text: 'Countries/States',
       sort: true,
-      formatter: (cell) => cell.join(', '),
-      sortValue: (cell) => cell.join(', '),
+      formatter: (cell) =>
+        (cell || []).map((country) => country.name).join(', '),
+      sortValue: (cell) =>
+        (cell || []).map((country) => country.name).join(', '),
     },
     {
       dataField: 'categories',
@@ -57,6 +63,20 @@ const MyTripsModal = ({ isLoggedIn }) => {
       hidden: true,
       formatter: (cell) => cell.join(', '),
       sortValue: (cell) => cell.join(', '),
+    },
+    {
+      dataField: 'actions',
+      isDummyField: true,
+      text: 'Actions',
+      formatter: (cell, row) => (
+        <Button
+          variant="link"
+          className="p-0"
+          onClick={() => showTripForm(row.id)}
+        >
+          <FaEdit />
+        </Button>
+      ),
     },
   ]
 

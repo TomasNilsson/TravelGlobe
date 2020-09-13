@@ -16,6 +16,7 @@ const TripFormPlaces = () => {
   const { fields: places, append: appendPlaces } = useFieldArray({
     control,
     name: FIELD_NAMES.PLACES,
+    keyName: 'key',
   })
 
   useEffect(() => {
@@ -94,25 +95,31 @@ const TripFormPlaces = () => {
       </Row>
       <ListGroup as="ol">
         {places.map((place, index) => (
-          <ListGroup.Item as="li" key={place.name}>
+          <ListGroup.Item as="li" key={place.key}>
             {place.name}
             <Form.Control
               type="hidden"
+              name={`places[${index}].id`}
+              ref={register()}
+              defaultValue={place.id}
+            />
+            <Form.Control
+              type="hidden"
               name={`places[${index}].name`}
-              ref={register}
+              ref={register()}
               defaultValue={place.name}
             />
             <Form.Control
               type="hidden"
               name={`places[${index}].latitude`}
-              ref={register}
-              defaultValue={place.lat}
+              ref={register()}
+              defaultValue={place.latitude}
             />
             <Form.Control
               type="hidden"
               name={`places[${index}].longitude`}
-              ref={register}
-              defaultValue={place.lng}
+              ref={register()}
+              defaultValue={place.longitude}
             />
           </ListGroup.Item>
         ))}

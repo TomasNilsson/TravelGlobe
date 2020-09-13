@@ -32,7 +32,8 @@ const MapSearchBox = ({
         } = places[0]
 
         if (typeof onSelect === 'function') {
-          onSelect({ name, ...location.toJSON() })
+          const { lat: latitude, lng: longitude } = location.toJSON()
+          onSelect({ name, latitude, longitude })
         }
 
         // Remove focus from the search box

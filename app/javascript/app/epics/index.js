@@ -5,7 +5,8 @@ import fetchVisitedCountriesEpic from './fetchVisitedCountriesEpic'
 import fetchMyTripsEpic from './fetchMyTripsEpic'
 import fetchPlacesLivedEpic from './fetchPlacesLivedEpic'
 import fetchStatisticsEpic from './fetchStatisticsEpic'
-import showTripInfoEpic from './showTripInfoEpic'
+import fetchTripInfoEpic from './fetchTripInfoEpic'
+import updateTripEpic from './updateTripEpic'
 
 const rootEpic = combineEpics(
   createTripEpic,
@@ -14,7 +15,8 @@ const rootEpic = combineEpics(
   fetchMyTripsEpic,
   fetchPlacesLivedEpic,
   fetchStatisticsEpic,
-  showTripInfoEpic
+  fetchTripInfoEpic,
+  updateTripEpic
 )
 
 export default rootEpic

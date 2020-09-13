@@ -28,8 +28,10 @@ const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
   const markers = useSelector(mapSelectors.getMarkers)
 
   const dispatch = useDispatch()
-  const onMapSearchSelect = ({ lat, lng, name }) =>
-    dispatch(mapActions.setMarkers([{ lat, lng, text: name }]))
+  const onMapSearchSelect = ({ latitude, longitude, name }) =>
+    dispatch(
+      mapActions.setMarkers([{ lat: latitude, lng: longitude, text: name }])
+    )
 
   useEffect(() => {
     // Adjust the map position and zoom level to show all markers

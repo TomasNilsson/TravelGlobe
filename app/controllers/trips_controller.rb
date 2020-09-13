@@ -52,7 +52,9 @@ class TripsController < ApplicationController
 
   def update
     authorize! :update, @trip
-    params[:trip][:category_ids].map! { |element|
+
+     # DEPRECATED: category_ids have been replaced by categories in new solution
+     (params[:trip][:category_ids] || []).map! { |element|
       # Create new category if element is a name instead of an id
       if element.present? && (element.to_i.to_s != element)
         Category.create(name: element, user_id: current_user.id).id
@@ -60,7 +62,9 @@ class TripsController < ApplicationController
         element
       end
     }
-    params[:trip][:travel_partner_ids].map! { |element|
+
+    # DEPRECATED: travel_partner_ids have been replaced by travel_partners in new solution
+    (params[:trip][:travel_partner_ids] || []).map! { |element|
       # Create new travel partner if element is a name instead of an id
       if element.present? && (element.to_i.to_s != element)
         TravelPartner.create(name: element, user_id: current_user.id).id
@@ -68,6 +72,7 @@ class TripsController < ApplicationController
         element
       end
     }
+
     if @trip.users.size > 1
       # If shared trip: add other user's travel_partners to the array before saving
       params[:trip][:travel_partner_ids] += @trip.travel_partners.where.not(user_id: current_user.id).map(&:id)

@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useForm, FormProvider } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers'
 import * as yup from 'yup'
 import { Modal, Tabs, Tab, Form, Button } from 'react-bootstrap'
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import classNames from 'classnames'
 import { FIELD_NAMES } from './constants'
 import TripFormInfo from './TripFormInfo'
@@ -38,23 +38,52 @@ const formSchema = yup.object().shape({
 const TripFormModal = () => {
   const dispatch = useDispatch()
   const handleClose = () => dispatch(myTripsActions.toggleTripFormModal())
+  const isOpen = useSelector(myTripsSelectors.getIsTripFormModalOpen)
+  const {
+    id,
+    name,
+    startDate,
+    endDate,
+    countries = [],
+    places = [],
+    extraInfoLoaded,
+  } = useSelector(myTripsSelectors.getTripInfoForSelectedId) || {}
 
   const formMethods = useForm({
     mode: 'onBlur', // Validation will trigger on the blur event.
     resolver: yupResolver(formSchema),
   })
 
-  const onValidSubmit = (tripData) => {
-    dispatch(
-      myTripsActions.addTrip({
-        ...tripData,
-        start_date: format(tripData[FIELD_NAMES.START_DATE], 'yyyy-MM-dd'),
-        end_date: format(tripData[FIELD_NAMES.END_DATE], 'yyyy-MM-dd'),
-        country_ids: tripData[FIELD_NAMES.COUNTRIES].map(
-          (country) => country.value
-        ),
-        places_attributes: tripData[FIELD_NAMES.PLACES], // TODO: rename to "places" in backend,
+  useEffect(() => {
+    if (id) {
+      // Set default values for form when editing a trip
+      formMethods.reset({
+        [FIELD_NAMES.NAME]: name,
+        [FIELD_NAMES.START_DATE]: parseISO(startDate),
+        [FIELD_NAMES.END_DATE]: parseISO(endDate),
+        [FIELD_NAMES.COUNTRIES]: countries.map((country) => ({
+          value: country.id,
+          label: country.name,
+        })),
+        [FIELD_NAMES.PLACES]: places,
       })
+    }
+  }, [id, extraInfoLoaded])
+
+  const onValidSubmit = (tripData) => {
+    const tripPayload = {
+      ...tripData,
+      start_date: format(tripData[FIELD_NAMES.START_DATE], 'yyyy-MM-dd'),
+      end_date: format(tripData[FIELD_NAMES.END_DATE], 'yyyy-MM-dd'),
+      country_ids: tripData[FIELD_NAMES.COUNTRIES].map(
+        (country) => country.value
+      ),
+      places_attributes: tripData[FIELD_NAMES.PLACES], // TODO: rename to "places" in backend,
+    }
+    dispatch(
+      id
+        ? myTripsActions.updateTrip({ id, ...tripPayload })
+        : myTripsActions.addTrip(tripPayload)
     )
   }
 
@@ -73,8 +102,6 @@ const TripFormModal = () => {
     )
   }
 
-  const isOpen = useSelector(myTripsSelectors.getIsTripFormModalOpen)
-
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
   const tabs = [
     { id: 'info', title: 'Info', TabComponent: TripFormInfo },
@@ -88,6 +115,11 @@ const TripFormModal = () => {
   ]
   const isOnLastTab = selectedTabIndex === tabs.length - 1
 
+  const onModalExited = () => {
+    setSelectedTabIndex(0)
+    formMethods.reset()
+  }
+
   return (
     <Modal
       centered
@@ -95,7 +127,7 @@ const TripFormModal = () => {
       backdrop="static"
       show={isOpen}
       onHide={handleClose}
-      onExited={() => setSelectedTabIndex(0)}
+      onExited={onModalExited}
     >
       <FormProvider {...formMethods}>
         <Form
@@ -103,7 +135,7 @@ const TripFormModal = () => {
           onSubmit={formMethods.handleSubmit(onValidSubmit, onInvalidSubmit)}
         >
           <Modal.Header closeButton>
-            <Modal.Title>New Trip</Modal.Title>
+            <Modal.Title>{id ? 'Edit Trip' : 'New Trip'}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Tabs
