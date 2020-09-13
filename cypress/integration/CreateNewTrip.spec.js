@@ -1,7 +1,13 @@
+const VACATION_NAME = 'Vacation in Croatia'
+const START_DATE = '2020-06-01'
+const END_DATE = '2020-06-10'
+
 const input = (label, content) =>
   cy.findByLabelText(label).click({ force: true }).type(content)
 
-const clickLabel = (label) => cy.findByText(label).click()
+const clickButton = (label) => cy.findByText(label).click()
+
+const awaitModalOpen = () => cy.wait(500)
 
 describe('Create New Trip', () => {
   before(() => cy.login())
@@ -13,10 +19,11 @@ describe('Create New Trip', () => {
     cy.visit('http://localhost:3000/')
 
     cy.findByText(/add new trip/i).click()
+    awaitModalOpen()
 
-    input(/name/i, 'Vacation in Croatia')
-    input(/start date/i, '2020-06-01')
-    input(/end date/i, '2020-06-10')
+    input(/name/i, VACATION_NAME)
+    input(/start date/i, START_DATE)
+    input(/end date/i, END_DATE)
 
     cy.findByText('travel_partner_1').should('not', 'exist')
     input(/travel partners/i, 'travel_par{enter}')
@@ -27,7 +34,7 @@ describe('Create New Trip', () => {
     cy.findByText('category_1').should('exist')
     cy.findByText('category_3').should('exist')
 
-    clickLabel(/next/i)
+    clickButton(/next/i)
   })
 
   it('correctly fills in the Places tab', () => {
@@ -35,14 +42,14 @@ describe('Create New Trip', () => {
 
     input(/places/i, 'Rovinj{enter}')
 
-    clickLabel(/next/i)
+    clickButton(/next/i)
   })
 
   it('correctly fills in the Photos/Videos tab', () => {
-    clickLabel(/next/i)
+    clickButton(/next/i)
   })
   it('correctly fills in the Notes tab', () => {
-    clickLabel(/save/i)
+    clickButton(/save/i)
   })
 })
 
@@ -56,10 +63,9 @@ describe('My Trips', () => {
     cy.visit('http://localhost:3000/')
 
     cy.findByText(/my trips/i).click()
+    awaitModalOpen()
 
-    cy.wait(1000)
-
-    cy.findAllByText(/vacation in croatia/i).should('exist')
-    cy.findAllByText('2020-06-01 – 2020-06-10').should('exist')
+    cy.findAllByText(VACATION_NAME).should('exist')
+    cy.findAllByText(`${START_DATE} – ${END_DATE}`).should('exist')
   })
 })
