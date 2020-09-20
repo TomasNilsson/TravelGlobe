@@ -7,7 +7,11 @@ const LoginModal = () => (
   <Modal show centered size="lg" backdrop="static">
     <Modal.Body>
       <Jumbotron fluid className="mb-0">
-        <img src={travelGlobeImage} className="img-fluid" />
+        <img
+          src={travelGlobeImage}
+          className="img-fluid"
+          alt="TravelGlobe map"
+        />
         <Container className="text-center mt-3">
           <h1>Welcome to TravelGlobe!</h1>
           <p className="lead">
@@ -24,7 +28,7 @@ const LoginModal = () => (
             .
           </p>
           <a href="/auth/facebook">
-            <img src={facebookLogo} />
+            <img src={facebookLogo} alt="Log in with Facebook" />
           </a>
         </Container>
       </Jumbotron>

@@ -36,8 +36,7 @@ const PlacesLivedModal = ({ isLoggedIn }) => {
         </Button>
       ),
       events: {
-        onClick: (e, column, columnIndex, row, rowIndex) =>
-          setSelectedPlace(row.id),
+        onClick: (e, column, columnIndex, row) => setSelectedPlace(row.id),
       },
     },
     {
@@ -57,7 +56,7 @@ const PlacesLivedModal = ({ isLoggedIn }) => {
   return (
     <Modal centered size="xl" show={isOpen} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Places I've Lived</Modal.Title>
+        <Modal.Title>{"Places I've Lived"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <DataTable

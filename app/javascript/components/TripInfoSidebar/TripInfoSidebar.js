@@ -1,15 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import {
-  Modal,
-  Card,
-  Badge,
-  Container,
-  Row,
-  Col,
-  Image,
-  Button,
-} from 'react-bootstrap'
+import { Modal, Badge, Row, Col, Image, Button } from 'react-bootstrap'
 import { mapActions, myTripsActions } from '../../app/actions'
 import { myTripsSelectors } from '../../app/selectors'
 import styles from './TripInfoSidebar.module.scss'

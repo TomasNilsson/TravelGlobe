@@ -79,7 +79,7 @@ const NavigationHeader = ({ user, isLoggedIn }) => {
               <NavDropdown
                 title={
                   <span>
-                    <img src={user.image_url} /> {user.name}
+                    <img src={user.image_url} alt="User" /> {user.name}
                   </span>
                 }
                 id="nav-dropdown"
