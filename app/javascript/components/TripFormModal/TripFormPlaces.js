@@ -35,12 +35,12 @@ const TripFormPlaces = () => {
   }, [])
 
   return (
-    <Card.Body>
+    <Card.Body data-testid="placesTab">
       <Card.Title>Select Places</Card.Title>
       <Row>
         <Col md={8}>
           <Form.Group controlId={FIELD_NAMES.COUNTRIES}>
-            <Form.Label id="countriesOrStates">Countries/States</Form.Label>
+            <Form.Label>Countries/States</Form.Label>
             <InputGroup>
               <InputGroup.Prepend>
                 <InputGroup.Text>
@@ -62,7 +62,7 @@ const TripFormPlaces = () => {
                     styles.error,
                   ]
                 )}
-                aria-labelledby="countriesOrStates"
+                inputId={FIELD_NAMES.COUNTRIES}
               />
               <Form.Control.Feedback type="invalid">
                 {errors[FIELD_NAMES.COUNTRIES]?.message}
@@ -74,7 +74,7 @@ const TripFormPlaces = () => {
       <Row>
         <Col md={8}>
           <Form.Group controlId={FIELD_NAMES.PLACES}>
-            <Form.Label id="places">Places</Form.Label>
+            <Form.Label>Places</Form.Label>
             <InputGroup>
               <InputGroup.Prepend>
                 <InputGroup.Text>
@@ -86,7 +86,6 @@ const TripFormPlaces = () => {
                 onSelect={(location) => appendPlaces(location)}
                 clearAfterSelect
                 isInvalid={!!errors[FIELD_NAMES.PLACES]}
-                aria-labelledby="places"
               />
               <Form.Control.Feedback type="invalid">
                 {errors[FIELD_NAMES.PLACES]?.message}

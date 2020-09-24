@@ -67,7 +67,7 @@ const TripFormInfo = () => {
                       'form-control',
                       !!errors[FIELD_NAMES.START_DATE] && 'is-invalid'
                     )}
-                    id="startDate"
+                    id={FIELD_NAMES.START_DATE}
                   />
                 )}
               />
@@ -107,7 +107,7 @@ const TripFormInfo = () => {
                       'form-control',
                       !!errors[FIELD_NAMES.END_DATE] && 'is-invalid'
                     )}
-                    id="endDate"
+                    id={FIELD_NAMES.END_DATE}
                   />
                 )}
               />
@@ -121,7 +121,7 @@ const TripFormInfo = () => {
       <Row>
         <Col md={8}>
           <Form.Group controlId={FIELD_NAMES.TRAVEL_PARTNERS}>
-            <Form.Label id="travelPartners">Travel Partners</Form.Label>
+            <Form.Label>Travel Partners</Form.Label>
             <InputGroup>
               <InputGroup.Prepend>
                 <InputGroup.Text>
@@ -141,7 +141,7 @@ const TripFormInfo = () => {
                 isMulti
                 placeholder="Select from the list or create new"
                 className={styles.selectInput}
-                aria-labelledby="travelPartners"
+                inputId={FIELD_NAMES.TRAVEL_PARTNERS}
               />
             </InputGroup>
           </Form.Group>
@@ -150,7 +150,7 @@ const TripFormInfo = () => {
       <Row>
         <Col md={8}>
           <Form.Group controlId={FIELD_NAMES.CATEGORIES}>
-            <Form.Label id="categories">Categories</Form.Label>
+            <Form.Label>Categories</Form.Label>
             <InputGroup>
               <InputGroup.Prepend>
                 <InputGroup.Text>
@@ -170,7 +170,7 @@ const TripFormInfo = () => {
                 isMulti
                 placeholder="Select from the list or create new"
                 className={styles.selectInput}
-                aria-labelledby="categories"
+                inputId={FIELD_NAMES.CATEGORIES}
               />
             </InputGroup>
           </Form.Group>
