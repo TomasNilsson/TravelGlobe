@@ -50,5 +50,8 @@
   "lint-staged": {
     "*.js": "eslint --fix",
     "*.{js,scss,rb}": "prettier --write"
+  },
+  "scripts": {
+    "test:e2e": "cypress run"
   }
 }
