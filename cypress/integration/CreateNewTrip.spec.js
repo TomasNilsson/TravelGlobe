@@ -72,6 +72,6 @@ describe('My Trips', () => {
     awaitModalOpen()
 
     cy.findAllByText(VACATION_NAME).should('exist')
-    cy.findAllByText(`${START_DATE} – ${END_DATE}`).should('exist')
+    cy.findAllByText(`${START_DATE} - ${END_DATE}`).should('exist')
   })
 })
