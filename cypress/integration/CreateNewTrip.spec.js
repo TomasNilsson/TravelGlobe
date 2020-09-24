@@ -9,6 +9,8 @@ const clickButton = (label) => cy.findByText(label).click()
 
 const awaitModalOpen = () => cy.wait(500)
 
+const awaitApi = () => cy.wait(1000)
+
 describe('Create New Trip', () => {
   before(() => cy.login())
   beforeEach(() => {
@@ -41,6 +43,10 @@ describe('Create New Trip', () => {
     input(/countries\/states/i, 'Croatia{enter}')
 
     input(/places/i, 'Rovinj{enter}')
+    awaitApi()
+
+    cy.findByTestId('placesTab').findByText('Croatia').should('exist')
+    cy.findByTestId('placesTab').findByText('Rovinj').should('exist')
 
     clickButton(/next/i)
   })
