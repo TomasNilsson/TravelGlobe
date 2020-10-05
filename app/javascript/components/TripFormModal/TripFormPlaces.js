@@ -35,7 +35,7 @@ const TripFormPlaces = () => {
   }, [])
 
   return (
-    <Card.Body>
+    <Card.Body data-testid="placesTab">
       <Card.Title>Select Places</Card.Title>
       <Row>
         <Col md={8}>
@@ -62,6 +62,7 @@ const TripFormPlaces = () => {
                     styles.error,
                   ]
                 )}
+                inputId={FIELD_NAMES.COUNTRIES}
               />
               <Form.Control.Feedback type="invalid">
                 {errors[FIELD_NAMES.COUNTRIES]?.message}

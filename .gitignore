@@ -28,3 +28,5 @@ config/secrets.yml
 config/application.yml
 config/cloudinary.yml
 .env
+
+cypress.env.json

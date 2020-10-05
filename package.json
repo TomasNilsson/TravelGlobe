@@ -28,7 +28,9 @@
   },
   "devDependencies": {
     "@prettier/plugin-ruby": "^0.20.1",
+    "@testing-library/cypress": "^7.0.0",
     "babel-plugin-transform-imports": "^2.0.0",
+    "cypress": "^5.0.0",
     "dotenv": "^8.2.0",
     "eslint": "^7.9.0",
     "eslint-config-prettier": "^6.11.0",
@@ -48,5 +50,8 @@
   "lint-staged": {
     "*.js": "eslint --fix",
     "*.{js,scss,rb}": "prettier --write"
+  },
+  "scripts": {
+    "test:e2e": "cypress run"
   }
 }

@@ -67,6 +67,7 @@ const TripFormInfo = () => {
                       'form-control',
                       !!errors[FIELD_NAMES.START_DATE] && 'is-invalid'
                     )}
+                    id={FIELD_NAMES.START_DATE}
                   />
                 )}
               />
@@ -106,6 +107,7 @@ const TripFormInfo = () => {
                       'form-control',
                       !!errors[FIELD_NAMES.END_DATE] && 'is-invalid'
                     )}
+                    id={FIELD_NAMES.END_DATE}
                   />
                 )}
               />
@@ -139,6 +141,7 @@ const TripFormInfo = () => {
                 isMulti
                 placeholder="Select from the list or create new"
                 className={styles.selectInput}
+                inputId={FIELD_NAMES.TRAVEL_PARTNERS}
               />
             </InputGroup>
           </Form.Group>
@@ -167,6 +170,7 @@ const TripFormInfo = () => {
                 isMulti
                 placeholder="Select from the list or create new"
                 className={styles.selectInput}
+                inputId={FIELD_NAMES.CATEGORIES}
               />
             </InputGroup>
           </Form.Group>
