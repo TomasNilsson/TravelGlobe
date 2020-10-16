@@ -1,9 +1,7 @@
 class PlaceLivedSerializer < ActiveModel::Serializer
-  attributes :id, :address, :country, :latitude, :longitude, :date
+  attributes :id, :address, :latitude, :longitude, :startDate, :endDate
 
-  def country
-    object.country.name
-  end
+  belongs_to :country
 
   def latitude
     object.latitude.to_f
@@ -11,5 +9,13 @@ class PlaceLivedSerializer < ActiveModel::Serializer
 
   def longitude
     object.longitude.to_f
+  end
+
+  def startDate
+    object.start_date.strftime('%Y-%m-%d')
+  end
+
+  def endDate
+    object.end_date.blank? ? '' : object.end_date.strftime('%Y-%m-%d')
   end
 end

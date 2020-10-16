@@ -7,6 +7,8 @@ export const TYPES = {
   SHOW_PLACES_LIVED_FORM: 'placesLived/SHOW_PLACES_LIVED_FORM',
   TOGGLE_PLACES_LIVED_MODAL: 'placesLived/TOGGLE_PLACES_LIVED_MODAL',
   TOGGLE_PLACES_LIVED_FORM_MODAL: 'placesLived/TOGGLE_PLACES_LIVED_FORM_MODAL',
+  UPDATE_PLACE_LIVED: 'placesLived/UPDATE_PLACE_LIVED',
+  UPDATE_PLACE_LIVED_SUCCESS: 'placesLived/UPDATE_PLACE_LIVED_SUCCESS',
 }
 
 export const addPlaceLived = (place) => ({
@@ -44,4 +46,14 @@ export const togglePlacesLivedModal = () => ({
 
 export const togglePlaceLivedFormModal = () => ({
   type: TYPES.TOGGLE_PLACES_LIVED_FORM_MODAL,
+})
+
+export const updatePlaceLived = (place) => ({
+  type: TYPES.UPDATE_PLACE_LIVED,
+  payload: place,
+})
+
+export const updatePlaceLivedSuccess = (place) => ({
+  type: TYPES.UPDATE_PLACE_LIVED_SUCCESS,
+  payload: place,
 })

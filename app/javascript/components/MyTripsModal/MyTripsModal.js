@@ -105,7 +105,7 @@ const MyTripsModal = ({ isLoggedIn }) => {
           Close
         </Button>
         {isLoggedIn && (
-          <Button variant="primary" onClick={showTripForm}>
+          <Button variant="primary" onClick={() => showTripForm()}>
             Add New Trip
           </Button>
         )}

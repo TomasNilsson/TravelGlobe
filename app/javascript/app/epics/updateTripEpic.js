@@ -2,7 +2,7 @@ import { ofType } from 'redux-observable'
 import { mergeMap, map } from 'rxjs/operators'
 import { myTripsActions } from '../actions'
 
-const createTripEpic = (action$, state$, { ajax }) =>
+const updateTripEpic = (action$, state$, { ajax }) =>
   action$.pipe(
     ofType(myTripsActions.TYPES.UPDATE_TRIP),
     mergeMap(({ payload: trip }) =>
@@ -24,4 +24,4 @@ const createTripEpic = (action$, state$, { ajax }) =>
     )
   )
 
-export default createTripEpic
+export default updateTripEpic

@@ -7,6 +7,7 @@ import fetchMyTripsEpic from './fetchMyTripsEpic'
 import fetchPlacesLivedEpic from './fetchPlacesLivedEpic'
 import fetchStatisticsEpic from './fetchStatisticsEpic'
 import fetchTripInfoEpic from './fetchTripInfoEpic'
+import updatePlaceLivedEpic from './updatePlaceLivedEpic'
 import updateTripEpic from './updateTripEpic'
 
 const rootEpic = combineEpics(
@@ -18,6 +19,7 @@ const rootEpic = combineEpics(
   fetchPlacesLivedEpic,
   fetchStatisticsEpic,
   fetchTripInfoEpic,
+  updatePlaceLivedEpic,
   updateTripEpic
 )
 

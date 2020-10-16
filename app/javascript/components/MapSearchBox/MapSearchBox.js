@@ -7,6 +7,7 @@ import styles from './MapSearchBox.module.scss'
 
 const MapSearchBox = ({
   placeholder = 'Search',
+  defaultValue,
   onSelect,
   clearAfterSelect = false,
   isInvalid = false,
@@ -60,6 +61,7 @@ const MapSearchBox = ({
       type="text"
       className={styles.searchBox}
       placeholder={placeholder}
+      defaultValue={defaultValue}
       isInvalid={isInvalid}
     />
   )

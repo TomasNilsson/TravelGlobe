@@ -7,7 +7,7 @@ import { Modal, Form, Row, Col, InputGroup, Button } from 'react-bootstrap'
 import { FaGlobeEurope, FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa'
 import Select from 'react-select'
 import DatePicker from 'react-datepicker'
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import classNames from 'classnames'
 import MapSearchBox from '../MapSearchBox'
 import { FIELD_NAMES } from './constants'
@@ -37,6 +37,8 @@ const PlaceLivedFormModal = () => {
   const handleClose = () =>
     dispatch(placesLivedActions.togglePlaceLivedFormModal())
   const isOpen = useSelector(placesLivedSelectors.getIsPlaceLivedFormModalOpen)
+  const { id, country, address, latitude, longitude, startDate, endDate } =
+    useSelector(placesLivedSelectors.getPlaceInfoForSelectedId) || {}
 
   useEffect(() => {
     dispatch(mapActions.fetchCountries())
@@ -52,15 +54,35 @@ const PlaceLivedFormModal = () => {
     resolver: yupResolver(formSchema),
   })
 
+  useEffect(() => {
+    if (id) {
+      // Set default values for form when editing a place
+      reset({
+        [FIELD_NAMES.COUNTRY]: {
+          value: country.id,
+          label: country.name,
+        },
+        [FIELD_NAMES.ADDRESS]: address,
+        [FIELD_NAMES.LATITUDE]: latitude,
+        [FIELD_NAMES.LONGITUDE]: longitude,
+        [FIELD_NAMES.START_DATE]: parseISO(startDate),
+        [FIELD_NAMES.END_DATE]: endDate ? parseISO(endDate) : null,
+      })
+    }
+  }, [id])
+
   const onSubmit = (placeData) => {
-    console.log(placeData)
     const placePayload = {
       ...placeData,
       country_id: placeData[FIELD_NAMES.COUNTRY].value,
       start_date: format(placeData[FIELD_NAMES.START_DATE], 'yyyy-MM-dd'),
       end_date: format(placeData[FIELD_NAMES.END_DATE], 'yyyy-MM-dd'),
     }
-    dispatch(placesLivedActions.addPlaceLived(placePayload))
+    dispatch(
+      id
+        ? placesLivedActions.updatePlaceLived({ id, ...placePayload })
+        : placesLivedActions.addPlaceLived(placePayload)
+    )
   }
 
   const setAddress = (location) => {
@@ -84,7 +106,9 @@ const PlaceLivedFormModal = () => {
     >
       <Form noValidate onSubmit={handleSubmit(onSubmit)}>
         <Modal.Header closeButton>
-          <Modal.Title>{"New Place I've Lived"}</Modal.Title>
+          <Modal.Title>
+            {id ? "Edit Place I've Lived" : "New Place I've Lived"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Row>
@@ -101,7 +125,7 @@ const PlaceLivedFormModal = () => {
                     as={Select}
                     name={FIELD_NAMES.COUNTRY}
                     control={control}
-                    defaultValue={[]}
+                    defaultValue={{}}
                     options={countries}
                     placeholder="Select a country"
                     className={classNames(
@@ -131,6 +155,7 @@ const PlaceLivedFormModal = () => {
                   </InputGroup.Prepend>
                   <MapSearchBox
                     placeholder="Enter a location"
+                    defaultValue={address}
                     onSelect={setAddress}
                     isInvalid={!!errors[FIELD_NAMES.ADDRESS]}
                   />

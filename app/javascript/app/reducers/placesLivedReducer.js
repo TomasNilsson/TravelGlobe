@@ -39,6 +39,15 @@ const placesLivedReducer = (state = initialState, { type, payload }) => {
         ...state,
         isPlaceLivedFormModalOpen: !state.isPlaceLivedFormModalOpen,
       }
+    case TYPES.UPDATE_PLACE_LIVED_SUCCESS:
+      return {
+        ...state,
+        places: state.places.map((place) => ({
+          ...place,
+          ...(place.id === payload.id && payload),
+        })),
+        isPlaceLivedFormModalOpen: false,
+      }
     default:
       return state
   }

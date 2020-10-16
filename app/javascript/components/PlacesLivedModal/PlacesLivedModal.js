@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap'
+import { FaEdit } from 'react-icons/fa'
 import DataTable from '../DataTable'
 import { placesLivedActions } from '../../app/actions'
 import { placesLivedSelectors } from '../../app/selectors'
@@ -25,26 +26,46 @@ const PlacesLivedModal = ({ isLoggedIn }) => {
     },
     {
       dataField: 'date',
+      isDummyField: true,
       text: 'Date',
       sort: true,
+      formatter: (cell, row) => `${row.startDate} - ${row.endDate}`,
+      sortValue: (cell, row) => `${row.startDate} - ${row.endDate}`,
     },
     {
       dataField: 'address',
       text: 'Address',
       sort: true,
-      formatter: (cell) => (
-        <Button variant="link" className="p-0">
+      formatter: (cell, row) => (
+        <Button
+          variant="link"
+          className="p-0"
+          onClick={() => setSelectedPlace(row.id)}
+        >
           {cell}
         </Button>
       ),
-      events: {
-        onClick: (e, column, columnIndex, row) => setSelectedPlace(row.id),
-      },
     },
     {
       dataField: 'country',
       text: 'Country/State',
       sort: true,
+      formatter: (country) => country && country.name,
+      sortValue: (country) => country && country.name,
+    },
+    {
+      dataField: 'actions',
+      isDummyField: true,
+      text: 'Actions',
+      formatter: (cell, row) => (
+        <Button
+          variant="link"
+          className="p-0"
+          onClick={() => showPlaceLivedForm(row.id)}
+        >
+          <FaEdit />
+        </Button>
+      ),
     },
   ]
 
@@ -73,7 +94,7 @@ const PlacesLivedModal = ({ isLoggedIn }) => {
           Close
         </Button>
         {isLoggedIn && (
-          <Button variant="primary" onClick={showPlaceLivedForm}>
+          <Button variant="primary" onClick={() => showPlaceLivedForm()}>
             Add New Place
           </Button>
         )}
