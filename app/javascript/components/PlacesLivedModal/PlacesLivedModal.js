@@ -12,6 +12,8 @@ const PlacesLivedModal = ({ isLoggedIn }) => {
   const setSelectedPlace = (placeId) => {
     dispatch(placesLivedActions.setSelectedPlaceId(placeId))
   }
+  const showPlaceLivedForm = (placeId) =>
+    dispatch(placesLivedActions.showPlaceLivedForm(placeId))
 
   const isOpen = useSelector(placesLivedSelectors.getIsPlacesLivedModalOpen)
   const placesLived = useSelector(placesLivedSelectors.getPlacesLived)
@@ -71,7 +73,7 @@ const PlacesLivedModal = ({ isLoggedIn }) => {
           Close
         </Button>
         {isLoggedIn && (
-          <Button variant="primary" onClick={() => null}>
+          <Button variant="primary" onClick={showPlaceLivedForm}>
             Add New Place
           </Button>
         )}

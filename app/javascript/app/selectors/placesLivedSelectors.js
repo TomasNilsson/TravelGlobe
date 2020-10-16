@@ -12,4 +12,7 @@ export const getPlaceInfoForSelectedId = (state) =>
   getPlaceInfoById(state, getSelectedPlaceId(state))
 
 export const getIsPlacesLivedModalOpen = (state) =>
-  getPlacesLivedState(state).isModalOpen
+  getPlacesLivedState(state).isPlacesLivedModalOpen
+
+export const getIsPlaceLivedFormModalOpen = (state) =>
+  getPlacesLivedState(state).isPlaceLivedFormModalOpen

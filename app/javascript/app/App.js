@@ -7,7 +7,9 @@ import { userActions } from './actions'
 import NavigationHeader from '../components/NavigationHeader'
 import Map from '../components/Map'
 import LoginModal from '../components/LoginModal'
+import TripFormModal from '../components/TripFormModal'
 import MyTripsModal from '../components/MyTripsModal'
+import PlaceLivedFormModal from '../components/PlaceLivedFormModal'
 import PlacesLivedModal from '../components/PlacesLivedModal'
 import StatisticsModal from '../components/StatisticsModal'
 import TripInfoSidebar from '../components/TripInfoSidebar'
@@ -16,7 +18,6 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css'
 import 'react-datepicker/dist/react-datepicker.css'
 import styles from './App.module.scss'
-import TripFormModal from '../components/TripFormModal'
 
 const store = configureStore()
 
@@ -39,6 +40,7 @@ const App = ({ user, isLoggedIn }) => {
           <>
             {isLoggedIn && <TripFormModal />}
             <MyTripsModal isLoggedIn={isLoggedIn} />
+            {isLoggedIn && <PlaceLivedFormModal />}
             <PlacesLivedModal isLoggedIn={isLoggedIn} />
             <StatisticsModal />
             <TripInfoSidebar />

@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Form } from 'react-bootstrap'
 import { mapSelectors } from '../../app/selectors'
+import getAddressString from './getAddressString'
 import styles from './MapSearchBox.module.scss'
 
 const MapSearchBox = ({
@@ -28,12 +29,19 @@ const MapSearchBox = ({
       if (places.length > 0) {
         const {
           name,
+          address_components: addressComponents,
+          formatted_address: formattedAddress,
           geometry: { location },
         } = places[0]
 
         if (typeof onSelect === 'function') {
           const { lat: latitude, lng: longitude } = location.toJSON()
-          onSelect({ name, latitude, longitude })
+          onSelect({
+            name,
+            address: getAddressString(addressComponents, formattedAddress),
+            latitude,
+            longitude,
+          })
         }
 
         // Remove focus from the search box
