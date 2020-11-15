@@ -52,7 +52,7 @@ const StatisticsModal = () => {
           <Card.Header as="h5">Top 10 Travel Partners:</Card.Header>
           <ListGroup as="ol" variant="flush">
             {travelPartnersTopList.map(({ name, tripCount }, i) => (
-              <ListGroup.Item as="li" key={name}>
+              <ListGroup.Item as="li" className="py-1" key={name}>
                 <Badge pill variant="dark" className="mr-2">
                   {i + 1}
                 </Badge>
@@ -63,7 +63,7 @@ const StatisticsModal = () => {
         </Card>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button variant="outline-secondary" onClick={handleClose}>
           Close
         </Button>
       </Modal.Footer>

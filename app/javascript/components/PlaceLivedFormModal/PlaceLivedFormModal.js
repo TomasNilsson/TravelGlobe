@@ -263,7 +263,7 @@ const PlaceLivedFormModal = () => {
           </Row>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="outline-secondary" onClick={handleClose}>
             Close
           </Button>
           <Button variant="primary" type="submit">

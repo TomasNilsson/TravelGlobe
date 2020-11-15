@@ -101,7 +101,7 @@ const MyTripsModal = ({ isLoggedIn }) => {
         />
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button variant="outline-secondary" onClick={handleClose}>
           Close
         </Button>
         {isLoggedIn && (

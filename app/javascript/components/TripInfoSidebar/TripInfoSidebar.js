@@ -51,6 +51,7 @@ const TripInfoSidebar = () => {
       scrollable
       backdrop={false}
       dialogClassName={styles.modalLeftSidebar}
+      contentClassName={styles.modalContent}
       show={isOpen}
       onHide={handleClose}
       onExit={removeMarkers}
@@ -87,7 +88,7 @@ const TripInfoSidebar = () => {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button variant="outline-secondary" onClick={handleClose}>
           Close
         </Button>
       </Modal.Footer>

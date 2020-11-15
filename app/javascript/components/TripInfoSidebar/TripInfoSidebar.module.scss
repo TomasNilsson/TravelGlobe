@@ -13,6 +13,10 @@
       margin: 0;
     }
 
+    .modalContent {
+      height: inherit;
+    }
+
     .modalWrapper {
       width: 0; // To allow map interaction when sidebar is open
     }

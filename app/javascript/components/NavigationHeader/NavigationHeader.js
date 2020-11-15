@@ -1,5 +1,5 @@
 import React from 'react'
-import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
+import { Navbar, Nav, NavDropdown, Image } from 'react-bootstrap'
 import {
   FaPlaneDeparture,
   FaGlobeEurope,
@@ -11,6 +11,7 @@ import {
   FaUserPlus,
 } from 'react-icons/fa'
 import { useDispatch } from 'react-redux'
+import styles from './NavigationHeader.module.scss'
 import {
   myTripsActions,
   placesLivedActions,
@@ -56,8 +57,10 @@ const NavigationHeader = ({ user, isLoggedIn }) => {
     : [{ text: 'Create your own TravelGlobe', href: '/', icon: FaUserPlus }]
 
   return (
-    <Navbar fixed="top" bg="dark" variant="dark" expand="lg">
-      <Navbar.Brand href="/">TravelGlobe</Navbar.Brand>
+    <Navbar fixed="top" bg="dark" variant="dark" expand="lg" className="py-0">
+      <Navbar.Brand href="/" className={styles.travelGlobeLogo}>
+        TravelGlobe
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto" as="ul">
@@ -78,12 +81,14 @@ const NavigationHeader = ({ user, isLoggedIn }) => {
             <Nav.Item as="li">
               <NavDropdown
                 title={
-                  <span>
-                    <img src={user.image_url} alt="User" /> {user.name}
-                  </span>
+                  <>
+                    <Image src={user.imageUrl} roundedCircle alt="User" />{' '}
+                    {user.name}
+                  </>
                 }
                 id="nav-dropdown"
                 alignRight
+                className="pb-2 pb-lg-0"
               >
                 {dropdownLinks.map(({ text, href, icon: LinkIcon }) => (
                   <NavDropdown.Item key={text} href={href}>
