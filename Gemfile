@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '6.0.2.2'
+gem 'rails', '~> 6.1.3'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'
 # Use Webpacker as JavaScript compiler. Read more: https://github.com/rails/webpacker
@@ -14,11 +14,9 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails'
 
 # Use Active Model Serializers to control JSON generation
-gem 'active_model_serializers', '~> 0.10.0'
+gem 'active_model_serializers', '~> 0.10.12'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0'
-# bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0', group: :doc
+gem 'jbuilder', '~> 2.11'
 
 # Use Bootstrap
 gem 'bootstrap-sass', '~> 3.4.1'
@@ -28,6 +26,7 @@ gem 'bootstrap-datepicker-rails'
 gem 'jwt'
 # Use Facebook authentication
 gem 'omniauth-facebook'
+gem 'omniauth-rails_csrf_protection'
 # Koala is a Facebook library for Ruby, supporting e.g. the Graph API 
 gem "koala", "~> 2.2"
 
