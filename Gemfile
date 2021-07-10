@@ -42,9 +42,6 @@ gem "cocoon"
 # Use Cloudinary to upload images to the cloud
 gem 'cloudinary'
 
-# Use HasSecureToken to generate unique random tokens 
-gem 'has_secure_token'
-
 # Use ValidatesTimeliness to validate dates, times and datetimes
 gem 'validates_timeliness', '~> 4.0'
 
