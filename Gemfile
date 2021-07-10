@@ -86,5 +86,5 @@ end
 
 group :production do
   # Use mysql2 as the database for production
-  gem 'mysql2', '~> 0.4.0'
+  gem "mysql2", "~> 0.5"
 end
