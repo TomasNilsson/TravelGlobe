@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers'
+import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Modal, Form, Row, Col, InputGroup, Button } from 'react-bootstrap'
 import { FaGlobeEurope, FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa'
@@ -49,7 +49,14 @@ const PlaceLivedFormModal = () => {
     label: country.name,
   }))
 
-  const { register, control, setValue, handleSubmit, errors, reset } = useForm({
+  const {
+    register,
+    control,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
     mode: 'onBlur', // Validation will trigger on the blur event.
     resolver: yupResolver(formSchema),
   })
@@ -122,18 +129,22 @@ const PlaceLivedFormModal = () => {
                     </InputGroup.Text>
                   </InputGroup.Prepend>
                   <Controller
-                    as={Select}
                     name={FIELD_NAMES.COUNTRY}
                     control={control}
                     defaultValue={{}}
-                    options={countries}
-                    placeholder="Select a country"
-                    className={classNames(
-                      styles.selectInput,
-                      !!errors[FIELD_NAMES.COUNTRY] && [
-                        'is-invalid',
-                        styles.error,
-                      ]
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={countries}
+                        placeholder="Select a country"
+                        className={classNames(
+                          styles.selectInput,
+                          !!errors[FIELD_NAMES.COUNTRY] && [
+                            'is-invalid',
+                            styles.error,
+                          ]
+                        )}
+                      />
                     )}
                   />
                   <Form.Control.Feedback type="invalid">
@@ -164,20 +175,11 @@ const PlaceLivedFormModal = () => {
                   </Form.Control.Feedback>
                 </InputGroup>
               </Form.Group>
+              <Form.Control type="hidden" {...register(FIELD_NAMES.ADDRESS)} />
+              <Form.Control type="hidden" {...register(FIELD_NAMES.LATITUDE)} />
               <Form.Control
                 type="hidden"
-                name={FIELD_NAMES.ADDRESS}
-                ref={register}
-              />
-              <Form.Control
-                type="hidden"
-                name={FIELD_NAMES.LATITUDE}
-                ref={register}
-              />
-              <Form.Control
-                type="hidden"
-                name={FIELD_NAMES.LONGITUDE}
-                ref={register}
+                {...register(FIELD_NAMES.LONGITUDE)}
               />
             </Col>
           </Row>
@@ -195,7 +197,7 @@ const PlaceLivedFormModal = () => {
                     name={FIELD_NAMES.START_DATE}
                     control={control}
                     defaultValue={null}
-                    render={({ onChange, onBlur, value }) => (
+                    render={({ field: { onChange, onBlur, value } }) => (
                       <DatePicker
                         onChange={onChange}
                         onBlur={onBlur}
@@ -234,7 +236,7 @@ const PlaceLivedFormModal = () => {
                     name={FIELD_NAMES.END_DATE}
                     control={control}
                     defaultValue={null}
-                    render={({ onChange, onBlur, value }) => (
+                    render={({ field: { onChange, onBlur, value } }) => (
                       <DatePicker
                         onChange={onChange}
                         onBlur={onBlur}

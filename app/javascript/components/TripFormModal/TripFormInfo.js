@@ -9,7 +9,11 @@ import { FIELD_NAMES } from './constants'
 import styles from './TripForm.module.scss'
 
 const TripFormInfo = () => {
-  const { register, errors, control } = useFormContext()
+  const {
+    register,
+    formState: { errors },
+    control,
+  } = useFormContext()
   return (
     <Card.Body>
       <Card.Title>Trip Info</Card.Title>
@@ -25,8 +29,7 @@ const TripFormInfo = () => {
               </InputGroup.Prepend>
               <Form.Control
                 placeholder="E.g. California Road Trip"
-                name={FIELD_NAMES.NAME}
-                ref={register}
+                {...register(FIELD_NAMES.NAME)}
                 isInvalid={!!errors[FIELD_NAMES.NAME]}
               />
               <Form.Control.Feedback type="invalid">
@@ -50,7 +53,7 @@ const TripFormInfo = () => {
                 name={FIELD_NAMES.START_DATE}
                 control={control}
                 defaultValue={null}
-                render={({ onChange, onBlur, value }) => (
+                render={({ field: { onChange, onBlur, value } }) => (
                   <DatePicker
                     onChange={onChange}
                     onBlur={onBlur}
@@ -90,7 +93,7 @@ const TripFormInfo = () => {
                 name={FIELD_NAMES.END_DATE}
                 control={control}
                 defaultValue={null}
-                render={({ onChange, onBlur, value }) => (
+                render={({ field: { onChange, onBlur, value } }) => (
                   <DatePicker
                     onChange={onChange}
                     onBlur={onBlur}
@@ -129,19 +132,23 @@ const TripFormInfo = () => {
                 </InputGroup.Text>
               </InputGroup.Prepend>
               <Controller
-                as={CreatableSelect}
                 name={FIELD_NAMES.TRAVEL_PARTNERS}
                 control={control}
                 defaultValue={[]}
-                options={[
-                  { value: 'Travel Partner 1', label: 'travel_partner_1' },
-                  { value: 'Travel Partner 2', label: 'travel_partner_2' },
-                  { value: 'Travel Partner 3', label: 'travel_partner_3' },
-                ]}
-                isMulti
-                placeholder="Select from the list or create new"
-                className={styles.selectInput}
-                inputId={FIELD_NAMES.TRAVEL_PARTNERS}
+                render={({ field }) => (
+                  <CreatableSelect
+                    {...field}
+                    options={[
+                      { value: 'Travel Partner 1', label: 'travel_partner_1' },
+                      { value: 'Travel Partner 2', label: 'travel_partner_2' },
+                      { value: 'Travel Partner 3', label: 'travel_partner_3' },
+                    ]}
+                    isMulti
+                    placeholder="Select from the list or create new"
+                    className={styles.selectInput}
+                    inputId={FIELD_NAMES.TRAVEL_PARTNERS}
+                  />
+                )}
               />
             </InputGroup>
           </Form.Group>
@@ -158,19 +165,23 @@ const TripFormInfo = () => {
                 </InputGroup.Text>
               </InputGroup.Prepend>
               <Controller
-                as={CreatableSelect}
                 name={FIELD_NAMES.CATEGORIES}
                 control={control}
                 defaultValue={[]}
-                options={[
-                  { value: 'Category 1', label: 'category_1' },
-                  { value: 'Category 2', label: 'category_2' },
-                  { value: 'Category 3', label: 'category_3' },
-                ]}
-                isMulti
-                placeholder="Select from the list or create new"
-                className={styles.selectInput}
-                inputId={FIELD_NAMES.CATEGORIES}
+                render={({ field }) => (
+                  <CreatableSelect
+                    {...field}
+                    options={[
+                      { value: 'Category 1', label: 'category_1' },
+                      { value: 'Category 2', label: 'category_2' },
+                      { value: 'Category 3', label: 'category_3' },
+                    ]}
+                    isMulti
+                    placeholder="Select from the list or create new"
+                    className={styles.selectInput}
+                    inputId={FIELD_NAMES.CATEGORIES}
+                  />
+                )}
               />
             </InputGroup>
           </Form.Group>

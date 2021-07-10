@@ -12,7 +12,12 @@ import styles from './TripForm.module.scss'
 import { mapActions } from '../../app/actions'
 
 const TripFormPlaces = () => {
-  const { register, trigger, errors, control } = useFormContext()
+  const {
+    register,
+    trigger,
+    formState: { errors },
+    control,
+  } = useFormContext()
   const { fields: places, append: appendPlaces } = useFieldArray({
     control,
     name: FIELD_NAMES.PLACES,
@@ -48,21 +53,25 @@ const TripFormPlaces = () => {
                 </InputGroup.Text>
               </InputGroup.Prepend>
               <Controller
-                as={Select}
                 name={FIELD_NAMES.COUNTRIES}
                 control={control}
                 defaultValue={[]}
-                options={countries}
-                isMulti
-                placeholder="Select one or many countries/states"
-                className={classNames(
-                  styles.selectInput,
-                  !!errors[FIELD_NAMES.COUNTRIES] && [
-                    'is-invalid',
-                    styles.error,
-                  ]
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    options={countries}
+                    isMulti
+                    placeholder="Select one or many countries/states"
+                    className={classNames(
+                      styles.selectInput,
+                      !!errors[FIELD_NAMES.COUNTRIES] && [
+                        'is-invalid',
+                        styles.error,
+                      ]
+                    )}
+                    inputId={FIELD_NAMES.COUNTRIES}
+                  />
                 )}
-                inputId={FIELD_NAMES.COUNTRIES}
               />
               <Form.Control.Feedback type="invalid">
                 {errors[FIELD_NAMES.COUNTRIES]?.message}
@@ -100,26 +109,22 @@ const TripFormPlaces = () => {
             {place.name}
             <Form.Control
               type="hidden"
-              name={`places[${index}].id`}
-              ref={register()}
+              {...register(`places[${index}].id`)}
               defaultValue={place.id}
             />
             <Form.Control
               type="hidden"
-              name={`places[${index}].name`}
-              ref={register()}
+              {...register(`places[${index}].name`)}
               defaultValue={place.name}
             />
             <Form.Control
               type="hidden"
-              name={`places[${index}].latitude`}
-              ref={register()}
+              {...register(`places[${index}].latitude`)}
               defaultValue={place.latitude}
             />
             <Form.Control
               type="hidden"
-              name={`places[${index}].longitude`}
-              ref={register()}
+              {...register(`places[${index}].longitude`)}
               defaultValue={place.longitude}
             />
           </ListGroup.Item>
