@@ -1,7 +1,6 @@
 class SessionsController < ApplicationController
-  
   def create
-    user = User.from_omniauth(request.env["omniauth.auth"])
+    user = User.from_omniauth(request.env['omniauth.auth'])
     cookies[:jwt] = { value: JsonWebToken.encode(sub: user.id), httponly: true }
     session[:user_id] = user.id # Only needed for old version
     redirect_to root_url
@@ -16,7 +15,6 @@ class SessionsController < ApplicationController
   end
 
   def failure
-    redirect_to root_url, alert: "Facebook login failed"
+    redirect_to root_url, alert: 'Facebook login failed'
   end
-
 end
