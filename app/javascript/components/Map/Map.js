@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import GoogleMap from 'google-map-react'
 import { GoogleMapsOverlay as DeckOverlay } from '@deck.gl/google-maps'
@@ -17,9 +17,11 @@ const US_STATES_GEOJSON_URL =
 const ZOOM_LEVEL_SHOW_DETAILS = 7
 
 const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
-  const [mapInstance, setMapInstance] = useState(null)
-  const [mapsApi, setMapsApi] = useState(null)
+  const mapRef = useRef()
+  const mapsApiRef = useRef()
+  const overlayRef = useRef()
 
+  const isMapsApiLoaded = useSelector(mapSelectors.getIsMapsApiLoaded)
   const visitedCountries = useSelector(mapSelectors.getVisitedCountries)
   const placesLived = useSelector(placesLivedSelectors.getPlacesLived)
   const selectedPlaceLived = useSelector(
@@ -34,57 +36,66 @@ const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
     )
 
   useEffect(() => {
+    // Show overlay with visited countries colored
+    if (visitedCountries?.length > 0 && isMapsApiLoaded) {
+      if (overlayRef.current) {
+        // Remove old overlay and release all underlying resources
+        overlayRef.current.finalize()
+      }
+      overlayRef.current = new DeckOverlay({
+        layers: [
+          new GeoJsonLayer({
+            id: 'countries',
+            data: COUNTRIES_GEOJSON_URL,
+            dataTransform: (data) => {
+              return data.features.filter((country) =>
+                visitedCountries.includes(country.properties.iso_a2)
+              )
+            },
+            getFillColor: [0, 255, 0, 100],
+          }),
+          new GeoJsonLayer({
+            id: 'states',
+            data: US_STATES_GEOJSON_URL,
+            dataTransform: (data) =>
+              data.features.filter((state) =>
+                visitedCountries.includes(state.properties.iso_3166_2)
+              ),
+            getFillColor: [0, 255, 0, 100],
+          }),
+        ],
+      })
+      overlayRef.current.setMap(mapRef.current)
+    }
+  }, [visitedCountries, isMapsApiLoaded])
+
+  useEffect(() => {
     // Adjust the map position and zoom level to show all markers
-    if (markers.length > 0 && mapsApi && mapInstance) {
-      const bounds = new mapsApi.LatLngBounds()
+    if (markers.length > 0 && mapsApiRef.current && mapRef.current) {
+      const bounds = new mapsApiRef.current.LatLngBounds()
       markers.forEach(({ lat, lng }) => bounds.extend({ lat, lng }))
-      mapInstance.fitBounds(bounds, 150)
-      if (mapInstance.getZoom() > ZOOM_LEVEL_SHOW_DETAILS) {
-        mapInstance.setZoom(ZOOM_LEVEL_SHOW_DETAILS)
+      mapRef.current.fitBounds(bounds, 150)
+      if (mapRef.current.getZoom() > ZOOM_LEVEL_SHOW_DETAILS) {
+        mapRef.current.setZoom(ZOOM_LEVEL_SHOW_DETAILS)
       }
     }
   }, [markers])
 
   useEffect(() => {
     // Adjust the map position and zoom level to show selected place
-    if (selectedPlaceLived && mapInstance) {
-      mapInstance.setCenter({
+    if (selectedPlaceLived && mapRef.current) {
+      mapRef.current.setCenter({
         lat: selectedPlaceLived.latitude,
         lng: selectedPlaceLived.longitude,
       })
-      mapInstance.setZoom(ZOOM_LEVEL_SHOW_DETAILS)
+      mapRef.current.setZoom(ZOOM_LEVEL_SHOW_DETAILS)
     }
   }, [selectedPlaceLived])
 
   const handleApiLoaded = (map, maps) => {
-    setMapInstance(map)
-    setMapsApi(maps)
+    mapRef.current = map
+    mapsApiRef.current = maps
     dispatch(mapActions.mapsApiLoaded())
-
-    const deckOverlay = new DeckOverlay({
-      layers: [
-        new GeoJsonLayer({
-          id: 'countries',
-          data: COUNTRIES_GEOJSON_URL,
-          dataTransform: (data) =>
-            data.features.filter((country) =>
-              visitedCountries.includes(country.properties.iso_a2)
-            ),
-          getFillColor: [0, 255, 0, 100],
-        }),
-        new GeoJsonLayer({
-          id: 'states',
-          data: US_STATES_GEOJSON_URL,
-          dataTransform: (data) =>
-            data.features.filter((state) =>
-              visitedCountries.includes(state.properties.iso_3166_2)
-            ),
-          getFillColor: [0, 255, 0, 100],
-        }),
-      ],
-    })
-
-    deckOverlay.setMap(map)
   }
 
   return (
