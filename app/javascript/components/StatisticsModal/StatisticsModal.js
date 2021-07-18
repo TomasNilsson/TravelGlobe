@@ -1,12 +1,16 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Modal, Card, Badge, ListGroup, Button } from 'react-bootstrap'
-import { statisticsActions } from '../../app/actions'
+import { statisticsActions, myTripsActions } from '../../app/actions'
 import { statisticsSelectors } from '../../app/selectors'
 
 const StatisticsModal = () => {
   const dispatch = useDispatch()
   const handleClose = () => dispatch(statisticsActions.toggleStatisticsModal())
+  const showTripsMatchingSearch = (search) => {
+    dispatch(myTripsActions.toggleMyTripsModal(search))
+    dispatch(statisticsActions.toggleStatisticsModal())
+  }
 
   const isOpen = useSelector(statisticsSelectors.getIsStatisticsModalOpen)
   const numberOfTrips = useSelector(statisticsSelectors.getNumberOfTrips)
@@ -56,7 +60,13 @@ const StatisticsModal = () => {
                 <Badge pill variant="dark" className="mr-2">
                   {i + 1}
                 </Badge>
-                {name}, {tripCount} {tripCount === 1 ? 'trip' : 'trips'}
+                <Button
+                  variant="link"
+                  className="p-0"
+                  onClick={() => showTripsMatchingSearch(name)}
+                >
+                  {name}, {tripCount} {tripCount === 1 ? 'trip' : 'trips'}
+                </Button>
               </ListGroup.Item>
             ))}
           </ListGroup>

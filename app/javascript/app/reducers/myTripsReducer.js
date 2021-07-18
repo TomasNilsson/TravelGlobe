@@ -7,6 +7,7 @@ const initialState = {
   isMyTripsModalOpen: false,
   isTripFormModalOpen: false,
   isTripInfoSidebarOpen: false,
+  myTripsSearch: '',
   selectedTripId: null,
 }
 
