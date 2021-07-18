@@ -4,7 +4,13 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import styles from './DataTable.module.scss'
 
-const DataTable = ({ keyField, data, columns, ...restProps }) => {
+const DataTable = ({
+  keyField,
+  data,
+  columns,
+  defaultSearch,
+  ...restProps
+}) => {
   const { SearchBar } = Search
 
   return (
@@ -15,6 +21,7 @@ const DataTable = ({ keyField, data, columns, ...restProps }) => {
       bootstrap4
       search={{
         searchFormatted: true,
+        defaultSearch,
       }}
     >
       {({ baseProps, searchProps }) => (

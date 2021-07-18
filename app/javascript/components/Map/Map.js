@@ -4,7 +4,7 @@ import GoogleMap from 'google-map-react'
 import { GoogleMapsOverlay as DeckOverlay } from '@deck.gl/google-maps'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import { mapSelectors, placesLivedSelectors } from '../../app/selectors'
-import { mapActions } from '../../app/actions'
+import { mapActions, myTripsActions } from '../../app/actions'
 import MapSearchBox from '../MapSearchBox'
 import MapMarker from '../MapMarker'
 
@@ -17,9 +17,9 @@ const US_STATES_GEOJSON_URL =
 const ZOOM_LEVEL_SHOW_DETAILS = 7
 
 const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
-  const mapRef = useRef()
-  const mapsApiRef = useRef()
-  const overlayRef = useRef()
+  const mapRef = useRef(null)
+  const mapsApiRef = useRef(null)
+  const overlayRef = useRef(null)
 
   const isMapsApiLoaded = useSelector(mapSelectors.getIsMapsApiLoaded)
   const visitedCountries = useSelector(mapSelectors.getVisitedCountries)
@@ -34,6 +34,12 @@ const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
     dispatch(
       mapActions.setMarkers([{ lat: latitude, lng: longitude, text: name }])
     )
+  const onOverlayClick = ({ object }) => {
+    const country = object?.properties?.name
+    if (country) {
+      dispatch(myTripsActions.toggleMyTripsModal(country))
+    }
+  }
 
   useEffect(() => {
     // Show overlay with visited countries colored
@@ -53,6 +59,7 @@ const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
               )
             },
             getFillColor: [0, 255, 0, 100],
+            pickable: true,
           }),
           new GeoJsonLayer({
             id: 'states',
@@ -62,8 +69,10 @@ const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
                 visitedCountries.includes(state.properties.iso_3166_2)
               ),
             getFillColor: [0, 255, 0, 100],
+            pickable: true,
           }),
         ],
+        onClick: onOverlayClick,
       })
       overlayRef.current.setMap(mapRef.current)
     }

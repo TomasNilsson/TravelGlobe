@@ -14,6 +14,12 @@ const MyTripsModal = ({ isLoggedIn }) => {
 
   const isOpen = useSelector(myTripsSelectors.getIsMyTripsModalOpen)
   const trips = useSelector(myTripsSelectors.getMyTrips)
+  const searchString = useSelector(myTripsSelectors.getMyTripsSearch)
+
+  const dateFormatter = ({ startDate, endDate }) => `${startDate} - ${endDate}`
+  const arrayToCommaSeparatedString = (array) => array.join(', ')
+  const countryListFormatter = (countries = []) =>
+    arrayToCommaSeparatedString(countries.map((country) => country.name))
 
   const columns = [
     {
@@ -25,8 +31,8 @@ const MyTripsModal = ({ isLoggedIn }) => {
       isDummyField: true,
       text: 'Date',
       sort: true,
-      formatter: (cell, row) => `${row.startDate} - ${row.endDate}`,
-      sortValue: (cell, row) => `${row.startDate} - ${row.endDate}`,
+      formatter: (cell, row) => dateFormatter(row),
+      sortValue: (cell, row) => dateFormatter(row),
     },
     {
       dataField: 'name',
@@ -46,23 +52,21 @@ const MyTripsModal = ({ isLoggedIn }) => {
       dataField: 'countries',
       text: 'Countries/States',
       sort: true,
-      formatter: (cell) =>
-        (cell || []).map((country) => country.name).join(', '),
-      sortValue: (cell) =>
-        (cell || []).map((country) => country.name).join(', '),
+      formatter: countryListFormatter,
+      sortValue: countryListFormatter,
     },
     {
       dataField: 'categories',
       text: 'Categories',
       sort: true,
-      formatter: (cell) => cell.join(', '),
-      sortValue: (cell) => cell.join(', '),
+      formatter: arrayToCommaSeparatedString,
+      sortValue: arrayToCommaSeparatedString,
     },
     {
       dataField: 'travelPartners',
       hidden: true,
-      formatter: (cell) => cell.join(', '),
-      sortValue: (cell) => cell.join(', '),
+      formatter: arrayToCommaSeparatedString,
+      sortValue: arrayToCommaSeparatedString,
     },
     {
       dataField: 'actions',
@@ -98,6 +102,7 @@ const MyTripsModal = ({ isLoggedIn }) => {
           data={trips}
           columns={columns}
           defaultSorted={defaultSorted}
+          defaultSearch={searchString}
         />
       </Modal.Body>
       <Modal.Footer>

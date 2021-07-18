@@ -42,7 +42,11 @@ const myTripsReducer = (state = initialState, { type, payload }) => {
         isTripInfoSidebarOpen: true,
       }
     case TYPES.TOGGLE_MY_TRIPS_MODAL:
-      return { ...state, isMyTripsModalOpen: !state.isMyTripsModalOpen }
+      return {
+        ...state,
+        isMyTripsModalOpen: !state.isMyTripsModalOpen,
+        myTripsSearch: payload || '',
+      }
     case TYPES.TOGGLE_TRIP_FORM_MODAL:
       return { ...state, isTripFormModalOpen: !state.isTripFormModalOpen }
     case TYPES.TOGGLE_TRIP_INFO_SIDEBAR:

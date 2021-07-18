@@ -57,8 +57,9 @@ export const showTripInfo = (tripId) => ({
   payload: tripId,
 })
 
-export const toggleMyTripsModal = () => ({
+export const toggleMyTripsModal = (searchString) => ({
   type: TYPES.TOGGLE_MY_TRIPS_MODAL,
+  payload: searchString,
 })
 
 export const toggleTripInfoSidebar = () => ({

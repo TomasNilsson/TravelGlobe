@@ -14,6 +14,8 @@ export const getTripInfoForSelectedId = (state) =>
 export const getIsMyTripsModalOpen = (state) =>
   getMyTripsState(state).isMyTripsModalOpen
 
+export const getMyTripsSearch = (state) => getMyTripsState(state).myTripsSearch
+
 export const getIsTripFormModalOpen = (state) =>
   getMyTripsState(state).isTripFormModalOpen
 
