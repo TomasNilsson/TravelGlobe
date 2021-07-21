@@ -42,8 +42,12 @@ const LoginModal = () => {
               cookie={true}
               callback={handleLoginCallback}
               render={({ onClick }) => (
-                <Button variant="link" onClick={onClick}>
-                  <img src={facebookLogo} alt="Log in with Facebook" />
+                <Button variant="link" className="p-0" onClick={onClick}>
+                  <img
+                    src={facebookLogo}
+                    alt="Log in with Facebook"
+                    className="mw-100"
+                  />
                 </Button>
               )}
             />
