@@ -121,6 +121,7 @@ const Map = ({ center = { lat: 30, lng: 25 }, zoom = 3, options = {} }) => {
         options={{
           minZoom: 3,
           maxZoom: 9,
+          gestureHandling: 'greedy',
           mapTypeControl: false,
           streetViewControl: false,
           fullscreenControl: false,
