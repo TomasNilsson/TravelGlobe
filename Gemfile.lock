@@ -362,6 +362,7 @@ DEPENDENCIES
   koala (~> 2.2)
   listen (~> 3.0)
   mysql2 (~> 0.5)
+  nokogiri
   omniauth-facebook
   omniauth-rails_csrf_protection
   rails (~> 6.1.3)

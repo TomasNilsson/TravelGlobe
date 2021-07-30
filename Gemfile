@@ -56,6 +56,9 @@ gem 'axlsx_rails'
 # Use jQuery HotKeys for WYSIWYG editor
 gem 'jquery-hotkeys-rails'
 
+# Use Nokogiri to parse HTML
+gem 'nokogiri'
+
 group :development do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3', '~> 1.4.2'
