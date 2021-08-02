@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_11_210013) do
+ActiveRecord::Schema.define(version: 2021_08_02_151301) do
   create_table 'categories', force: :cascade do |t|
     t.string 'name'
     t.datetime 'created_at', null: false
@@ -58,11 +58,9 @@ ActiveRecord::Schema.define(version: 2021_07_11_210013) do
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.integer 'order'
-    t.integer 'user_id'
     t.string 'external_id'
     t.string 'from'
     t.index ['trip_id'], name: 'index_photos_on_trip_id'
-    t.index ['user_id'], name: 'index_photos_on_user_id'
   end
 
   create_table 'places', force: :cascade do |t|
@@ -153,7 +151,6 @@ ActiveRecord::Schema.define(version: 2021_07_11_210013) do
 
   add_foreign_key 'categories', 'users'
   add_foreign_key 'photos', 'trips'
-  add_foreign_key 'photos', 'users'
   add_foreign_key 'places', 'trips'
   add_foreign_key 'places_lived', 'countries'
   add_foreign_key 'places_lived', 'users'

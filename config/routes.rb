@@ -14,7 +14,6 @@ Rails
     get 'users/:id/trips', to: 'users#trips'
     get 'users/:id/statistics', to: 'users#statistics'
 
-    get 'photos/update_facebook_urls', to: 'photos#update_facebook_urls'
     post 'photos/extract_from_google_photos',
          to: 'photos#extract_from_google_photos'
 
