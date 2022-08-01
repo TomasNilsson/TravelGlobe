@@ -25,6 +25,7 @@ const MyTripsModal = ({ isLoggedIn }) => {
     {
       dataField: 'id',
       hidden: true,
+      searchable: false,
     },
     {
       dataField: 'date',
@@ -33,6 +34,7 @@ const MyTripsModal = ({ isLoggedIn }) => {
       sort: true,
       formatter: (cell, row) => dateFormatter(row),
       sortValue: (cell, row) => dateFormatter(row),
+      filterValue: (cell, row) => dateFormatter(row),
     },
     {
       dataField: 'name',
@@ -54,6 +56,7 @@ const MyTripsModal = ({ isLoggedIn }) => {
       sort: true,
       formatter: countryListFormatter,
       sortValue: countryListFormatter,
+      filterValue: countryListFormatter,
     },
     {
       dataField: 'categories',
@@ -61,17 +64,20 @@ const MyTripsModal = ({ isLoggedIn }) => {
       sort: true,
       formatter: arrayToCommaSeparatedString,
       sortValue: arrayToCommaSeparatedString,
+      filterValue: arrayToCommaSeparatedString,
     },
     {
       dataField: 'travelPartners',
       hidden: true,
       formatter: arrayToCommaSeparatedString,
       sortValue: arrayToCommaSeparatedString,
+      filterValue: arrayToCommaSeparatedString,
     },
     {
       dataField: 'actions',
       isDummyField: true,
       text: 'Actions',
+      searchable: false,
       formatter: (cell, row) => (
         <Button
           variant="link"

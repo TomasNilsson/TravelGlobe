@@ -19,18 +19,22 @@ const PlacesLivedModal = ({ isLoggedIn }) => {
   const isOpen = useSelector(placesLivedSelectors.getIsPlacesLivedModalOpen)
   const placesLived = useSelector(placesLivedSelectors.getPlacesLived)
 
+  const dateFormatter = ({ startDate, endDate }) => `${startDate} - ${endDate}`
+
   const columns = [
     {
       dataField: 'id',
       hidden: true,
+      searchable: false,
     },
     {
       dataField: 'date',
       isDummyField: true,
       text: 'Date',
       sort: true,
-      formatter: (cell, row) => `${row.startDate} - ${row.endDate}`,
-      sortValue: (cell, row) => `${row.startDate} - ${row.endDate}`,
+      formatter: (cell, row) => dateFormatter(row),
+      sortValue: (cell, row) => dateFormatter(row),
+      filterValue: (cell, row) => dateFormatter(row),
     },
     {
       dataField: 'address',
@@ -50,13 +54,15 @@ const PlacesLivedModal = ({ isLoggedIn }) => {
       dataField: 'country',
       text: 'Country/State',
       sort: true,
-      formatter: (country) => country && country.name,
-      sortValue: (country) => country && country.name,
+      formatter: (country) => country?.name,
+      sortValue: (country) => country?.name,
+      filterValue: (country) => country?.name,
     },
     {
       dataField: 'actions',
       isDummyField: true,
       text: 'Actions',
+      searchable: false,
       formatter: (cell, row) => (
         <Button
           variant="link"

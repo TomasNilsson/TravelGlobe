@@ -20,7 +20,6 @@ const DataTable = ({
       columns={columns}
       bootstrap4
       search={{
-        searchFormatted: true,
         defaultSearch,
       }}
     >
