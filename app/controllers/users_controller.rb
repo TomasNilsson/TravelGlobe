@@ -24,4 +24,9 @@ class UsersController < ApplicationController
   def statistics
     render json: @current_user, serializer: UserStatisticsSerializer
   end
+
+  def categories
+    categories = Category.for_user(current_user)
+    render json: categories, each_serializer: CategorySerializer
+  end
 end

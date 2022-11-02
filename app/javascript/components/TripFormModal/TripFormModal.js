@@ -44,6 +44,8 @@ const TripFormModal = () => {
     name,
     startDate,
     endDate,
+    travelPartners = [],
+    categories = [],
     countries = [],
     places = [],
     extraInfoLoaded,
@@ -61,6 +63,14 @@ const TripFormModal = () => {
         [FIELD_NAMES.NAME]: name,
         [FIELD_NAMES.START_DATE]: parseISO(startDate),
         [FIELD_NAMES.END_DATE]: parseISO(endDate),
+        [FIELD_NAMES.TRAVEL_PARTNERS]: travelPartners.map((travelPartner) => ({
+          value: travelPartner.id,
+          label: travelPartner.name,
+        })),
+        [FIELD_NAMES.CATEGORIES]: categories.map((category) => ({
+          value: category.id,
+          label: category.name,
+        })),
         [FIELD_NAMES.COUNTRIES]: countries.map((country) => ({
           value: country.id,
           label: country.name,

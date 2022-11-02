@@ -17,9 +17,8 @@ const MyTripsModal = ({ isLoggedIn }) => {
   const searchString = useSelector(myTripsSelectors.getMyTripsSearch)
 
   const dateFormatter = ({ startDate, endDate }) => `${startDate} - ${endDate}`
-  const arrayToCommaSeparatedString = (array) => array.join(', ')
-  const countryListFormatter = (countries = []) =>
-    arrayToCommaSeparatedString(countries.map((country) => country.name))
+  const arrayToCommaSeparatedString = (array = []) =>
+    array.map((element) => element.name).join(', ')
 
   const columns = [
     {
@@ -54,9 +53,9 @@ const MyTripsModal = ({ isLoggedIn }) => {
       dataField: 'countries',
       text: 'Countries/States',
       sort: true,
-      formatter: countryListFormatter,
-      sortValue: countryListFormatter,
-      filterValue: countryListFormatter,
+      formatter: arrayToCommaSeparatedString,
+      sortValue: arrayToCommaSeparatedString,
+      filterValue: arrayToCommaSeparatedString,
     },
     {
       dataField: 'categories',

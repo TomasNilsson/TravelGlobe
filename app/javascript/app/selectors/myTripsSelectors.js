@@ -24,3 +24,5 @@ export const getIsTripInfoSidebarOpen = (state) =>
 
 export const getTravelPartners = (state) =>
   getMyTripsState(state).travelPartners
+
+export const getCategories = (state) => getMyTripsState(state).categories

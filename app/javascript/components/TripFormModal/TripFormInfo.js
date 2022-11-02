@@ -27,8 +27,16 @@ const TripFormInfo = () => {
     })
   )
 
+  const categories = useSelector(myTripsSelectors.getCategories).map(
+    (category) => ({
+      value: category.id,
+      label: category.name,
+    })
+  )
+
   useEffect(() => {
     dispatch(myTripsActions.fetchTravelPartners())
+    dispatch(myTripsActions.fetchCategories())
   }, [])
 
   return (
@@ -184,11 +192,7 @@ const TripFormInfo = () => {
                 render={({ field }) => (
                   <CreatableSelect
                     {...field}
-                    options={[
-                      { value: 'Category 1', label: 'category_1' },
-                      { value: 'Category 2', label: 'category_2' },
-                      { value: 'Category 3', label: 'category_3' },
-                    ]}
+                    options={categories}
                     isMulti
                     placeholder="Select from the list or create new"
                     className={styles.selectInput}

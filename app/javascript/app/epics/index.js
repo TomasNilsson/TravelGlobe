@@ -1,6 +1,7 @@
 import { combineEpics } from 'redux-observable'
 import createPlaceLivedEpic from './createPlaceLivedEpic'
 import createTripEpic from './createTripEpic'
+import fetchCategoriesEpic from './fetchCategoriesEpic'
 import fetchCountriesEpic from './fetchCountriesEpic'
 import fetchVisitedCountriesEpic from './fetchVisitedCountriesEpic'
 import fetchMyTripsEpic from './fetchMyTripsEpic'
@@ -14,6 +15,7 @@ import updateTripEpic from './updateTripEpic'
 const rootEpic = combineEpics(
   createPlaceLivedEpic,
   createTripEpic,
+  fetchCategoriesEpic,
   fetchCountriesEpic,
   fetchVisitedCountriesEpic,
   fetchMyTripsEpic,

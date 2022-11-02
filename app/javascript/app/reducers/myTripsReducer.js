@@ -3,6 +3,7 @@ import { myTripsActions } from '../actions'
 const { TYPES } = myTripsActions
 
 const initialState = {
+  categories: [],
   trips: [],
   travelPartners: [],
   isMyTripsModalOpen: false,
@@ -20,6 +21,8 @@ const myTripsReducer = (state = initialState, { type, payload }) => {
         trips: [...state.trips, payload],
         isTripFormModalOpen: false,
       }
+    case TYPES.FETCH_CATEGORIES_SUCCESS:
+      return { ...state, categories: payload }
     case TYPES.FETCH_MY_TRIPS_SUCCESS:
       return { ...state, trips: payload }
     case TYPES.FETCH_TRAVEL_PARTNERS_SUCCESS:

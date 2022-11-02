@@ -1,6 +1,8 @@
 export const TYPES = {
   ADD_TRIP: 'myTrips/ADD_TRIP',
   ADD_TRIP_SUCCESS: 'myTrips/ADD_TRIP_SUCCESS',
+  FETCH_CATEGORIES: 'myTrips/FETCH_CATEGORIES',
+  FETCH_CATEGORIES_SUCCESS: 'myTrips/FETCH_CATEGORIES_SUCCESS',
   FETCH_MY_TRIPS: 'myTrips/FETCH_MY_TRIPS',
   FETCH_MY_TRIPS_SUCCESS: 'myTrips/FETCH_MY_TRIPS_SUCCESS',
   FETCH_TRAVEL_PARTNERS: 'myTrips/FETCH_TRAVEL_PARTNERS',
@@ -23,6 +25,15 @@ export const addTrip = (trip) => ({
 export const addTripSuccess = (trip) => ({
   type: TYPES.ADD_TRIP_SUCCESS,
   payload: trip,
+})
+
+export const fetchCategories = () => ({
+  type: TYPES.FETCH_CATEGORIES,
+})
+
+export const fetchCategoriesSuccess = (categories) => ({
+  type: TYPES.FETCH_CATEGORIES_SUCCESS,
+  payload: categories,
 })
 
 export const fetchMyTrips = () => ({

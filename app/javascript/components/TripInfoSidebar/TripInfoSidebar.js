@@ -36,7 +36,14 @@ const TripInfoSidebar = () => {
   const tripDetails = [
     { label: 'Date', value: `${startDate} - ${endDate}` },
     ...(travelPartners.length > 0
-      ? [{ label: 'Travel Partners', value: travelPartners.join(', ') }]
+      ? [
+          {
+            label: 'Travel Partners',
+            value: travelPartners
+              .map((travelPartner) => travelPartner.name)
+              .join(', '),
+          },
+        ]
       : []),
     {
       label: 'Countries',
@@ -65,8 +72,8 @@ const TripInfoSidebar = () => {
           <>
             <h5>{name}</h5>
             {categories.map((category) => (
-              <Badge variant="primary" key={category}>
-                {category}
+              <Badge variant="primary" key={category.id}>
+                {category.name}
               </Badge>
             ))}
             <dl className="row mt-3">
