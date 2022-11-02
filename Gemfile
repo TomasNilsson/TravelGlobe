@@ -85,6 +85,6 @@ group :development do
 end
 
 group :production do
-  # Use mysql2 as the database for production
-  gem "mysql2", "~> 0.5"
+  # Use PostgreSQL as the database for production
+  gem "pg", "~> 1.4"
 end

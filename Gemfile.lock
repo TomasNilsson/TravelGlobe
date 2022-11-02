@@ -205,7 +205,6 @@ GEM
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
-    mysql2 (0.5.3)
     net-scp (3.0.0)
       net-ssh (>= 2.6.5, < 7.0.0)
     net-ssh (6.1.0)
@@ -232,6 +231,7 @@ GEM
     omniauth-rails_csrf_protection (1.0.0)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
+    pg (1.4.4)
     public_suffix (4.0.6)
     racc (1.5.2)
     rack (2.2.3)
@@ -361,10 +361,10 @@ DEPENDENCIES
   jwt
   koala (~> 2.2)
   listen (~> 3.0)
-  mysql2 (~> 0.5)
   nokogiri
   omniauth-facebook
   omniauth-rails_csrf_protection
+  pg (~> 1.4)
   rails (~> 6.1.3)
   react-rails
   ruby-debug-ide
