@@ -4,6 +4,7 @@ const { TYPES } = myTripsActions
 
 const initialState = {
   trips: [],
+  travelPartners: [],
   isMyTripsModalOpen: false,
   isTripFormModalOpen: false,
   isTripInfoSidebarOpen: false,
@@ -21,6 +22,8 @@ const myTripsReducer = (state = initialState, { type, payload }) => {
       }
     case TYPES.FETCH_MY_TRIPS_SUCCESS:
       return { ...state, trips: payload }
+    case TYPES.FETCH_TRAVEL_PARTNERS_SUCCESS:
+      return { ...state, travelPartners: payload }
     case TYPES.FETCH_TRIP_INFO_SUCCESS:
       return {
         ...state,

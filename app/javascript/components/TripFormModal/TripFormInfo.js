@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { useFormContext, Controller } from 'react-hook-form'
 import { Card, Form, Row, Col, InputGroup } from 'react-bootstrap'
 import { FaInfoCircle, FaCalendarAlt, FaUser, FaTags } from 'react-icons/fa'
@@ -6,6 +7,8 @@ import DatePicker from 'react-datepicker'
 import CreatableSelect from 'react-select/creatable'
 import classNames from 'classnames'
 import { FIELD_NAMES } from './constants'
+import { myTripsActions } from '../../app/actions'
+import { myTripsSelectors } from '../../app/selectors'
 import styles from './TripForm.module.scss'
 
 const TripFormInfo = () => {
@@ -14,6 +17,20 @@ const TripFormInfo = () => {
     formState: { errors },
     control,
   } = useFormContext()
+
+  const dispatch = useDispatch()
+
+  const travelPartners = useSelector(myTripsSelectors.getTravelPartners).map(
+    (travelPartner) => ({
+      value: travelPartner.id,
+      label: travelPartner.name,
+    })
+  )
+
+  useEffect(() => {
+    dispatch(myTripsActions.fetchTravelPartners())
+  }, [])
+
   return (
     <Card.Body>
       <Card.Title>Trip Info</Card.Title>
@@ -138,11 +155,7 @@ const TripFormInfo = () => {
                 render={({ field }) => (
                   <CreatableSelect
                     {...field}
-                    options={[
-                      { value: 'Travel Partner 1', label: 'travel_partner_1' },
-                      { value: 'Travel Partner 2', label: 'travel_partner_2' },
-                      { value: 'Travel Partner 3', label: 'travel_partner_3' },
-                    ]}
+                    options={travelPartners}
                     isMulti
                     placeholder="Select from the list or create new"
                     className={styles.selectInput}

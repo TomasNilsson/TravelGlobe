@@ -9,16 +9,14 @@ class TripInfoSerializer < ActiveModel::Serializer
     object.categories.map(&:name)
   end
 
-  has_many :travel_partners, key: :travelPartners do
-    object.travel_partners.map(&:name)
-  end
+  has_many :travel_partners, key: :travelPartners
 
   def startDate
-    object.start_date.strftime("%Y-%m-%d")
+    object.start_date.strftime('%Y-%m-%d')
   end
 
   def endDate
-    object.end_date.strftime("%Y-%m-%d")
+    object.end_date.strftime('%Y-%m-%d')
   end
 
   has_many :photos

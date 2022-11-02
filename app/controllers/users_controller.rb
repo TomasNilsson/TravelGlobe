@@ -11,6 +11,11 @@ class UsersController < ApplicationController
     render json: places_lived, each_serializer: PlaceLivedSerializer
   end
 
+  def travel_partners
+    travel_partners = @current_user.travel_partners.order(:name)
+    render json: travel_partners, each_serializer: TravelPartnerSerializer
+  end
+
   def trips
     trips = @current_user.trips.order(:start_date)
     render json: trips, each_serializer: TripSerializer

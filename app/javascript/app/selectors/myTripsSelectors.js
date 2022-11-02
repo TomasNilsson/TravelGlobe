@@ -21,3 +21,6 @@ export const getIsTripFormModalOpen = (state) =>
 
 export const getIsTripInfoSidebarOpen = (state) =>
   getMyTripsState(state).isTripInfoSidebarOpen
+
+export const getTravelPartners = (state) =>
+  getMyTripsState(state).travelPartners
