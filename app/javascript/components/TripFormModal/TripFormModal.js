@@ -56,28 +56,31 @@ const TripFormModal = () => {
     resolver: yupResolver(formSchema),
   })
 
+  const setDefaultValues = () => {
+    setSelectedTabIndex(0)
+    // Reset the form if no selected trip. Set default values for form when editing a trip.
+    formMethods.reset({
+      [FIELD_NAMES.NAME]: name,
+      [FIELD_NAMES.START_DATE]: startDate ? parseISO(startDate) : null,
+      [FIELD_NAMES.END_DATE]: endDate ? parseISO(endDate) : null,
+      [FIELD_NAMES.TRAVEL_PARTNERS]: travelPartners.map((travelPartner) => ({
+        value: travelPartner.id,
+        label: travelPartner.name,
+      })),
+      [FIELD_NAMES.CATEGORIES]: categories.map((category) => ({
+        value: category.id,
+        label: category.name,
+      })),
+      [FIELD_NAMES.COUNTRIES]: countries.map((country) => ({
+        value: country.id,
+        label: country.name,
+      })),
+      [FIELD_NAMES.PLACES]: places,
+    })
+  }
+
   useEffect(() => {
-    if (id) {
-      // Set default values for form when editing a trip
-      formMethods.reset({
-        [FIELD_NAMES.NAME]: name,
-        [FIELD_NAMES.START_DATE]: parseISO(startDate),
-        [FIELD_NAMES.END_DATE]: parseISO(endDate),
-        [FIELD_NAMES.TRAVEL_PARTNERS]: travelPartners.map((travelPartner) => ({
-          value: travelPartner.id,
-          label: travelPartner.name,
-        })),
-        [FIELD_NAMES.CATEGORIES]: categories.map((category) => ({
-          value: category.id,
-          label: category.name,
-        })),
-        [FIELD_NAMES.COUNTRIES]: countries.map((country) => ({
-          value: country.id,
-          label: country.name,
-        })),
-        [FIELD_NAMES.PLACES]: places,
-      })
-    }
+    setDefaultValues()
   }, [id, extraInfoLoaded])
 
   const onValidSubmit = (tripData) => {
@@ -125,11 +128,6 @@ const TripFormModal = () => {
   ]
   const isOnLastTab = selectedTabIndex === tabs.length - 1
 
-  const onModalExited = () => {
-    setSelectedTabIndex(0)
-    formMethods.reset()
-  }
-
   return (
     <Modal
       centered
@@ -137,7 +135,7 @@ const TripFormModal = () => {
       backdrop="static"
       show={isOpen}
       onHide={handleClose}
-      onExited={onModalExited}
+      onExited={setDefaultValues}
     >
       <FormProvider {...formMethods}>
         <Form
