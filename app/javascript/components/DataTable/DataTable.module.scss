@@ -2,5 +2,12 @@
   .table {
     table-layout: auto;
     white-space: nowrap;
+
+    td,
+    td button {
+      text-overflow: ellipsis;
+      max-width: 18rem;
+      overflow: hidden;
+    }
   }
 }
