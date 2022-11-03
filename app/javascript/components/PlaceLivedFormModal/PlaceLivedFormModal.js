@@ -16,10 +16,9 @@ import { mapActions, placesLivedActions } from '../../app/actions'
 import { mapSelectors, placesLivedSelectors } from '../../app/selectors'
 
 const formSchema = yup.object().shape({
-  [FIELD_NAMES.COUNTRY]: yup
-    .object()
-    .required('Country/state is required')
-    .nullable(),
+  [FIELD_NAMES.COUNTRY]: yup.object().shape({
+    value: yup.string().required('Country/state is required'),
+  }),
   [FIELD_NAMES.ADDRESS]: yup.string().required('Address is required'),
   [FIELD_NAMES.START_DATE]: yup
     .date()
@@ -61,21 +60,25 @@ const PlaceLivedFormModal = () => {
     resolver: yupResolver(formSchema),
   })
 
+  const setDefaultValues = () => {
+    // Reset the form if no selected place. Set default values for form when editing a place.
+    reset({
+      [FIELD_NAMES.COUNTRY]: country
+        ? {
+            value: country.id,
+            label: country.name,
+          }
+        : null,
+      [FIELD_NAMES.ADDRESS]: address,
+      [FIELD_NAMES.LATITUDE]: latitude,
+      [FIELD_NAMES.LONGITUDE]: longitude,
+      [FIELD_NAMES.START_DATE]: startDate ? parseISO(startDate) : null,
+      [FIELD_NAMES.END_DATE]: endDate ? parseISO(endDate) : null,
+    })
+  }
+
   useEffect(() => {
-    if (id) {
-      // Set default values for form when editing a place
-      reset({
-        [FIELD_NAMES.COUNTRY]: {
-          value: country.id,
-          label: country.name,
-        },
-        [FIELD_NAMES.ADDRESS]: address,
-        [FIELD_NAMES.LATITUDE]: latitude,
-        [FIELD_NAMES.LONGITUDE]: longitude,
-        [FIELD_NAMES.START_DATE]: parseISO(startDate),
-        [FIELD_NAMES.END_DATE]: endDate ? parseISO(endDate) : null,
-      })
-    }
+    setDefaultValues()
   }, [id])
 
   const onSubmit = (placeData) => {
@@ -98,10 +101,6 @@ const PlaceLivedFormModal = () => {
     setValue(FIELD_NAMES.ADDRESS, location.address, { shouldValidate: true })
   }
 
-  const onModalExited = () => {
-    reset()
-  }
-
   return (
     <Modal
       centered
@@ -109,7 +108,7 @@ const PlaceLivedFormModal = () => {
       backdrop="static"
       show={isOpen}
       onHide={handleClose}
-      onExited={onModalExited}
+      onExited={setDefaultValues}
     >
       <Form noValidate onSubmit={handleSubmit(onSubmit)}>
         <Modal.Header closeButton>
@@ -122,7 +121,7 @@ const PlaceLivedFormModal = () => {
             <Col md={8}>
               <Form.Group controlId={FIELD_NAMES.COUNTRY}>
                 <Form.Label>Country/State</Form.Label>
-                <InputGroup>
+                <InputGroup hasValidation>
                   <InputGroup.Prepend>
                     <InputGroup.Text>
                       <FaGlobeEurope />
@@ -148,7 +147,7 @@ const PlaceLivedFormModal = () => {
                     )}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {errors[FIELD_NAMES.COUNTRY]?.message}
+                    {errors[FIELD_NAMES.COUNTRY]?.value?.message}
                   </Form.Control.Feedback>
                 </InputGroup>
               </Form.Group>
@@ -158,7 +157,7 @@ const PlaceLivedFormModal = () => {
             <Col md={8}>
               <Form.Group controlId={FIELD_NAMES.ADDRESS}>
                 <Form.Label>Address</Form.Label>
-                <InputGroup>
+                <InputGroup hasValidation>
                   <InputGroup.Prepend>
                     <InputGroup.Text>
                       <FaMapMarkerAlt />
@@ -187,7 +186,7 @@ const PlaceLivedFormModal = () => {
             <Col xs={12} md={6}>
               <Form.Group controlId={FIELD_NAMES.START_DATE}>
                 <Form.Label>Start Date</Form.Label>
-                <InputGroup>
+                <InputGroup hasValidation>
                   <InputGroup.Prepend>
                     <InputGroup.Text>
                       <FaCalendarAlt />
@@ -208,6 +207,7 @@ const PlaceLivedFormModal = () => {
                         showYearDropdown
                         dropdownMode="select"
                         wrapperClassName={classNames(
+                          styles.datePickerWrapper,
                           !!errors[FIELD_NAMES.START_DATE] && 'is-invalid'
                         )}
                         className={classNames(
@@ -226,7 +226,7 @@ const PlaceLivedFormModal = () => {
             <Col xs={12} md={6}>
               <Form.Group controlId={FIELD_NAMES.END_DATE}>
                 <Form.Label>End Date</Form.Label>
-                <InputGroup>
+                <InputGroup hasValidation>
                   <InputGroup.Prepend>
                     <InputGroup.Text>
                       <FaCalendarAlt />
@@ -247,6 +247,7 @@ const PlaceLivedFormModal = () => {
                         showYearDropdown
                         dropdownMode="select"
                         wrapperClassName={classNames(
+                          styles.datePickerWrapper,
                           !!errors[FIELD_NAMES.END_DATE] && 'is-invalid'
                         )}
                         className={classNames(

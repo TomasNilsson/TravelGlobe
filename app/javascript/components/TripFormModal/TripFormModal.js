@@ -27,12 +27,8 @@ const formSchema = yup.object().shape({
     .nullable(),
   [FIELD_NAMES.COUNTRIES]: yup
     .array()
-    .required('At least one country/state is required')
-    .nullable(),
-  [FIELD_NAMES.PLACES]: yup
-    .array()
-    .required('At least one place is required')
-    .nullable(),
+    .min(1, 'At least one country/state is required'),
+  [FIELD_NAMES.PLACES]: yup.array().min(1, 'At least one place is required'),
 })
 
 const TripFormModal = () => {

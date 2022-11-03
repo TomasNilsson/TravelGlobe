@@ -46,7 +46,7 @@ const TripFormInfo = () => {
         <Col md={8}>
           <Form.Group controlId={FIELD_NAMES.NAME}>
             <Form.Label>Name</Form.Label>
-            <InputGroup>
+            <InputGroup hasValidation>
               <InputGroup.Prepend>
                 <InputGroup.Text>
                   <FaInfoCircle />
@@ -68,7 +68,7 @@ const TripFormInfo = () => {
         <Col xs={12} md={6}>
           <Form.Group controlId={FIELD_NAMES.START_DATE}>
             <Form.Label>Start Date</Form.Label>
-            <InputGroup>
+            <InputGroup hasValidation>
               <InputGroup.Prepend>
                 <InputGroup.Text>
                   <FaCalendarAlt />
@@ -89,6 +89,7 @@ const TripFormInfo = () => {
                     showYearDropdown
                     dropdownMode="select"
                     wrapperClassName={classNames(
+                      styles.datePickerWrapper,
                       !!errors[FIELD_NAMES.START_DATE] && 'is-invalid'
                     )}
                     className={classNames(
@@ -108,7 +109,7 @@ const TripFormInfo = () => {
         <Col xs={12} md={6}>
           <Form.Group controlId={FIELD_NAMES.END_DATE}>
             <Form.Label>End Date</Form.Label>
-            <InputGroup>
+            <InputGroup hasValidation>
               <InputGroup.Prepend>
                 <InputGroup.Text>
                   <FaCalendarAlt />
@@ -129,6 +130,7 @@ const TripFormInfo = () => {
                     showYearDropdown
                     dropdownMode="select"
                     wrapperClassName={classNames(
+                      styles.datePickerWrapper,
                       !!errors[FIELD_NAMES.END_DATE] && 'is-invalid'
                     )}
                     className={classNames(
@@ -165,7 +167,7 @@ const TripFormInfo = () => {
                     {...field}
                     options={travelPartners}
                     isMulti
-                    placeholder="Select from the list or create new"
+                    placeholder="Select or create new"
                     className={styles.selectInput}
                     inputId={FIELD_NAMES.TRAVEL_PARTNERS}
                   />
@@ -194,7 +196,7 @@ const TripFormInfo = () => {
                     {...field}
                     options={categories}
                     isMulti
-                    placeholder="Select from the list or create new"
+                    placeholder="Select or create new"
                     className={styles.selectInput}
                     inputId={FIELD_NAMES.CATEGORIES}
                   />

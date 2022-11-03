@@ -46,7 +46,7 @@ const TripFormPlaces = () => {
         <Col md={8}>
           <Form.Group controlId={FIELD_NAMES.COUNTRIES}>
             <Form.Label>Countries/States</Form.Label>
-            <InputGroup>
+            <InputGroup hasValidation>
               <InputGroup.Prepend>
                 <InputGroup.Text>
                   <FaGlobeEurope />
@@ -61,7 +61,7 @@ const TripFormPlaces = () => {
                     {...field}
                     options={countries}
                     isMulti
-                    placeholder="Select one or many countries/states"
+                    placeholder="Select one or many"
                     className={classNames(
                       styles.selectInput,
                       !!errors[FIELD_NAMES.COUNTRIES] && [
@@ -84,7 +84,7 @@ const TripFormPlaces = () => {
         <Col md={8}>
           <Form.Group controlId={FIELD_NAMES.PLACES}>
             <Form.Label>Places</Form.Label>
-            <InputGroup>
+            <InputGroup hasValidation>
               <InputGroup.Prepend>
                 <InputGroup.Text>
                   <FaMapMarkerAlt />
