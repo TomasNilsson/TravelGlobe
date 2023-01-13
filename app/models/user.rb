@@ -42,14 +42,13 @@ class User < ActiveRecord::Base
     return count
   end
 
-  def self.from_omniauth(auth)
-    # TODO: need to refresh OAuth token if it has expired. Check before Koala call.
-    user = User.where(uid: auth.uid).first_or_initialize
-    user.uid = auth.uid
-    user.name = auth.info.name
-    user.image_url = auth.info.image
-    user.oauth_token = auth.credentials.token
-    user.oauth_expires_at = Time.at(auth.credentials.expires_at)
+  def self.from_google_user(google_user)
+    puts google_user
+    puts google_user[:email]
+    user = User.where(email: google_user[:email]).first_or_initialize
+    user.name = google_user[:name]
+    user.email = google_user[:email]
+    user.image_url = google_user[:picture]
     user.last_sign_in_at = user.current_sign_in_at
     user.current_sign_in_at = Time.now
     user.save!

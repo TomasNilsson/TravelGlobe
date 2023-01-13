@@ -1,6 +1,5 @@
 class TripsController < ApplicationController
   before_action :set_trip, only: [:show, :edit, :update, :destroy, :info]
-  before_action :authorize_request, only: [:info, :create]
 
   def new
     @trip = Trip.new

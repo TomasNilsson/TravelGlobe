@@ -5,8 +5,7 @@ Rails
     # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
     root 'home#index'
     get 'old', to: 'old#index'
-    get 'auth/facebook/callback', to: 'sessions#create'
-    get 'auth/failure', to: 'sessions#failure'
+    post 'login', to: 'sessions#create'
     delete 'logout', to: 'sessions#destroy'
 
     get 'users/:id/visited_countries', to: 'users#visited_countries'

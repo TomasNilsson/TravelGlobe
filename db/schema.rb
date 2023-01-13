@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_02_151301) do
+ActiveRecord::Schema.define(version: 2023_01_13_192304) do
   create_table 'categories', force: :cascade do |t|
     t.string 'name'
     t.datetime 'created_at', null: false
@@ -145,8 +145,10 @@ ActiveRecord::Schema.define(version: 2021_08_02_151301) do
     t.string 'token'
     t.datetime 'current_sign_in_at'
     t.datetime 'last_sign_in_at'
+    t.string 'email'
     t.index ['token'], name: 'index_users_on_token'
     t.index ['uid'], name: 'index_users_on_uid'
+    t.index ['email'], name: 'index_users_on_email'
   end
 
   add_foreign_key 'categories', 'users'

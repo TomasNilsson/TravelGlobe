@@ -10,16 +10,21 @@ import {
   FaPowerOff,
   FaUserPlus,
 } from 'react-icons/fa'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import styles from './NavigationHeader.module.scss'
 import {
   myTripsActions,
   placesLivedActions,
   statisticsActions,
 } from '../../app/actions'
+import { userSelectors } from '../../app/selectors'
 
-const NavigationHeader = ({ user, isLoggedIn }) => {
+const NavigationHeader = () => {
   const dispatch = useDispatch()
+
+  const userName = useSelector(userSelectors.getUserName)
+  const userImageUrl = useSelector(userSelectors.getUserImageUrl)
+  const isLoggedIn = useSelector(userSelectors.getIsLoggedIn)
 
   const navLinks = [
     ...(isLoggedIn
@@ -76,14 +81,19 @@ const NavigationHeader = ({ user, isLoggedIn }) => {
             </Nav.Item>
           ))}
         </Nav>
-        {user && (
+        {userName && (
           <Nav as="ul">
             <Nav.Item as="li">
               <NavDropdown
                 title={
                   <>
-                    <Image src={user.imageUrl} roundedCircle alt="User" />{' '}
-                    {user.name}
+                    <Image
+                      src={userImageUrl}
+                      roundedCircle
+                      alt="User"
+                      height="40"
+                    />{' '}
+                    {userName}
                   </>
                 }
                 id="nav-dropdown"

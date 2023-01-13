@@ -6,6 +6,7 @@ const initialState = {
   id: '',
   name: '',
   imageUrl: '',
+  email: '',
 }
 
 const userReducer = (state = initialState, { type, payload }) => {

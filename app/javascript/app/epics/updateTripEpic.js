@@ -1,6 +1,7 @@
 import { ofType } from 'redux-observable'
 import { mergeMap, map } from 'rxjs/operators'
 import { myTripsActions } from '../actions'
+import { userSelectors } from '../selectors'
 
 const updateTripEpic = (action$, state$, { ajax }) =>
   action$.pipe(
@@ -12,6 +13,7 @@ const updateTripEpic = (action$, state$, { ajax }) =>
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${userSelectors.getToken(state$.value)}`,
         },
         body: {
           trip,

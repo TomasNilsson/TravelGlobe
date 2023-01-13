@@ -4,9 +4,9 @@ import { Modal, Button } from 'react-bootstrap'
 import { FaEdit } from 'react-icons/fa'
 import DataTable from '../DataTable'
 import { myTripsActions } from '../../app/actions'
-import { myTripsSelectors } from '../../app/selectors'
+import { myTripsSelectors, userSelectors } from '../../app/selectors'
 
-const MyTripsModal = ({ isLoggedIn }) => {
+const MyTripsModal = () => {
   const dispatch = useDispatch()
   const handleClose = () => dispatch(myTripsActions.toggleMyTripsModal())
   const showTripInfo = (tripId) => dispatch(myTripsActions.showTripInfo(tripId))
@@ -15,6 +15,7 @@ const MyTripsModal = ({ isLoggedIn }) => {
   const isOpen = useSelector(myTripsSelectors.getIsMyTripsModalOpen)
   const trips = useSelector(myTripsSelectors.getMyTrips)
   const searchString = useSelector(myTripsSelectors.getMyTripsSearch)
+  const isLoggedIn = useSelector(userSelectors.getIsLoggedIn)
 
   const dateFormatter = ({ startDate, endDate }) => `${startDate} - ${endDate}`
   const arrayToCommaSeparatedString = (array = []) =>
