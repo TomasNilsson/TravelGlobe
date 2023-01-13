@@ -4,9 +4,9 @@ import { Modal, Button } from 'react-bootstrap'
 import { FaEdit } from 'react-icons/fa'
 import DataTable from '../DataTable'
 import { placesLivedActions } from '../../app/actions'
-import { placesLivedSelectors } from '../../app/selectors'
+import { placesLivedSelectors, userSelectors } from '../../app/selectors'
 
-const PlacesLivedModal = ({ isLoggedIn }) => {
+const PlacesLivedModal = () => {
   const dispatch = useDispatch()
   const handleClose = () =>
     dispatch(placesLivedActions.togglePlacesLivedModal())
@@ -18,6 +18,7 @@ const PlacesLivedModal = ({ isLoggedIn }) => {
 
   const isOpen = useSelector(placesLivedSelectors.getIsPlacesLivedModalOpen)
   const placesLived = useSelector(placesLivedSelectors.getPlacesLived)
+  const isLoggedIn = useSelector(userSelectors.getIsLoggedIn)
 
   const dateFormatter = ({ startDate, endDate }) => `${startDate} - ${endDate}`
 

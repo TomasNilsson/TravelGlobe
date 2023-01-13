@@ -1,9 +1,13 @@
 class SessionsController < ApplicationController
   def create
-    user = User.from_omniauth(request.env['omniauth.auth'])
-    cookies[:jwt] = { value: JsonWebToken.encode(sub: user.id), httponly: true }
-    session[:user_id] = user.id # Only needed for old version
-    redirect_to root_url
+    begin
+      decoded_token = JsonWebToken.verify_google_jwt(params[:jwt])
+      user = User.from_google_user(decoded_token)
+      user[:token] = JsonWebToken.encode(sub: user.id)
+      render json: user, status: :ok
+    rescue GoogleIDToken::ValidationError, ActiveRecord::RecordNotFound
+      render json: {}, status: :unauthorized
+    end
   end
 
   def destroy
@@ -14,7 +18,14 @@ class SessionsController < ApplicationController
     redirect_to root_url
   end
 
-  def failure
-    redirect_to root_url, alert: 'Facebook login failed'
+  def refresh
+    begin
+      decoded_token = JsonWebToken.decode(params[:jwt])
+      user = User.find(decoded_token[:sub])
+      user[:token] = JsonWebToken.encode(sub: user.id)
+      render json: user, status: :ok
+    rescue JWT::DecodeError, ActiveRecord::RecordNotFound
+      render json: {}, status: :unauthorized
+    end
   end
 end

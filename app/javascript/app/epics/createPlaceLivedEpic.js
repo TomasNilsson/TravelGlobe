@@ -1,6 +1,7 @@
 import { ofType } from 'redux-observable'
 import { mergeMap, map } from 'rxjs/operators'
 import { placesLivedActions } from '../actions'
+import { userSelectors } from '../selectors'
 
 const createPlaceLivedEpic = (action$, state$, { ajax }) =>
   action$.pipe(
@@ -12,6 +13,7 @@ const createPlaceLivedEpic = (action$, state$, { ajax }) =>
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${userSelectors.getToken(state$.value)}`,
         },
         body: {
           place_lived: place,

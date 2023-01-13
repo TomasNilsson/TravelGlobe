@@ -18,4 +18,10 @@ class JsonWebToken
       )
     HashWithIndifferentAccess.new decoded[0]
   end
+
+  def self.verify_google_jwt(token)
+    validator = GoogleIDToken::Validator.new
+    payload = validator.check(token, ENV['GOOGLE_CLIENT_ID'])
+    HashWithIndifferentAccess.new payload
+  end
 end

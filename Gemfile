@@ -22,6 +22,8 @@ gem 'jbuilder', '~> 2.11'
 gem 'bootstrap-sass', '~> 3.4.1'
 gem 'bootstrap-datepicker-rails'
 
+# Use Google ID Token for authentication
+gem 'google-id-token'
 # Use jwt for authorization
 gem 'jwt'
 # Use Facebook authentication
