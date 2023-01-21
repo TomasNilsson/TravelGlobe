@@ -32,8 +32,6 @@ class TripInfoSerializer < ActiveModel::Serializer
   end
 
   class PhotoSerializer < ActiveModel::Serializer
-    attribute :thumb_url, key: :thumbUrl
-    attribute :image_url, key: :imageUrl
-    attribute :caption
+    attributes :id, :thumb_url, :image_url, :caption
   end
 end

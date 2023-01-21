@@ -10,10 +10,7 @@ class PhotosController < ApplicationController
                }.scan(%r{"(https://lh3.googleusercontent.com/[^/]+?)",\d+,\d+}) # Find all image URLs in the script
                  .flatten.uniq # Remove duplicate due to one of the images also being album cover image
                  .map { |url|
-                 {
-                   image_url: url + '=w1920-h1920',
-                   thumb_url: url + '=w720-h720',
-                 }
+                 { imageUrl: url + '=w1920-h1920', thumbUrl: url }
                }
     rescue ActionController::ParameterMissing
       render json: { error: 'album_url param is missing' }, status: :bad_request

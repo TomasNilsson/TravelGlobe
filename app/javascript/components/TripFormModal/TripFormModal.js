@@ -44,6 +44,7 @@ const TripFormModal = () => {
     categories = [],
     countries = [],
     places = [],
+    photos = [],
     extraInfoLoaded,
   } = useSelector(myTripsSelectors.getTripInfoForSelectedId) || {}
 
@@ -72,6 +73,7 @@ const TripFormModal = () => {
         label: country.name,
       })),
       [FIELD_NAMES.PLACES]: places,
+      [FIELD_NAMES.PHOTOS]: photos,
     })
   }
 
@@ -87,7 +89,8 @@ const TripFormModal = () => {
       country_ids: tripData[FIELD_NAMES.COUNTRIES].map(
         (country) => country.value
       ),
-      places_attributes: tripData[FIELD_NAMES.PLACES], // TODO: rename to "places" in backend,
+      places_attributes: tripData[FIELD_NAMES.PLACES], // TODO: rename to "places" in backend
+      photos_attributes: tripData[FIELD_NAMES.PHOTOS], // TODO: rename to "photos" in backend
     }
     dispatch(
       id

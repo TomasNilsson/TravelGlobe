@@ -6,4 +6,5 @@ export const FIELD_NAMES = {
   CATEGORIES: 'categories',
   COUNTRIES: 'countries',
   PLACES: 'places',
+  PHOTOS: 'photos',
 }

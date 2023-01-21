@@ -86,8 +86,12 @@ const TripInfoSidebar = () => {
             </dl>
             <Row>
               {photos.map(({ thumbUrl }) => (
-                <Col xs={6} className="pb-2 px-0" key={thumbUrl}>
-                  <Image src={thumbUrl} thumbnail />
+                <Col xs={6} className="pb-2 px-1" key={thumbUrl}>
+                  <Image
+                    src={thumbUrl}
+                    thumbnail
+                    referrerPolicy="no-referrer"
+                  />
                 </Col>
               ))}
             </Row>
